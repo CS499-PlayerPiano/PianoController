@@ -26,7 +26,7 @@ public abstract class Plugin implements NoteCallback {
     private final File CONFIG_FILE = new File("plugins/config/" + name + ".json");
 
     @Getter
-    protected JsonObject config = new JsonObject();
+    protected PluginConfig config = new PluginConfig(this);
 
     @Getter
     protected final Logger logger = new Logger(this);
@@ -37,45 +37,13 @@ public abstract class Plugin implements NoteCallback {
     protected void onDisable() {};
 
     public void loadPlugin() {
-        loadConfig();
+        config.loadConfig();
         if(enabled) return;
-        if(config.get("enabled") != null && !config.get("enabled").getAsBoolean()) return;
+        if(!config.getBoolean("enabled", true)) return;
 
         enabled = true;
         logger.info("Hello world!");
         onEnable();
-    }
-
-    protected void populateDefaultConfig() {}
-
-    public void loadConfig() {
-        //default config
-        if(!CONFIG_FILE.exists()) {
-            logger.info("Creating default config file");
-            config.addProperty("enabled", true);
-            populateDefaultConfig();
-            saveConfig();
-        }
-        try {
-            config = GSON.fromJson(new FileReader(CONFIG_FILE), JsonObject.class);
-        } catch (FileNotFoundException e) {
-            logger.error("Failed to load config file!", e);
-        }
-    }
-
-    public void saveConfig() {
-
-        if(!CONFIG_FILE.exists()) {
-            CONFIG_FILE.getParentFile().mkdirs();
-        }
-        String jsonString = GSON.toJson(config);
-        try {
-            Files.write(CONFIG_FILE.toPath(), jsonString.getBytes());
-        }
-        catch(Exception e) {
-            logger.error("Failed to save config file!", e);
-        }
-
     }
 
     public void setDisabled() {
@@ -107,4 +75,5 @@ public abstract class Plugin implements NoteCallback {
         return PlayerPianoController.getInstance().isSheetMusicPlaying();
     }
 
+    public void setDefaultConfigValues() {}
 }

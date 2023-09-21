@@ -28,10 +28,11 @@ public class PluginGui extends PluginStateKeeper {
     }
 
     @Override
-    protected void populateDefaultConfig() {
+    public void setDefaultConfigValues() {
 
         //TRACK_NUMBER, RAINBOW_GRADIENT
-        config.addProperty("colorMode", "TRACK_NUMBER");
+        //config.addProperty("colorMode", "TRACK_NUMBER");
+        config.setString("colorMode", "RAINBOW_GRADIENT");
     }
 
     @Override
@@ -45,7 +46,9 @@ public class PluginGui extends PluginStateKeeper {
 //        }
 
         for(Note note : keys) {
-            piano.setKeyLit(note);
+            if(note != null) {
+                piano.setKeyLit(note);
+            };
         }
 
     }

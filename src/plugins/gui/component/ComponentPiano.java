@@ -227,7 +227,7 @@ public class ComponentPiano extends JComponent {
         if (note != null && note.isNoteOn()) {
 
             Color color = Color.RED;
-            String mode = pluginGui.getConfig().get("colorMode").getAsString();
+            String mode = pluginGui.getConfig().getString("colorMode", "RAINBOW_GRADIENT");
             if(mode.equalsIgnoreCase("TRACK_NUMBER")) {
                 color = getColorForNoteTrackNumber(note);
             }

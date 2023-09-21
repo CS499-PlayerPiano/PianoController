@@ -4,20 +4,12 @@ import plu.capstone.playerpiano.controller.midi.Note;
 
 public abstract class PluginStateKeeper extends Plugin {
 
-    private static final int TOTAL_KEYS = 88;
-
-    private boolean[] keys = new boolean[TOTAL_KEYS];
-    private int[] velocities = new int[TOTAL_KEYS];
+    private static final int TOTAL_KEYS = 128;
 
     private Note[] notes = new Note[TOTAL_KEYS];
 
     @Override
     public void onEnable() {
-        for(int i = 0; i < keys.length; ++i) {
-            keys[i] = false;
-            velocities[i] = 0;
-        }
-
         for(int i = 0; i < notes.length; ++i) {
             notes[i] = new Note(
                     (byte) i,
@@ -29,22 +21,12 @@ public abstract class PluginStateKeeper extends Plugin {
     @Override
     public void onNotePlayed(Note note, long timestamp) {
         final int key = note.getKeyNumber();
-        if(key > TOTAL_KEYS - 1) {
-            return;
-        }
-        keys[key] = note.isNoteOn();
-        velocities[key] = note.getVelocity();
         notes[key] = note;
-        onNoteChange(keys, velocities);
-        onNoteChange2(notes);
+        onNoteChange(notes, timestamp);
     }
 
     @Override
-    public void onSongFinished() {
-        for(int i = 0; i < keys.length; ++i) {
-            keys[i] = false;
-            velocities[i] = 0;
-        }
+    public void onSongFinished(long timestamp) {
 
         for(int i = 0; i < notes.length; ++i) {
             final Note oldNote = notes[i];
@@ -58,11 +40,9 @@ public abstract class PluginStateKeeper extends Plugin {
             }
         }
 
-        onNoteChange(keys, velocities);
-        onNoteChange2(notes);
+        onNoteChange(notes, timestamp);
     }
 
-    public abstract void onNoteChange(boolean[] keys, int[] velocities);
-    public abstract void onNoteChange2(Note[] keys);
+    public abstract void onNoteChange(Note[] keys, long timestamp);
 
 }

@@ -10,6 +10,6 @@ public interface NoteCallback {
         return 0;
     }
 
-    default void onSongStarted() {}
-    default void onSongFinished() {}
+    default void onSongStarted(long timestamp) {}
+    default void onSongFinished(long timestamp) {}
 }

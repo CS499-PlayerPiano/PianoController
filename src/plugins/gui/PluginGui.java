@@ -6,55 +6,48 @@ import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.controller.midi.Note;
 import plu.capstone.playerpiano.controller.plugin.PluginStateKeeper;
 import plugins.gui.component.ComponentPiano;
-import plugins.gui.component.ComponentPiano2;
 
 public class PluginGui extends PluginStateKeeper {
 
-    private final JFrame frame = new JFrame("Piano");
-    private final ComponentPiano piano = new ComponentPiano();
+    private static final int TOTAL_KEYS = 88;
 
-    private final JFrame frame2 = new JFrame("Piano 2");
-    private final ComponentPiano2 piano2 = new ComponentPiano2();
+    private final JFrame frame = new JFrame("Piano");
+    private final ComponentPiano piano = new ComponentPiano(this);
 
     @Override
     public void onEnable() {
-//        frame.add(new JScrollPane(piano));
-//        //this.add(new ComponentPiano());
-//
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(500, 500);
-//
-//        SwingUtilities.invokeLater(() -> {
-//            frame.setVisible(true);
-//        });
 
+        frame.add(new JScrollPane(piano));
 
-
-
-
-        frame2.add(new JScrollPane(piano2));
-        //this.add(new ComponentPiano());
-
-        frame2.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame2.setSize(500, 500);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(500, 500);
 
         SwingUtilities.invokeLater(() -> {
-            frame2.setVisible(true);
+            frame.setVisible(true);
         });
     }
 
     @Override
-    public void onNoteChange(boolean[] keys, int[] velocities) {
-        for(int i = 0; i < keys.length; i++) {
-           piano.setKeyLit(i, keys[i]);
-        }
+    protected void populateDefaultConfig() {
+
+        //TRACK_NUMBER, RAINBOW_GRADIENT
+        config.addProperty("colorMode", "TRACK_NUMBER");
     }
 
     @Override
-    public void onNoteChange2(Note[] keys) {
-        for(int i = 0; i < keys.length; i++) {
-           piano2.setKeyLit(i, keys[i]);
+    public void onNoteChange(Note[] keys, long timestamp) {
+
+        //Valid notes are from 21 to 108 in MIDI
+        //https://www.inspiredacoustics.com/en/MIDI_note_numbers_and_center_frequencies
+//        for(int i = 21; i < 21 + TOTAL_KEYS; i++) {
+//            final int key = i - 21;
+//            piano.setKeyLit(key, keys[key]);
+//        }
+
+        for(Note note : keys) {
+            piano.setKeyLit(note);
         }
+
     }
 
 }

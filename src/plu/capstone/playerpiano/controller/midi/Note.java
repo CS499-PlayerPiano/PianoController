@@ -47,4 +47,12 @@ public class Note {
         return note;
     }
 
+    public boolean isValidPianoKey() {
+        return keyNumber >= 21 && keyNumber <= 88;
+    }
+
+    public int toPianoKey() {
+        return keyNumber - 21;
+    }
+
 }

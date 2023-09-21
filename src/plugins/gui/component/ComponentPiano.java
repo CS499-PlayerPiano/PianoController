@@ -15,11 +15,12 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import javax.swing.JComponent;
 import plu.capstone.playerpiano.controller.midi.Note;
+import plugins.gui.PluginGui;
 
 public class ComponentPiano extends JComponent {
 
@@ -31,11 +32,11 @@ public class ComponentPiano extends JComponent {
     private static final int WHITE_KEY_WIDTH = Math.round(220 * WHITE_KEY_ASPECT);
     private static final int WHITE_KEY_HEIGHT = 220;
     private List<KeyShape> keyShapes;
-    private final Set<Integer> litKeys = new HashSet<>();
+    private final Map<Integer, Color> litKeys = new HashMap<>();
 
     private static final Color COLOR_BACKGROUND = Color.BLUE;
     private static final Color COLOR_WHITE_KEY = Color.WHITE;
-    private static final Color COLOR_WHITE_KEY_LIT = new Color(0xDF3030);
+//    private static final Color COLOR_WHITE_KEY_LIT = new Color(0xDF3030);
     private static final Color[] COLOR_WHITE_KEY_GRADIENT = {
             new Color(0x60FFFFFF, true),
             new Color(0x00FFFFFF, true),
@@ -44,7 +45,7 @@ public class ComponentPiano extends JComponent {
     };
     private static final float[] WHITE_KEY_GRADIENT_DISTRIBUTIONS = { 0, 0.2f, 0.8f, 1 };
     private static final Color COLOR_BLACK_KEY = Color.BLACK;
-    private static final Color COLOR_BLACK_KEY_LIT = new Color(0xFF5050);
+//    private static final Color COLOR_BLACK_KEY_LIT = new Color(0xFF5050);
     private static final Color[] COLOR_BLACK_KEY_GRADIENT = {
             new Color(0xA0000000, true),
             new Color(0x30000000, true),
@@ -56,12 +57,17 @@ public class ComponentPiano extends JComponent {
 
     private static final float KEY_BEVEL = 0.15f;
 
+    private final PluginGui pluginGui;
+
+    public ComponentPiano(PluginGui pluginGui) {
+        this.pluginGui = pluginGui;
+    }
+
     @Override
     public void invalidate() {
         super.invalidate();
         keyShapes = null;
     }
-
 
     private List<KeyShape> getKeyShapes() {
         if (keyShapes == null) {
@@ -152,7 +158,7 @@ public class ComponentPiano extends JComponent {
 
             Color color = ks.isBlack() ? COLOR_BLACK_KEY : COLOR_WHITE_KEY;
             if(isKeyLit(i)) {
-                color = ks.isBlack() ? COLOR_BLACK_KEY_LIT : COLOR_WHITE_KEY_LIT;
+                color = litKeys.get(i);
             }
 
             g.setColor(color);
@@ -210,19 +216,73 @@ public class ComponentPiano extends JComponent {
         return -1;
     }
 
-    public void setKeyLit(int index, boolean b) {
+    public void setKeyLit(Note note) {
+        if(note.isValidPianoKey()) {
+            setKeyLit(note.toPianoKey(), note);
+        }
+    }
+
+    private void setKeyLit(int index, Note note) {
         if (index < 0 || index > getKeyShapes().size()) return;
-        if (b) {
-            litKeys.add(index);
+        if (note != null && note.isNoteOn()) {
+
+            Color color = Color.RED;
+            String mode = pluginGui.getConfig().get("colorMode").getAsString();
+            if(mode.equalsIgnoreCase("TRACK_NUMBER")) {
+                color = getColorForNoteTrackNumber(note);
+            }
+            else if(mode.equalsIgnoreCase("RAINBOW_GRADIENT")) {
+                color = getColorForNoteRainbowGradient(note);
+            }
+            else {
+                pluginGui.getLogger().warning("Invalid color mode: " + mode);
+            }
+
+            litKeys.put(index, getColorForNoteTrackNumber(note));
         } else {
             litKeys.remove(index);
         }
         repaint(getKeyShapes().get(index).getShape().getBounds());
     }
 
+    private static Color getColorForNoteRainbowGradient(Note note) {
+        int totalNotes = 88;
+        int key = note.getKeyNumber();
+
+        float percent = (float)key / totalNotes;
+        if(percent > 1) {
+            percent = 1;
+        }
+
+        if(percent < 0) {
+            percent = 0;
+        }
+
+        return Color.getHSBColor(percent, 1, 1);
+    }
+
+    private static Color getColorForNoteTrackNumber(Note note) {
+        int totalTracks = 16;
+        int channel = note.getChannelNum();
+
+        if(channel == Note.NO_CHANNEL) {
+            return Color.RED;
+        }
+
+        float percent = (float)channel / totalTracks;
+        if(percent > 1) {
+            percent = 1;
+        }
+
+        if(percent < 0) {
+            percent = 0;
+        }
+
+        return Color.getHSBColor(percent, 1, 1);
+    }
 
     public boolean isKeyLit(int index) {
-        return litKeys.contains(index);
+        return litKeys.containsKey(index);
     }
 
 

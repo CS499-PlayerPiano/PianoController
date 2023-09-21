@@ -9,15 +9,19 @@ import plu.capstone.playerpiano.controller.plugin.Plugin;
 
 public class PluginSynth extends Plugin {
 
-    private Synthesizer midiSynth;
+    private static final int NUM_CHANNELS = 16;
+
+    //each channel has its own synth so that multiple notes can be played at once without java dying
+    private Synthesizer[] midiSynth = new Synthesizer[NUM_CHANNELS];
 
     @Override
     public void onEnable() {
-        setDisabled();
         try {
-            midiSynth = MidiSystem.getSynthesizer();
-            midiSynth.open();
-            midiSynth.loadAllInstruments(midiSynth.getDefaultSoundbank());
+            for(int i = 0; i < NUM_CHANNELS; i++) {
+                midiSynth[i] = MidiSystem.getSynthesizer();
+                midiSynth[i].open();
+                midiSynth[i].loadAllInstruments(midiSynth[i].getDefaultSoundbank());
+            }
         }
         catch(MidiUnavailableException e) {
             logger.error("Failed to open MidiSynth. No sound will be played!", e);
@@ -26,16 +30,17 @@ public class PluginSynth extends Plugin {
 
     @Override
     public void onNotePlayed(Note note, long timestamp) {
-        if(midiSynth == null) {
-            return;
-        }
 
-        MidiChannel[] mChannels = midiSynth.getChannels();
+        Synthesizer synth = midiSynth[note.getChannelNum()];
+
+        if(synth == null) {return;}
+
+        final MidiChannel channel = synth.getChannels()[note.getChannelNum()];
         if(note.isNoteOn()) {
-            mChannels[note.getChannelNum()].noteOn(note.getKeyNumber(), note.getVelocity());
+            channel.noteOn(note.getKeyNumber(), note.getVelocity());
         }
         else {
-            mChannels[note.getChannelNum()].noteOff(note.getKeyNumber(), note.getVelocity());
+            channel.noteOff(note.getKeyNumber(), note.getVelocity());
         }
     }
 }

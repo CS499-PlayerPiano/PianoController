@@ -35,7 +35,7 @@ public class PlayerPianoController implements Runnable {
         pluginLoader.loadFromPackage("plugins");
 
         for(Plugin plugin : pluginLoader.getPlugins()) {
-            plugin.setEnabled();
+            plugin.loadPlugin();
         }
 
         try {

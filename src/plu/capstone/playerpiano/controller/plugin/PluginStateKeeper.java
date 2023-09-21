@@ -8,8 +8,9 @@ public abstract class PluginStateKeeper extends Plugin {
 
     private Note[] notes = new Note[TOTAL_KEYS];
 
-    @Override
-    public void onEnable() {
+    public PluginStateKeeper() {
+        super();
+
         for(int i = 0; i < notes.length; ++i) {
             notes[i] = new Note(
                     (byte) i,

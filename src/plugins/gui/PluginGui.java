@@ -46,9 +46,7 @@ public class PluginGui extends PluginStateKeeper {
 //        }
 
         for(Note note : keys) {
-            if(note != null) {
-                piano.setKeyLit(note);
-            };
+            piano.setKeyLit(note);
         }
 
     }

@@ -5,8 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import plu.capstone.playerpiano.controller.logger.Logger;
 
 public class SheetMusic {
+
+    private final Logger logger = new Logger(this);
 
     @Getter(value = lombok.AccessLevel.PROTECTED)
     private Map<Long, List<Note>> noteMap = new HashMap<>();

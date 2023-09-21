@@ -56,6 +56,10 @@ public class PlayerPianoController implements Runnable {
     }
 
     public void playNote(Note note, long timestamp) {
+        if(note == null) {
+            logger.warning("Attempted to play null note!");
+            return;
+        }
         for(Plugin plugin : pluginLoader.getPlugins()) {
             if(plugin.isEnabled()) {
                 plugin.onNotePlayed(note, timestamp);

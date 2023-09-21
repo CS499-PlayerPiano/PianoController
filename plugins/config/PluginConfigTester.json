@@ -30,5 +30,6 @@
   "testNestedConfig2": {
     "testString": "test"
   },
-  "valueThatDoesNotExist": "default"
+  "valueThatDoesNotExist": "default",
+  "testEnum": null
 }

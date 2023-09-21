@@ -1,5 +1,6 @@
 package plu.capstone.playerpiano.controller.plugin;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -60,6 +61,12 @@ public class PluginConfig {
         }
     }
 
+    private JsonElement getElementOrReturnNull(String key) {
+        JsonElement element = underlyingConfig.get(key);
+        if(element == null || element.isJsonNull()) {return null;}
+        return element;
+    }
+
     public void setString(String key, String value) {
         underlyingConfig.addProperty(key, value);
     }
@@ -67,7 +74,9 @@ public class PluginConfig {
     public String getString(String key) {return getString(key, null);}
     public String getString(String key, String defaultValue) {
         checkOrSetDefault(key, defaultValue);
-        return underlyingConfig.get(key).getAsString();
+        JsonElement element = getElementOrReturnNull(key);
+        if(element == null) {return null;}
+        return element.getAsString();
     }
 
     public void setStringList(String key, String... value) {
@@ -88,7 +97,9 @@ public class PluginConfig {
     public int getInteger(String key) {return getInteger(key, 0);}
     public int getInteger(String key, int defaultValue) {
         checkOrSetDefault(key, defaultValue);
-        return underlyingConfig.get(key).getAsInt();
+        JsonElement element = getElementOrReturnNull(key);
+        if(element == null) {return 0;}
+        return element.getAsInt();
     }
 
     public void setIntegerList(String key, int... value) {
@@ -107,10 +118,12 @@ public class PluginConfig {
         underlyingConfig.addProperty(key, value);
     }
 
-    public int getDouble(String key) {return getDouble(key, 0);}
-    public int getDouble(String key, double defaultValue) {
+    public double getDouble(String key) {return getDouble(key, 0);}
+    public double getDouble(String key, double defaultValue) {
         checkOrSetDefault(key, defaultValue);
-        return underlyingConfig.get(key).getAsInt();
+        JsonElement element = getElementOrReturnNull(key);
+        if(element == null) {return 0;}
+        return element.getAsDouble();
     }
 
     public void setDoubleList(String key, double... value) {
@@ -131,7 +144,9 @@ public class PluginConfig {
     public boolean getBoolean(String key) {return getBoolean(key, false);}
     public boolean getBoolean(String key, boolean defaultValue) {
         checkOrSetDefault(key, defaultValue);
-        return underlyingConfig.get(key).getAsBoolean();
+        JsonElement element = getElementOrReturnNull(key);
+        if(element == null) {return false;}
+        return element.getAsBoolean();
     }
 
     public void setBooleanList(String key, boolean... value) {
@@ -158,6 +173,27 @@ public class PluginConfig {
         }
         checkOrSetDefault(key, defaultValue);
         return new PluginConfig(plugin, underlyingConfig.getAsJsonObject(key));
+    }
+
+    public void setEnum(String key, Enum value) {
+        underlyingConfig.addProperty(key, value.name());
+    }
+
+    public <T extends Enum<T>> T getEnum(String key, Class<T> enumType) {
+        return getEnum(key, enumType, null);
+    }
+
+    public <T extends Enum<T>> T getEnum(String key, Class<T> enumType, T defaultValue) {
+        checkOrSetDefault(key, defaultValue);
+        try {
+            String name = getString(key);
+            if(name == null) {return defaultValue;}
+            return Enum.valueOf(enumType, name);
+        }
+        catch(IllegalArgumentException e) {
+            logger.error("Failed to parse enum value for key: " + key, e);
+            return defaultValue;
+        }
     }
 
     private void checkOrSetDefault(String key, Object obj) {
@@ -189,6 +225,12 @@ public class PluginConfig {
             }
             else if(obj instanceof PluginConfig) {
                 this.setNestedConfig(key, (PluginConfig) obj);
+            }
+            else if(obj instanceof Enum) {
+                this.setEnum(key, (Enum) obj);
+            }
+            else if(obj == null) {
+                underlyingConfig.addProperty(key, (String)null);
             }
             else {
                 logger.error("Unknown type for default value: " + obj.getClass().getName());

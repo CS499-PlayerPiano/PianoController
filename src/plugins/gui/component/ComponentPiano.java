@@ -21,6 +21,7 @@ import java.util.Map;
 import javax.swing.JComponent;
 import plu.capstone.playerpiano.controller.midi.Note;
 import plugins.gui.PluginGui;
+import plugins.gui.PluginGui.ColorMode;
 
 public class ComponentPiano extends JComponent {
 
@@ -226,19 +227,22 @@ public class ComponentPiano extends JComponent {
         if (index < 0 || index > getKeyShapes().size()) return;
         if (note != null && note.isNoteOn()) {
 
-            Color color = Color.RED;
-            String mode = pluginGui.getConfig().getString("colorMode", "RAINBOW_GRADIENT");
-            if(mode.equalsIgnoreCase("TRACK_NUMBER")) {
+            final Color color;
+
+            ColorMode colorMode = pluginGui.getConfig().getEnum("colorMode", ColorMode.class);
+
+            if(colorMode == ColorMode.TRACK_NUMBER) {
                 color = getColorForNoteTrackNumber(note);
             }
-            else if(mode.equalsIgnoreCase("RAINBOW_GRADIENT")) {
+            else if(colorMode == ColorMode.RAINBOW_GRADIENT) {
                 color = getColorForNoteRainbowGradient(note);
             }
             else {
-                pluginGui.getLogger().warning("Invalid color mode: " + mode);
+                pluginGui.getLogger().warning("Invalid color mode: " + pluginGui.getConfig().getString("colorMode"));
+                color = Color.RED;
             }
 
-            litKeys.put(index, getColorForNoteTrackNumber(note));
+            litKeys.put(index, color);
         } else {
             litKeys.remove(index);
         }

@@ -14,6 +14,11 @@ public class PluginGui extends PluginStateKeeper {
     private final JFrame frame = new JFrame("Piano");
     private final ComponentPiano piano = new ComponentPiano(this);
 
+    public enum ColorMode {
+        RAINBOW_GRADIENT,
+        TRACK_NUMBER,
+    }
+
     @Override
     public void onEnable() {
 
@@ -29,10 +34,7 @@ public class PluginGui extends PluginStateKeeper {
 
     @Override
     public void setDefaultConfigValues() {
-
-        //TRACK_NUMBER, RAINBOW_GRADIENT
-        //config.addProperty("colorMode", "TRACK_NUMBER");
-        config.setString("colorMode", "RAINBOW_GRADIENT");
+        config.setEnum("colorMode", ColorMode.RAINBOW_GRADIENT);
     }
 
     @Override

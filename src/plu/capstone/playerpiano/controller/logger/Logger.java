@@ -9,10 +9,12 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import lombok.Getter;
 import lombok.Setter;
 
 public class Logger {
 
+    @Getter
     private final String name;
 
     @Setter

@@ -37,7 +37,7 @@ public class SheetMusic {
         this.isPlaying = true;
 
         for(NoteCallback callback : callbacks) {
-            callback.onSongStarted(0);
+            callback.onSongStarted(0, noteMap);
         }
 
         final long startTime = System.nanoTime();

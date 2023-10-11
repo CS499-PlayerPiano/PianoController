@@ -1,0 +1,3 @@
+[submodule "src/plugins/PluginLogger"]
+	path = src/plugins/PluginLogger
+	url = https://github.com/CS499-PlayerPiano/PluginLogger

@@ -7,3 +7,6 @@
 [submodule "src/plugins/PluginPianoEmulatorGui"]
 	path = src/plugins/PluginPianoEmulatorGui
 	url = https://github.com/CS499-PlayerPiano/PluginPianoEmulatorGui
+[submodule "src/plugins/PluginArduinoPiano"]
+	path = src/plugins/PluginArduinoPiano
+	url = https://github.com/CS499-PlayerPiano/PluginArduinoPiano

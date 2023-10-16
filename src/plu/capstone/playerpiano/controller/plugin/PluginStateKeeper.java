@@ -20,10 +20,12 @@ public abstract class PluginStateKeeper extends Plugin {
     }
 
     @Override
-    public void onNotePlayed(Note note, long timestamp) {
-        final int key = note.getKeyNumber();
-        notes[key] = note;
-        onNoteChange(notes, timestamp);
+    public final void onNotesPlayed(Note[] notes, long timestamp) {
+        for(Note note : notes) {
+            final int key = note.getKeyNumber();
+            this.notes[key] = note;
+        }
+        onNoteChange(this.notes, timestamp);
     }
 
     @Override

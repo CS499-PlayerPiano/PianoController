@@ -7,7 +7,10 @@ public interface NoteCallback {
 
     public static final long LIVE_TIMESTAMP = -1;
 
+    @Deprecated
     void onNotePlayed(Note note, long timestamp);
+
+    void onNotesPlayed(Note[] notes, long timestamp);
 
     default long getOffset() {
         return 0;

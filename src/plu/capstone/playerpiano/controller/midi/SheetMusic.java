@@ -67,6 +67,7 @@ public class SheetMusic {
                         final long newTime = prevTime + callback.getOffset();
                         List<Note> msgs = noteMap.getOrDefault(newTime, null);
                         if(msgs != null) {
+                            callback.onNotesPlayed(msgs.toArray(new Note[0]), newTime);
                             for(Note note : msgs) {
                                 callback.onNotePlayed(note, newTime);
                             }

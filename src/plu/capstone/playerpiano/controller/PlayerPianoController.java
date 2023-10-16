@@ -63,6 +63,7 @@ public class PlayerPianoController implements Runnable {
         for(Plugin plugin : pluginLoader.getPlugins()) {
             if(plugin.isEnabled()) {
                 plugin.onNotePlayed(note, timestamp);
+                plugin.onNotesPlayed(new Note[] { note }, timestamp);
             }
         }
     }

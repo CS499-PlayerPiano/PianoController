@@ -54,6 +54,9 @@ public abstract class Plugin implements NoteCallback {
     }
 
     @Override
+    public void onNotesPlayed(Note[] notes, long timestamp) {}
+
+    @Override
     public void onNotePlayed(Note note, long timestamp) {};
 
     /////////// Shortcuts for PlayerPianoController methods ///////////

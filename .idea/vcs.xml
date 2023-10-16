@@ -2,5 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/plugins/PluginArduinoPiano" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/plugins/PluginLogger" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/plugins/PluginPianoEmulatorGui" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/plugins/PluginSynth" vcs="Git" />
   </component>
 </project>

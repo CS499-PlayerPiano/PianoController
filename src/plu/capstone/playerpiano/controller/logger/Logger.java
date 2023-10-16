@@ -32,6 +32,10 @@ public class Logger {
         this.name = name;
     }
 
+    public Logger(Logger parent, String child) {
+        this.name = parent.name + " - " + child;
+    }
+
     public void debug(String msg) {
         if(!debugEnabled) {return;}
         this.print(ConsoleColors.BLACK_BRIGHT, "Debug", ConsoleColors.BLACK_BRIGHT, msg, false);

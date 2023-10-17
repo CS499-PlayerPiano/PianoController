@@ -39,11 +39,12 @@ public class PlayerPianoController implements Runnable {
         }
 
         try {
-            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
+            playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
             //playSheetMusic(new MidiSheetMusic(new File("res/songs/ABBA/Money Money.mid")));
             //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/mididownload.mid")));
-            playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
             //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/RUSH_E_FINAL.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/River_Flows_In_You.mid")));
         } catch (InvalidMidiDataException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {

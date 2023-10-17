@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "comPort": "COM10",
-  "baudRate": 19200,
+  "comPort": "COM3",
+  "baudRate": 115200,
   "printDebugOutputFromArduino": true
 }

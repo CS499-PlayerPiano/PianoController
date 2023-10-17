@@ -60,25 +60,30 @@ public class PluginLoader {
     }
 
     public void findAllClassesUsingClassLoader(String packageName, List<Class> foundClasses) {
-        InputStream stream = ClassLoader.getSystemClassLoader()
-                .getResourceAsStream(packageName.replaceAll("[.]", "/"));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-        Set<String> lines = reader.lines().collect(Collectors.toSet());
+        try {
+            InputStream stream = ClassLoader.getSystemClassLoader()
+                    .getResourceAsStream(packageName.replaceAll("[.]", "/"));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 
-        for(String line : lines) {
+            Set<String> lines = reader.lines().collect(Collectors.toSet());
 
-            if(line.endsWith(".class")) {
-                //System.out.println("Found class: " + packageName + "." + line);
-                foundClasses.add(getClass(line, packageName));
-            }
-            else {
-                line = packageName + "." + line;
-                //System.out.println("Not a class: " + line);
-                findAllClassesUsingClassLoader(line, foundClasses);
+            for (String line : lines) {
+
+                if (line.endsWith(".class")) {
+                    //System.out.println("Found class: " + packageName + "." + line);
+                    foundClasses.add(getClass(line, packageName));
+                } else {
+                    line = packageName + "." + line;
+                    System.out.println("Not a class: " + line);
+                    findAllClassesUsingClassLoader(line, foundClasses);
+                }
+
             }
 
         }
+        //Not a java file most likely
+        catch(NullPointerException e) {}
 
     }
 

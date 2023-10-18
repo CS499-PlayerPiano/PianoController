@@ -11,6 +11,11 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.logger.Logger;
 
+/**
+ * A plugin management class. Currently only supports loading plugins from a package path.
+ *
+ * TODO: Load jar plugins from a directory
+ */
 public class PluginLoader {
 
     private final Logger logger = new Logger(this);
@@ -18,7 +23,10 @@ public class PluginLoader {
     @Getter
     private List<Plugin> plugins = new ArrayList<>();
 
-    //Load all plugins from a package path
+    /**
+     * Loads all plugins from a package path.
+     * @param pckge The package path to load from
+     */
     public void loadFromPackage(String pckge) {
 
         List<Class> allClassesWeRecursivelyFound = new ArrayList<>();
@@ -50,6 +58,11 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * Finds a plugin by name
+     * @param name The name of the plugin
+     * @return The plugin, or null if not found
+     */
     public Plugin findPluginByName(String name) {
         for(Plugin plugin : plugins) {
             if(plugin.getName().equals(name)) {
@@ -59,7 +72,12 @@ public class PluginLoader {
         return null;
     }
 
-    public void findAllClassesUsingClassLoader(String packageName, List<Class> foundClasses) {
+    /**
+     * Finds all classes in a package path recursively
+     * @param packageName The package path to search
+     * @param foundClasses The list to add found classes to
+     */
+    private void findAllClassesUsingClassLoader(String packageName, List<Class> foundClasses) {
 
         try {
             InputStream stream = ClassLoader.getSystemClassLoader()
@@ -87,6 +105,12 @@ public class PluginLoader {
 
     }
 
+    /**
+     * Gets a class from a package path
+     * @param className The name of the class
+     * @param packageName The package path
+     * @return The class, or null if not found
+     */
     private Class getClass(String className, String packageName) {
         try {
             return Class.forName(packageName + "."

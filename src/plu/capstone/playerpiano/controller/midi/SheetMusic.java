@@ -7,6 +7,10 @@ import java.util.Map;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.logger.Logger;
 
+/**
+ * Base class for any type of sheet music.
+ * Can be extended, or used as is.
+ */
 public class SheetMusic {
 
     private final Logger logger = new Logger(this);
@@ -21,6 +25,11 @@ public class SheetMusic {
     private boolean isPlaying = false;
     private List<NoteCallback> callbacks = new ArrayList<>();
 
+    /**
+     * Creates a new SheetMusic object.
+     * @param time The time in milliseconds that this note starts.
+     * @param note The note to add.
+     */
     public final void putNote(long time, Note note) {
         if(!noteMap.containsKey(time)) {
             noteMap.put(time, new ArrayList<>());
@@ -28,10 +37,17 @@ public class SheetMusic {
         noteMap.get(time).add(note);
     }
 
+    /**
+     * Adds a callback to this SheetMusic object.
+     * @param callback The callback to add.
+     */
     public final void addCallback(NoteCallback callback) {
         callbacks.add(callback);
     }
 
+    /**
+     * Starts playing this SheetMusic object.
+     */
     public void play() {
         if(isPlaying) {throw new IllegalStateException("Already playing");}
         this.isPlaying = true;
@@ -83,6 +99,9 @@ public class SheetMusic {
 
     }
 
+    /**
+     * Stops playing this SheetMusic object.
+     */
     public void stop() {
         this.isPlaying = false;
     }

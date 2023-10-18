@@ -13,10 +13,19 @@ import javax.sound.midi.Track;
 import plu.capstone.playerpiano.controller.logger.Logger;
 import plu.capstone.playerpiano.controller.midi.MidiConstants.MetaMessages;
 
+/**
+ * This class is used to parse midi files into SheetMusic
+ */
 public class MidiSheetMusic extends SheetMusic {
 
     private final Logger logger = new Logger(this);
 
+    /**
+     * Creates a new MidiSheetMusic object from a midi file
+     * @param midiFile The midi file to parse
+     * @throws InvalidMidiDataException If the midi file is invalid
+     * @throws IOException If the midi file cannot be read
+     */
     public MidiSheetMusic(File midiFile) throws InvalidMidiDataException, IOException {
         load(midiFile);
     }

@@ -3,6 +3,9 @@ package plu.capstone.playerpiano.controller.midi;
 import java.util.Map;
 import static java.util.Map.entry;
 
+/**
+ * A class containing constants for MIDI messages.
+ */
 public class MidiConstants {
 
     public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};

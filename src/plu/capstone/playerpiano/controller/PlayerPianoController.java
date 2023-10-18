@@ -19,6 +19,10 @@ public class PlayerPianoController implements Runnable {
 
     private PluginLoader pluginLoader;
 
+    /**
+     * Returns the single instance of the PlayerPianoController.
+     * @return the single instance of the PlayerPianoController.
+     */
     public static PlayerPianoController getInstance() {
         if(INSTANCE == null) {
             INSTANCE = new PlayerPianoController();
@@ -52,23 +56,36 @@ public class PlayerPianoController implements Runnable {
         }
     }
 
-    public void playNote(Note note) {
-        this.playNote(note, NoteCallback.LIVE_TIMESTAMP);
+    /**
+     * Plays multiple notes.
+     * @param notes The notes to play live.
+     */
+    public void playNotes(Note[] notes) {
+        this.playNotes(notes, NoteCallback.LIVE_TIMESTAMP);
     }
 
-    public void playNote(Note note, long timestamp) {
-        if(note == null) {
+    /**
+     * Plays multiple notes.
+     * @param notes The notes to play.
+     * @param timestamp The timestamp of the notes.
+     *                  Use {@link NoteCallback#LIVE_TIMESTAMP} for live playing, or {@link #playNotes(Note[])} for a shortcut
+     */
+    public void playNotes(Note[] notes, long timestamp) {
+        if(notes == null || notes.length == 0) {
             logger.warning("Attempted to play null note!");
             return;
         }
         for(Plugin plugin : pluginLoader.getPlugins()) {
             if(plugin.isEnabled()) {
-                plugin.onNotePlayed(note, timestamp);
-                plugin.onNotesPlayed(new Note[] { note }, timestamp);
+                plugin.onNotesPlayed(notes, timestamp);
             }
         }
     }
 
+    /**
+     * Plays a given sheet music.
+     * @param music The sheet music to play.
+     */
     public void playSheetMusic(SheetMusic music) {
 
         this.currentSheetMusic = music;
@@ -83,12 +100,19 @@ public class PlayerPianoController implements Runnable {
 
     }
 
+    /**
+     * Stops the current sheet music.
+     */
     public void stopSheetMusic() {
         if(currentSheetMusic != null) {
             currentSheetMusic.stop();
         }
     }
 
+    /**
+     * Returns true if the sheet music is currently playing.
+     * @return true if the sheet music is currently playing.
+     */
     public boolean isSheetMusicPlaying() {
         if(currentSheetMusic != null) {
             return currentSheetMusic.isPlaying();

@@ -22,6 +22,10 @@ public class PluginConfig {
 
     private final File CONFIG_FILE;
 
+    /**
+     * Creates a new PluginConfig object for the given plugin, and initializes the config with the default values.
+     * @param plugin The plugin to create the config for.
+     */
     public PluginConfig(Plugin plugin) {
         this.plugin = plugin;
         logger = new Logger(plugin.getName() + "-Config");
@@ -29,11 +33,19 @@ public class PluginConfig {
         CONFIG_FILE = new File("plugins/config/" + this.plugin.getName() + ".json");
     }
 
+    /**
+     * Creates a new PluginConfig object for the given plugin with the given config.
+     * @param plugin The plugin to create the config for.
+     * @param config The config to use.
+     */
     private PluginConfig(Plugin plugin, JsonObject config) {
         this(plugin);
         underlyingConfig = config;
     }
 
+    /**
+     * Loads the config from the config file, or creates a new one if it doesn't exist.
+     */
     public void loadConfig() {
         if(!CONFIG_FILE.exists()) {
             logger.info("Creating default config file");
@@ -48,6 +60,9 @@ public class PluginConfig {
         }
     }
 
+    /**
+     * Saves the config to the config file.
+     */
     public void saveConfig() {
         if(!CONFIG_FILE.exists()) {
             CONFIG_FILE.getParentFile().mkdirs();
@@ -61,17 +76,39 @@ public class PluginConfig {
         }
     }
 
+    /**
+     * Small helper method to get an element from the config, or return null if it doesn't exist.
+     * @param key The key to get the element for.
+     * @return The element, or null if it doesn't exist.
+     */
     private JsonElement getElementOrReturnNull(String key) {
         JsonElement element = underlyingConfig.get(key);
         if(element == null || element.isJsonNull()) {return null;}
         return element;
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setString(String key, String value) {
         underlyingConfig.addProperty(key, value);
     }
 
+    /**
+     * Gets the value for the given key, or null if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or null if it doesn't exist.
+     */
     public String getString(String key) {return getString(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public String getString(String key, String defaultValue) {
         checkOrSetDefault(key, defaultValue);
         JsonElement element = getElementOrReturnNull(key);
@@ -79,22 +116,56 @@ public class PluginConfig {
         return element.getAsString();
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setStringList(String key, String... value) {
         underlyingConfig.add(key, plugin.GSON.toJsonTree(value));
     }
 
+    /**
+     * Gets the value for the given key, or null if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or null if it doesn't exist.
+     */
     public String[] getStringList(String key) {return getStringList(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public String[] getStringList(String key, String... defaultValue) {
         if(defaultValue == null) {defaultValue = new String[0];}
         checkOrSetDefault(key, defaultValue);
         return plugin.GSON.fromJson(underlyingConfig.get(key), String[].class);
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setInteger(String key, int value) {
         underlyingConfig.addProperty(key, value);
     }
 
+    /**
+     * Gets the value for the given key, or 0 if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or 0 if it doesn't exist.
+     */
     public int getInteger(String key) {return getInteger(key, 0);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public int getInteger(String key, int defaultValue) {
         checkOrSetDefault(key, defaultValue);
         JsonElement element = getElementOrReturnNull(key);
@@ -102,23 +173,56 @@ public class PluginConfig {
         return element.getAsInt();
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setIntegerList(String key, int... value) {
         underlyingConfig.add(key, plugin.GSON.toJsonTree(value));
     }
 
+    /**
+     * Gets the value for the given key, or an empty array if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or an empty array if it doesn't exist.
+     */
     public int[] getIntegerList(String key) {return getIntegerList(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public int[] getIntegerList(String key, int... defaultValue) {
         if(defaultValue == null) {defaultValue = new int[0];}
         checkOrSetDefault(key, defaultValue);
         return plugin.GSON.fromJson(underlyingConfig.get(key), int[].class);
     }
 
-    ///////////
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setDouble(String key, double value) {
         underlyingConfig.addProperty(key, value);
     }
 
+    /**
+     * Gets the value for the given key, or 0 if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or 0 if it doesn't exist.
+     */
     public double getDouble(String key) {return getDouble(key, 0);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public double getDouble(String key, double defaultValue) {
         checkOrSetDefault(key, defaultValue);
         JsonElement element = getElementOrReturnNull(key);
@@ -126,22 +230,56 @@ public class PluginConfig {
         return element.getAsDouble();
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setDoubleList(String key, double... value) {
         underlyingConfig.add(key, plugin.GSON.toJsonTree(value));
     }
 
+    /**
+     * Gets the value for the given key, or an empty array if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or an empty array if it doesn't exist.
+     */
     public double[] getDoubleList(String key) {return getDoubleList(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public double[] getDoubleList(String key, double... defaultValue) {
         if(defaultValue == null) {defaultValue = new double[0];}
         checkOrSetDefault(key, defaultValue);
         return plugin.GSON.fromJson(underlyingConfig.get(key), double[].class);
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setBoolean(String key, Boolean value) {
         underlyingConfig.addProperty(key, value);
     }
 
+    /**
+     * Gets the value for the given key, or false if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or false if it doesn't exist.
+     */
     public boolean getBoolean(String key) {return getBoolean(key, false);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public boolean getBoolean(String key, boolean defaultValue) {
         checkOrSetDefault(key, defaultValue);
         JsonElement element = getElementOrReturnNull(key);
@@ -149,24 +287,58 @@ public class PluginConfig {
         return element.getAsBoolean();
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setBooleanList(String key, boolean... value) {
         underlyingConfig.add(key, plugin.GSON.toJsonTree(value));
     }
 
+    /**
+     * Gets the value for the given key, or an empty array if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or an empty array if it doesn't exist.
+     */
     public boolean[] getBooleanList(String key) {return getBooleanList(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public boolean[] getBooleanList(String key, boolean... defaultValue) {
         if(defaultValue == null) {defaultValue = new boolean[0];}
         checkOrSetDefault(key, defaultValue);
         return plugin.GSON.fromJson(underlyingConfig.get(key), boolean[].class);
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setNestedConfig(String key, PluginConfig value) {
         underlyingConfig.add(key, value.underlyingConfig);
     }
 
+    /**
+     * Gets the value for the given key, or an empty config if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or an empty config if it doesn't exist.
+     */
     public PluginConfig getNestedConfig(String key) {
         return getNestedConfig(key, null);
     }
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
     public PluginConfig getNestedConfig(String key, PluginConfig defaultValue) {
         if(defaultValue == null) {
             defaultValue = new PluginConfig(plugin);
@@ -175,14 +347,34 @@ public class PluginConfig {
         return new PluginConfig(plugin, underlyingConfig.getAsJsonObject(key));
     }
 
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
     public void setEnum(String key, Enum value) {
         underlyingConfig.addProperty(key, value.name());
     }
 
+    /**
+     * Gets the value for the given key, or null if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param enumType The type of enum to parse.
+     * @return The value, or null if it doesn't exist.
+     * @param <T> The type of enum to parse.
+     */
     public <T extends Enum<T>> T getEnum(String key, Class<T> enumType) {
         return getEnum(key, enumType, null);
     }
 
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param enumType The type of enum to parse.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     * @param <T> The type of enum to parse.
+     */
     public <T extends Enum<T>> T getEnum(String key, Class<T> enumType, T defaultValue) {
         checkOrSetDefault(key, defaultValue);
         try {
@@ -196,6 +388,11 @@ public class PluginConfig {
         }
     }
 
+    /**
+     * Checks if the given key exists in the config. If it doesn't, it sets it to the given default value.
+     * @param key The key to check.
+     * @param obj The default value to set if the key doesn't exist.
+     */
     private void checkOrSetDefault(String key, Object obj) {
         if(!underlyingConfig.has(key)) {
 
@@ -240,6 +437,10 @@ public class PluginConfig {
         }
     }
 
+    /**
+     * Returns a JSON string representation of the config.
+     * @return A JSON string representation of the config.
+     */
     @Override
     public String toString() {
         return underlyingConfig.toString();

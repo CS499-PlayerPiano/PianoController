@@ -1,5 +1,8 @@
 package plu.capstone.playerpiano.controller.logger;
 
+/**
+ * This class is a copy of the ConsoleColors class from the following StackOverflow answer: https://stackoverflow.com/a/45444716
+ */
 public class ConsoleColors {
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset

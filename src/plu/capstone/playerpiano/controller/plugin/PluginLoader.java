@@ -93,7 +93,7 @@ public class PluginLoader {
                     foundClasses.add(getClass(line, packageName));
                 } else {
                     line = packageName + "." + line;
-                    System.out.println("Not a class: " + line);
+                    logger.debug("Not a class: " + line);
                     findAllClassesUsingClassLoader(line, foundClasses);
                 }
 

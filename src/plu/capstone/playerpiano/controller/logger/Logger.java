@@ -17,6 +17,20 @@ import lombok.Setter;
  */
 public class Logger {
 
+    private static final int BUFFER_SIZE = 4096;
+    private static final PrintWriter OUT;
+    private static final PrintWriter ERR;
+
+    static {
+        try {
+            OUT = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileDescriptor.out), "UTF-8"), BUFFER_SIZE ));
+            ERR = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileDescriptor.err), "UTF-8"), BUFFER_SIZE ));
+        } catch (UnsupportedEncodingException e) {
+            System.err.println("Failed to create logger");
+            throw new RuntimeException(e);
+        }
+    }
+
     @Getter
     private final String name;
 
@@ -114,16 +128,9 @@ public class Logger {
         //https://stackoverflow.com/questions/18584809/java-system-out-effect-on-performance
         String x = ConsoleColors.BLUE + "[" + name + "] " + prefixColor + "[" + prefix + "] " + msgColor + msg + ConsoleColors.RESET;
 
-        try {
-            FileDescriptor fd = error ? FileDescriptor.err : FileDescriptor.out;
-            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fd), "UTF-8"), 4096 ));
-            out.println(x);
-            out.flush();
-
-        } catch (UnsupportedEncodingException e) {
-            final PrintStream out = error ? System.err : System.out;
-            out.println(x);
-        }
+        PrintWriter out = error ? ERR : OUT;
+        out.println(x);
+        out.flush();
     }
 
     /**

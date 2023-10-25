@@ -4,6 +4,7 @@ import javax.sound.midi.ShortMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import plu.capstone.playerpiano.controller.midi.MidiConstants.NoteDetails;
 
 /**
  * Represents a single note in a piece of sheet music.
@@ -12,8 +13,6 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class Note {
-
-    private static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
 
     public static final int NO_CHANNEL = -1;
 
@@ -63,9 +62,10 @@ public class Note {
     }
     public Note(byte keyNumber, byte velocity, boolean noteOn, int channelNum) {
         this.keyNumber = keyNumber;
-        this.octave = (keyNumber / 12)-1;
-        int note = keyNumber % 12;
-        this.noteName = NOTE_NAMES[note];
+
+        final NoteDetails noteDetails = NoteDetails.from(keyNumber);
+        this.octave = noteDetails.getOctave();
+        this.noteName = noteDetails.getNoteName();
         this.velocity = velocity;
         this.noteOn = noteOn;
         this.channelNum = channelNum;

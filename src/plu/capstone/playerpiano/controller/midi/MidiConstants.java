@@ -2,6 +2,9 @@ package plu.capstone.playerpiano.controller.midi;
 
 import java.util.Map;
 import static java.util.Map.entry;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * A class containing constants for MIDI messages.
@@ -34,7 +37,7 @@ public class MidiConstants {
             entry(127, "Mono Mode Off / Poly Mode On")
     );
 
-   public static class MetaMessages {
+    public static class MetaMessages {
         public static final int SEQUENCE_NUMBER = 0x00;
         public static final int TEXT_EVENT = 0x01;
         public static final int COPYRIGHT_NOTICE = 0x02;
@@ -50,6 +53,32 @@ public class MidiConstants {
         public static final int TIME_SIGNATURE = 0x58;
         public static final int KEY_SIGNATURE = 0x59;
         public static final int SEQUENCER_SPECIFIC = 0x7F;
+    }
+
+    /**
+     * Converts a MIDI message to a NoteDetails object.
+     * NoteDetails contains the key number, octave, and note name.
+     */
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public static final class NoteDetails {
+
+        private final int keyNumber;
+        private final int octave;
+        private final String noteName;
+
+
+        /**
+         * Converts a MIDI key number to a NoteDetails object.
+         * @param midiNote The MIDI key number.
+         * @return The NoteDetails object.
+         */
+        public static NoteDetails from(int midiNote) {
+            int octave = (midiNote / 12)-1;
+            int note = midiNote % 12;
+            String noteName = NOTE_NAMES[note];
+            return new NoteDetails(midiNote, octave, noteName);
+        }
     }
 
 }

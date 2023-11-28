@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
-import plu.capstone.playerpiano.controller.logger.Logger;
+import plu.capstone.playerpiano.logger.Logger;
 
 public class PluginConfig {
 

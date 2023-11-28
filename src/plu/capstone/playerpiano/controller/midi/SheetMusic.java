@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import plu.capstone.playerpiano.controller.logger.Logger;
+import plu.capstone.playerpiano.logger.Logger;
 
 /**
  * Base class for any type of sheet music.

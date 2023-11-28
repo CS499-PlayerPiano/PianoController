@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import plu.capstone.playerpiano.controller.logger.Logger;
+import plu.capstone.playerpiano.logger.Logger;
 
 /**
  * A plugin management class. Currently only supports loading plugins from a package path.

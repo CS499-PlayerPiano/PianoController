@@ -3,7 +3,7 @@ package plu.capstone.playerpiano.controller;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
-import plu.capstone.playerpiano.controller.logger.Logger;
+import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.controller.midi.MidiSheetMusic;
 import plu.capstone.playerpiano.controller.midi.Note;
 import plu.capstone.playerpiano.controller.midi.NoteCallback;

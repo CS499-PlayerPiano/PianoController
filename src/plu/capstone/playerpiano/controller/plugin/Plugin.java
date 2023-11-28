@@ -2,17 +2,13 @@ package plu.capstone.playerpiano.controller.plugin;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.nio.file.Files;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
 import plu.capstone.playerpiano.controller.midi.Note;
-import plu.capstone.playerpiano.controller.logger.Logger;
 import plu.capstone.playerpiano.controller.midi.NoteCallback;
 import plu.capstone.playerpiano.controller.midi.SheetMusic;
+import plu.capstone.playerpiano.logger.Logger;
 
 /**
  * Base class for all plugins.

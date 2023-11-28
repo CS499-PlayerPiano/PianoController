@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Piano-SheetMusic">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/piano/Piano-SheetMusic.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.controller.midi.MidiSheetMusic;
-import plu.capstone.playerpiano.controller.midi.Note;
-import plu.capstone.playerpiano.controller.midi.NoteCallback;
-import plu.capstone.playerpiano.controller.midi.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
+import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.NoteCallback;
+import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugin.PluginLoader;
 

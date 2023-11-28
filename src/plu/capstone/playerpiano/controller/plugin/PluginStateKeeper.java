@@ -1,6 +1,6 @@
 package plu.capstone.playerpiano.controller.plugin;
 
-import plu.capstone.playerpiano.controller.midi.Note;
+import plu.capstone.playerpiano.sheetmusic.Note;
 
 /**
  * An extension of the Plugin class that keeps track of the state of the piano notes.

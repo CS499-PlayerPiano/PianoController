@@ -5,9 +5,9 @@ import com.google.gson.GsonBuilder;
 import java.io.File;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
-import plu.capstone.playerpiano.controller.midi.Note;
-import plu.capstone.playerpiano.controller.midi.NoteCallback;
-import plu.capstone.playerpiano.controller.midi.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.NoteCallback;
+import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.logger.Logger;
 
 /**

@@ -88,6 +88,9 @@ public class PlayerPianoController implements Runnable {
      */
     public void playSheetMusic(SheetMusic music) {
 
+        //Stop the current sheet music if we are playing one
+        this.stopSheetMusic();
+
         this.currentSheetMusic = music;
 
         for(Plugin plugin : pluginLoader.getPlugins()) {
@@ -96,7 +99,14 @@ public class PlayerPianoController implements Runnable {
             }
         }
 
-        currentSheetMusic.play();
+        // We use a new thread for this, so we don't hang the main thread
+        // TODO: This should be properly handled by the plugin system & locking!!
+        // TODO: It seems to work, but this change will most likely break things!
+        new Thread(() -> {
+            currentSheetMusic.play();
+        }, "Sheet music playing thread").start();
+
+        //currentSheetMusic.play();
 
     }
 

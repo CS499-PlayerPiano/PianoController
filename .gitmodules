@@ -10,6 +10,7 @@
 [submodule "src/plugins/PluginArduinoPiano"]
 	path = src/plugins/PluginArduinoPiano
 	url = https://github.com/CS499-PlayerPiano/PluginArduinoPiano
+	branch = plugin-queue-thread
 [submodule "res/songs-db"]
 	path = res/songs-db
 	url = https://github.com/CS499-PlayerPiano/SongDB.git

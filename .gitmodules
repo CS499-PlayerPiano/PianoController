@@ -13,3 +13,6 @@
 [submodule "res/songs-db"]
 	path = res/songs-db
 	url = https://github.com/CS499-PlayerPiano/SongDB.git
+[submodule "src/plugins/PluginWebAPI"]
+	path = src/plugins/PluginWebAPI
+	url = https://github.com/CS499-PlayerPiano/PluginWebAPI

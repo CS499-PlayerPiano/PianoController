@@ -1,6 +1,3 @@
-[submodule "src/plugins/PluginSynth"]
-	path = src/plugins/PluginSynth
-	url = https://github.com/CS499-PlayerPiano/PluginSynth
 [submodule "src/plugins/PluginPianoEmulatorGui"]
 	path = src/plugins/PluginPianoEmulatorGui
 	url = https://github.com/CS499-PlayerPiano/PluginPianoEmulatorGui

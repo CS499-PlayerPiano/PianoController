@@ -28,7 +28,6 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-common-1.8.21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-jdk7-1.8.21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/lombok/lombok-1.18.30.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/slf4j-simple-2.0.7.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcommander/jcommander-1.82.jar" path-in-jar="/" />
     </root>
   </artifact>

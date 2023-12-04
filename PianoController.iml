@@ -7,15 +7,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/slf4j-simple-2.0.7.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="io.javalin" level="project" />
     <orderEntry type="library" name="projectlombok.lombok" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />

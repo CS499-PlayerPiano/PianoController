@@ -35,10 +35,6 @@ public class MainMidiConverter {
          */
     }
 
-
-
-    public static void main(String[] args) throws Exception {new MainMidiConverter().run();}
-
     Map<Long, List<Note>> noteMap = new HashMap<>();
 
     Logger logger = new Logger(MainMidiConverter.class);
@@ -49,7 +45,7 @@ public class MainMidiConverter {
 
     int notesOnRightNow = 0;
 
-    private void run() throws Exception {
+    public void run(String input, String output) throws Exception {
 
 
         Sequence sequence = MidiSystem.getSequence(midiFile);

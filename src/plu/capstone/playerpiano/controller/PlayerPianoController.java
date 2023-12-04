@@ -36,7 +36,7 @@ public class PlayerPianoController implements Runnable {
     public void run() {
         logger.info("PlayerPianoController running!");
         pluginLoader = new PluginLoader();
-        pluginLoader.loadFromPackage("plugins");
+        pluginLoader.loadFromPluginEnum();
 
         for(Plugin plugin : pluginLoader.getPlugins()) {
             plugin.loadPlugin();

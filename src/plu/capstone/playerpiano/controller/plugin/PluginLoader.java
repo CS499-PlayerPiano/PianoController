@@ -12,7 +12,7 @@ import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 
 /**
- * A plugin management class. Currently only supports loading plugins from a package path.
+ * A plugin management class. Currently only supports loading plugins from the PluginInstances enum
  *
  * TODO: Load jar plugins from a directory
  */
@@ -24,17 +24,12 @@ public class PluginLoader {
     private List<Plugin> plugins = new ArrayList<>();
 
     /**
-     * Loads all plugins from a package path.
-     * @param pckge The package path to load from
+     * Loads all plugins from the instances enum
      */
-    public void loadFromPackage(String pckge) {
+    public void loadFromPluginEnum() {
 
-        List<Class> allClassesWeRecursivelyFound = new ArrayList<>();
-
-        findAllClassesUsingClassLoader(pckge, allClassesWeRecursivelyFound);
-
-        logger.debug("Found classes: ");
-        for(Class clazz : allClassesWeRecursivelyFound) {
+        logger.debug("Plugin Classes in Enum: ");
+        for(Class clazz : PluginInstances.getAllPlugins()) {
 
             Class superClass = clazz.getSuperclass();
 
@@ -47,12 +42,12 @@ public class PluginLoader {
                     plugins.add((Plugin) instance);
 
                 } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    logger.debug("Failed to initalize empty constructor for: " + clazz.getSimpleName());
+                    logger.warning("Failed to initialize empty constructor for: " + clazz.getSimpleName());
                 }
 
             }
             else {
-                logger.debug("  - " + clazz.getSimpleName() + " is not a plugin!");
+                logger.error("  - " + clazz.getSimpleName() + " is not a plugin!");
             }
 
         }
@@ -71,54 +66,4 @@ public class PluginLoader {
         }
         return null;
     }
-
-    /**
-     * Finds all classes in a package path recursively
-     * @param packageName The package path to search
-     * @param foundClasses The list to add found classes to
-     */
-    private void findAllClassesUsingClassLoader(String packageName, List<Class> foundClasses) {
-
-        try {
-            InputStream stream = ClassLoader.getSystemClassLoader()
-                    .getResourceAsStream(packageName.replaceAll("[.]", "/"));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
-            Set<String> lines = reader.lines().collect(Collectors.toSet());
-
-            for (String line : lines) {
-
-                if (line.endsWith(".class")) {
-                    //System.out.println("Found class: " + packageName + "." + line);
-                    foundClasses.add(getClass(line, packageName));
-                } else {
-                    line = packageName + "." + line;
-                    logger.debug("Not a class: " + line);
-                    findAllClassesUsingClassLoader(line, foundClasses);
-                }
-
-            }
-
-        }
-        //Not a java file most likely
-        catch(NullPointerException e) {}
-
-    }
-
-    /**
-     * Gets a class from a package path
-     * @param className The name of the class
-     * @param packageName The package path
-     * @return The class, or null if not found
-     */
-    private Class getClass(String className, String packageName) {
-        try {
-            return Class.forName(packageName + "."
-                    + className.substring(0, className.lastIndexOf('.')));
-        } catch (ClassNotFoundException e) {
-            // handle the exception
-        }
-        return null;
-    }
-
 }

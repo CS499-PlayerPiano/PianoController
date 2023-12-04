@@ -3,10 +3,5 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/res/songs-db" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/plugins/PluginArduinoPiano" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/plugins/PluginLogger" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/plugins/PluginPianoEmulatorGui" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/plugins/PluginSynth" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/plugins/PluginWebAPI" vcs="Git" />
   </component>
 </project>

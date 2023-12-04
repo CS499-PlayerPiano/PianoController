@@ -32,7 +32,7 @@ public abstract class PluginStateKeeper extends Plugin {
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public final void onNotesPlayed(Note[] notes, long timestamp) {
+    public final void onNotesPlayed2(Note[] notes, long timestamp) {
         for(Note note : notes) {
             final int key = note.getKeyNumber();
             this.notes[key] = note;

@@ -317,6 +317,5 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Piano-Logger" level="project" />
-    <orderEntry type="library" name="Piano-SheetMusic" level="project" />
   </component>
 </module>

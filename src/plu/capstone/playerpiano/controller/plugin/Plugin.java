@@ -3,6 +3,11 @@ package plu.capstone.playerpiano.controller.plugin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
 import plu.capstone.playerpiano.sheetmusic.Note;
@@ -30,6 +35,8 @@ public abstract class Plugin implements NoteCallback {
     @Getter
     protected final Logger logger = new Logger(this);
 
+    private final Queue<TimedNotes> noteQueue = new ConcurrentLinkedQueue<>();
+
 
     /**
      * Called when the plugin is enabled.
@@ -53,6 +60,21 @@ public abstract class Plugin implements NoteCallback {
         enabled = true;
         logger.info("Hello world!");
         onEnable();
+
+        new Thread(() -> {
+            while(enabled) {
+                TimedNotes timedNotes = noteQueue.poll();
+                if(timedNotes == null) {
+                    try {
+                        //so we don't spin the cpu
+                        Thread.sleep(10);
+                    }
+                    catch (InterruptedException e) {}
+                    continue;
+                }
+                onNotesPlayed2(timedNotes.getNotes(), timedNotes.getTimestamp());
+            }
+        }, this.name + " - Note Queue Poller").start();
     }
 
     /**
@@ -64,6 +86,8 @@ public abstract class Plugin implements NoteCallback {
         enabled = false;
         logger.info("Goodbye!");
         onDisable();
+
+        noteQueue.clear();
     }
 
     /**
@@ -73,10 +97,30 @@ public abstract class Plugin implements NoteCallback {
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public void onNotesPlayed(Note[] notes, long timestamp) {
+    public final void onNotesPlayed(Note[] notes, long timestamp) {
+        noteQueue.add(new TimedNotes(timestamp, notes));
+    }
+
+    /**
+     * Called when X note(s) are played / state changed at a given timestamp.
+     * @param notes array of notes that were played / changed
+     * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
+     *                  and the timestamp will be the time since the song started.
+     */
+    public void onNotesPlayed2(Note[] notes, long timestamp) {
         for(Note note : notes) {
             onNotePlayed(note, timestamp);
         }
+    }
+
+    @Override
+    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
+        noteQueue.clear();
+    }
+
+    @Override
+    public void onSongFinished(long timestamp) {
+        noteQueue.clear();
     }
 
     /**
@@ -134,4 +178,12 @@ public abstract class Plugin implements NoteCallback {
      * This is called BEFORE {@link #onEnable()}.
      */
     public void setDefaultConfigValues() {}
+
+
+    @AllArgsConstructor
+    @Getter
+    public class TimedNotes {
+        private final long timestamp;
+        private final Note[] notes;
+    }
 }

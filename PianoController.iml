@@ -16,18 +16,10 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library>
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/jcommander-1.83.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="io.javalin" level="project" />
     <orderEntry type="library" name="projectlombok.lombok" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="library" name="fazecast.jSerialComm" level="project" />
+    <orderEntry type="library" name="beust.jcommander" level="project" />
   </component>
 </module>

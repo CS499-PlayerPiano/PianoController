@@ -1,4 +1,4 @@
-package plugins.PluginPianoEmulatorGui.component;
+package plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.component;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,10 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
+import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui;
+import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui.ColorMode;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 import plu.capstone.playerpiano.sheetmusic.Note;
-import plugins.PluginPianoEmulatorGui.PluginGui;
-import plugins.PluginPianoEmulatorGui.PluginGui.ColorMode;
+
 
 public class ComponentPiano extends JComponent {
 

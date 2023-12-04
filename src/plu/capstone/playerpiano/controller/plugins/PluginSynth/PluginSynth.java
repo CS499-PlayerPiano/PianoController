@@ -1,4 +1,4 @@
-package plugins.PluginSynth;
+package plu.capstone.playerpiano.controller.plugins.PluginSynth;
 
 import javax.sound.midi.MidiChannel;
 import javax.sound.midi.MidiSystem;

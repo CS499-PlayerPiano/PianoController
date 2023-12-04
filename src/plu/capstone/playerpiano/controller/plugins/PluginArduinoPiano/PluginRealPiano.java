@@ -1,4 +1,4 @@
-package plugins.PluginArduinoPiano;
+package plu.capstone.playerpiano.controller.plugins.PluginArduinoPiano;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;

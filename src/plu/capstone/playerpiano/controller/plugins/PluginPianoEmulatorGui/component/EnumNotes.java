@@ -1,4 +1,4 @@
-package plugins.PluginPianoEmulatorGui.component;
+package plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.component;
 
 import lombok.Getter;
 

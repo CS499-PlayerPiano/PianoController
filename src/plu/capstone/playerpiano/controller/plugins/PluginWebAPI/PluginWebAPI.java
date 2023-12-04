@@ -1,4 +1,4 @@
-package plugins.PluginWebAPI;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,9 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
-import plugins.PluginWebAPI.endpoints.Endpoint;
-import plugins.PluginWebAPI.endpoints.v1.V1_ControlPiano;
-import plugins.PluginWebAPI.endpoints.v1.V1_EndpointGetSongData;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1.V1_ControlPiano;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1.V1_EndpointGetSongData;
 
 public class PluginWebAPI extends Plugin {
 

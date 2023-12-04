@@ -1,4 +1,4 @@
-package plugins.PluginWebAPI.endpoints.v1;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1;
 
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
@@ -7,10 +7,10 @@ import io.javalin.http.HttpStatus;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plugins.PluginWebAPI.PluginWebAPI;
-import plugins.PluginWebAPI.endpoints.Endpoint;
 
 public class V1_ControlPiano implements Endpoint {
 

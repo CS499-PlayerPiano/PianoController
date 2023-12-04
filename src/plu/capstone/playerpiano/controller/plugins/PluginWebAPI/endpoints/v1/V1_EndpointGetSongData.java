@@ -1,12 +1,12 @@
-package plugins.PluginWebAPI.endpoints.v1;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import plugins.PluginWebAPI.PluginWebAPI;
-import plugins.PluginWebAPI.endpoints.Endpoint;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 
 public class V1_EndpointGetSongData implements Endpoint {
 

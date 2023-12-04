@@ -1,13 +1,13 @@
-package plugins.PluginPianoEmulatorGui;
+package plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui;
 
 import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.component.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.controller.plugin.PluginStateKeeper;
-import plugins.PluginPianoEmulatorGui.component.ComponentPiano;
 
 /**
  * Plugin to visualize the piano keys.

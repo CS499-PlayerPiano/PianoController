@@ -1,4 +1,4 @@
-package plugins.test;
+package plu.capstone.playerpiano.controller.plugins.test;
 
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 

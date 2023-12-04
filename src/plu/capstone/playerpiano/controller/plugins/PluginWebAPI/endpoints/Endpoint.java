@@ -1,7 +1,7 @@
-package plugins.PluginWebAPI.endpoints;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints;
 
 import io.javalin.Javalin;
-import plugins.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 
 public interface Endpoint {
 

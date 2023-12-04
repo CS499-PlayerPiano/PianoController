@@ -1,4 +1,4 @@
-package plugins.PluginLogger;
+package plu.capstone.playerpiano.controller.plugins.PluginLogger;
 
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.sheetmusic.Note;

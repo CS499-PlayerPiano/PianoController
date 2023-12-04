@@ -316,6 +316,14 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="commons-cli-1.6.0" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/jcommander-1.83.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

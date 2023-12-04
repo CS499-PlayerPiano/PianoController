@@ -36,7 +36,7 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/jakarta.transaction-api-2.0.0.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-1.7.10.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/asm-tree-9.4.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/commons-cli/commons-cli-1.6.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcommander-1.83.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

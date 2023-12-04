@@ -316,5 +316,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-cli-1.6.0" level="project" />
   </component>
 </module>

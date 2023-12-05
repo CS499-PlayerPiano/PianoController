@@ -1,1 +1,84 @@
-<h1>Hello from Java!</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Website</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            background-color: #4e89ff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            box-shadow: 0 0 40px rgba(255, 255, 255, 1);
+        }
+
+        .logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media screen and (max-width: 600px) {
+            .text {
+                font-size: 18px;
+            }
+
+            .button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <img src="piano.png" alt="Logo">
+        </div>
+        <div class="text">
+            <p>We should replace this with the UI</p>
+        </div>
+        <div class="buttons">
+            <a href="/docs" class="button">API Documentation</a>
+        </div>
+    </div>
+</body>
+
+</html>

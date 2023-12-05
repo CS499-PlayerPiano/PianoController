@@ -1,6 +1,5 @@
 package plu.capstone.playerpiano.controller.plugins.PluginWebAPI;
 
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
@@ -8,7 +7,6 @@ import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
 import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
-import io.javalin.openapi.plugin.SecurityComponentConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.websocket.WsContext;
@@ -18,7 +16,6 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.TestEndpoint;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
 
@@ -31,8 +28,7 @@ public class PluginWebAPI extends Plugin {
 
     private final Set<Endpoint> ENDPOINTS = Set.of(
             new EndpointGetSongData(),
-            new EndpointControlPiano(),
-            new TestEndpoint()
+            new EndpointControlPiano()
     );
 
     String API_DOCS_JSON = "/api/openapi.json";
@@ -68,7 +64,6 @@ public class PluginWebAPI extends Plugin {
                 //staticFiles.mimeTypes.add(mimeType, ext);       // you can add custom mimetypes for extensions
             });
 
-
             config.plugins.register(new OpenApiPlugin(
                             new OpenApiPluginConfiguration()
                                     .withDocumentationPath(API_DOCS_JSON)
@@ -76,10 +71,12 @@ public class PluginWebAPI extends Plugin {
                                             .withOpenApiInfo((openApiInfo) -> {
                                                 openApiInfo.setTitle("Piano Controller API");
                                                 openApiInfo.setVersion("1.0.0");
+                                                openApiInfo.setDescription("API for controlling the piano");
                                             })
+                                    )
                     )
 
-            ));
+            );
 
             SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
             swaggerConfiguration.setUiPath(API_DOCS_SWAGGER_PATH);

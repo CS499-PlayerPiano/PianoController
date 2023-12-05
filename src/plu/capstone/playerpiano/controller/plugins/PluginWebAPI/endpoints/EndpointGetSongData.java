@@ -15,7 +15,7 @@ import plu.capstone.playerpiano.controller.songdb.Song;
 
 public class EndpointGetSongData implements Endpoint {
 
-    final File DEFAULT_ALBUM_ART = new File("res/songs-db/artwork/null.jpg");
+    final File DEFAULT_ALBUM_ART = new File("res" + File.separator + "songs-db" + File.separator + "artwork" + File.separator + "NULL.jpg");
 
     @Override
     public void register(PluginWebAPI server, Javalin app) {
@@ -42,7 +42,7 @@ public class EndpointGetSongData implements Endpoint {
                     )
             })
     private void getSongs(Context ctx) throws IOException {
-        File file = new File("res/songs-db/songs.json");
+        File file = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
         ctx.result(Files.readString(file.toPath()));
     }
 
@@ -80,7 +80,7 @@ public class EndpointGetSongData implements Endpoint {
 
 
         if(name != null && !name.isEmpty() && !name.equalsIgnoreCase("null")) {
-            File file = new File("res/songs-db/artwork/" + name);
+            File file = new File("res" + File.separator + "songs-db" + File.separator + "artwork" + File.separator + name);
             if(file.exists()) {
                 result = file;
             }

@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/PianoController_jar</output-path>
     <root id="archive" name="PianoController.jar">
       <element id="module-output" name="PianoController" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcommander/jcommander-1.82.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jSerialComm/jSerialComm-2.10.4.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/gson/gson-2.10.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/javalin-5.6.3.jar" path-in-jar="/" />
@@ -27,8 +28,119 @@
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-1.8.21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-common-1.8.21.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin/kotlin-stdlib-jdk7-1.8.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/openapi-annotation-processor-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/openapi-specification-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-databind-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-annotations-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-core-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-module-kotlin-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/gson-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/kotlin-stdlib-jdk8-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/kotlin-stdlib-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/kotlin-stdlib-common-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/kotlin-stdlib-jdk7-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/kotlin-reflect-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/groovy-4.0.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/javalin-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/annotations-24.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-server-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-jakarta-servlet-api-5.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-http-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-util-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-io-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-webapp-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-servlet-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-security-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-xml-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-jetty-server-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-jetty-common-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-core-common-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-servlet-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-core-server-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-annotations-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-plus-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jakarta.transaction-api-2.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jetty-jndi-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jakarta.annotation-api-2.1.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/asm-9.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/asm-commons-9.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/asm-tree-9.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/websocket-jetty-api-11.0.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-2.1.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-v2-converter-2.1.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-core-1.6.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jakarta.xml.bind-api-2.3.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jakarta.activation-api-1.2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/commons-lang3-3.12.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-models-1.6.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-annotations-1.6.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/guava-31.1-android.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/failureaccess-1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jsr305-3.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/checker-qual-3.12.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/error_prone_annotations-2.11.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/j2objc-annotations-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-1.0.67.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-compat-spec-parser-1.0.67.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/json-schema-validator-2.2.14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-coreutils-equivalence-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/json-schema-core-1.2.14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/uri-template-0.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/rhino-1.7.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/joda-time-2.10.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/libphonenumber-8.11.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jopt-simple-5.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/json-patch-1.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/msg-simple-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/btf-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-coreutils-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/httpclient-4.5.14.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/httpcore-4.4.16.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/commons-codec-1.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-models-2.2.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-core-2.1.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-v3-2.1.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-core-2.2.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-datatype-jsr310-2.14.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-annotations-2.2.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jakarta.validation-api-2.0.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/swagger-parser-safe-url-resolver-2.1.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/jackson-dataformat-yaml-2.15.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/snakeyaml-2.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/commons-io-2.11.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/logback-classic-1.4.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/logback-core-1.4.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-annotation-processor/slf4j-api-2.0.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/javalin-openapi-plugin-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/openapi-specification-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/jackson-databind-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/jackson-annotations-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/jackson-core-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/jackson-module-kotlin-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/kotlin-reflect-1.5.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/gson-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/kotlin-stdlib-jdk8-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/kotlin-stdlib-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/kotlin-stdlib-common-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/annotations-13.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-openapi-plugin/kotlin-stdlib-jdk7-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/javalin-swagger-plugin-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/openapi-specification-5.6.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/jackson-databind-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/jackson-annotations-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/jackson-core-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/jackson-module-kotlin-2.15.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/kotlin-reflect-1.5.32.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/gson-2.10.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/swagger-ui-3.52.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/kotlin-stdlib-jdk8-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/kotlin-stdlib-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/kotlin-stdlib-common-1.8.22.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/annotations-13.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/javalin-swagger-plugin/kotlin-stdlib-jdk7-1.8.22.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/lombok/lombok-1.18.30.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jcommander/jcommander-1.82.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

@@ -123,7 +123,7 @@ public class PluginRealPiano extends Plugin {
             buffer.put((byte) MathUtilities.map(note.getVelocity(), 0, 127, 106, 235));
         }
 
-        logger.debug("Sending " + byteArrayToString(buffer.array()) + " bytes to arduino");
+        logger.debug("Sending " + byteArrayToString(buffer.array()));
         arduino.writeBytes(buffer.array(), buffer.array().length);
 
     }

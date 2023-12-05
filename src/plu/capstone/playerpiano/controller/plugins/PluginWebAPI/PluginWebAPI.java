@@ -6,13 +6,9 @@ import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
-import io.javalin.openapi.BasicAuth;
-import io.javalin.openapi.JsonSchemaLoader;
-import io.javalin.openapi.JsonSchemaResource;
 import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
 import io.javalin.openapi.plugin.SecurityComponentConfiguration;
-import io.javalin.openapi.plugin.SecurityConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.websocket.WsContext;
@@ -23,8 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.TestEndpoint;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1.V1_ControlPiano;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1.V1_EndpointGetSongData;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
 
 public class PluginWebAPI extends Plugin {
 
@@ -34,8 +30,8 @@ public class PluginWebAPI extends Plugin {
     private Set<WsContext> wsClients = new HashSet<>();
 
     private final Set<Endpoint> ENDPOINTS = Set.of(
-            new V1_EndpointGetSongData(),
-            new V1_ControlPiano(),
+            new EndpointGetSongData(),
+            new EndpointControlPiano(),
             new TestEndpoint()
     );
 
@@ -81,22 +77,6 @@ public class PluginWebAPI extends Plugin {
                                                 openApiInfo.setTitle("Piano Controller API");
                                                 openApiInfo.setVersion("1.0.0");
                                             })
-
-                                            .withServer((openApiServer) -> {
-                                               openApiServer.setUrl(("/api"));
-                                                //openApiServer.setDescription("Server description goes here");
-//                                                openApiServer.addVariable("port", "8898", new String[] { "7070", "8898" }, "Port of the server");
-//                                                openApiServer.addVariable("basePath", "", new String[] { "", "v1" }, "Base path of the server");
-                                            })
-
-                                            .withSecurity(new SecurityComponentConfiguration()
-
-                                            )
-
-                                            .withDefinitionProcessor(content -> { // you can add whatever you want to this document using your favourite json api
-                                                content.set("test", new TextNode("Value"));
-                                                return content.toPrettyString();
-                                            }))
                     )
             );
 

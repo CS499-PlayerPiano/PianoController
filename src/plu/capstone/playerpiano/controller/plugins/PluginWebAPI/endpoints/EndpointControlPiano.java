@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.v1;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints;
 
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
@@ -8,23 +8,22 @@ import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
-public class V1_ControlPiano implements Endpoint {
+public class EndpointControlPiano implements Endpoint {
 
     private PluginWebAPI server;
 
     @Override
     public void register(PluginWebAPI server, Javalin app) {
         this.server = server;
-        app.post("/api/v1/control/start", this::startSong);
-        app.post("/api/v1/control/stop", this::stopSong);
-        app.post("/api/v1/control/pause", this::pauseSong);
-        app.post("/api/v1/control/resume", this::resumeSong);
-        app.get("/api/v1/control/status", this::getStatus);
-        app.post("/api/v1/control/playNotes", this::playNotes);
+        app.post("/api/control/start", this::startSong);
+        app.post("/api/control/stop", this::stopSong);
+        app.post("/api/control/pause", this::pauseSong);
+        app.post("/api/control/resume", this::resumeSong);
+        app.get("/api/control/status", this::getStatus);
+        app.post("/api/control/playNotes", this::playNotes);
     }
 
     private void playNotes(Context context) {

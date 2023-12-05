@@ -10,8 +10,6 @@ import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 public class TestEndpoint implements Endpoint{
     @Override
     public void register(PluginWebAPI server, Javalin app) {
-
-
         app.get("/api/test", this::test);
     }
 

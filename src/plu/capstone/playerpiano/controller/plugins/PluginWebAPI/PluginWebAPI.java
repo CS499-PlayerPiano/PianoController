@@ -78,7 +78,8 @@ public class PluginWebAPI extends Plugin {
                                                 openApiInfo.setVersion("1.0.0");
                                             })
                     )
-            );
+
+            ));
 
             SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
             swaggerConfiguration.setUiPath(API_DOCS_SWAGGER_PATH);

@@ -9,14 +9,12 @@ import io.javalin.openapi.OpenApi;
 import io.javalin.openapi.OpenApiContent;
 import io.javalin.openapi.OpenApiDescription;
 import io.javalin.openapi.OpenApiExample;
-import io.javalin.openapi.OpenApiParam;
 import io.javalin.openapi.OpenApiRequestBody;
 import io.javalin.openapi.OpenApiResponse;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
-import plu.capstone.playerpiano.controller.songdb.Song;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 

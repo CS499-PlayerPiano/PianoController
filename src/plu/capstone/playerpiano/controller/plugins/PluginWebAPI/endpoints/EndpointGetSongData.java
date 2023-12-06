@@ -1,5 +1,7 @@
 package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.openapi.OpenApi;
@@ -10,12 +12,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
-import plu.capstone.playerpiano.controller.songdb.Song;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.Song;
 
 public class EndpointGetSongData implements Endpoint {
 
-    final File DEFAULT_ALBUM_ART = new File("res" + File.separator + "songs-db" + File.separator + "artwork" + File.separator + "NULL.jpg");
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().serializeNulls().create();
+    private static final File DEFAULT_ALBUM_ART = new File("res" + File.separator + "songs-db" + File.separator + "artwork" + File.separator + "NULL.jpg");
+    private static final File SONGS_DB = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
 
     @Override
     public void register(PluginWebAPI server, Javalin app) {
@@ -42,8 +45,17 @@ public class EndpointGetSongData implements Endpoint {
                     )
             })
     private void getSongs(Context ctx) throws IOException {
-        File file = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
-        ctx.result(Files.readString(file.toPath()));
+
+        Song[] songs = GSON.fromJson(Files.readString(SONGS_DB.toPath()), Song[].class);
+
+        for(Song song : songs) {
+            //TODO: Replace this with the actual number of times the song has been played
+            int constantPlayCount = song.getName().hashCode() % 1000;
+            constantPlayCount = Math.abs(constantPlayCount);
+            song.setTimesPlayed(constantPlayCount);
+        }
+
+        ctx.result(GSON.toJson(songs));
     }
 
     @OpenApi(

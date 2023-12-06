@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.controller.songdb;
+package plu.capstone.playerpiano.controller.plugins.PluginWebAPI;
 
 import io.javalin.openapi.JsonSchema;
 import io.javalin.openapi.OpenApi;
@@ -7,6 +7,7 @@ import io.javalin.openapi.OpenApiExample;
 import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 
 //@JsonSchema
@@ -18,13 +19,18 @@ public final class Song implements Serializable {
     private String midiFile;
     private String artwork;
     private String[] tags;
+    private long noteCount;
+    private long songLengthMS;
+
+    @Setter
+    private long timesPlayed;
 
     @OpenApiDescription("Display name of the song")
     @OpenApiExample("Coconut Mall")
     public String getName() {return name;}
 
     @OpenApiDescription("Artists who made the song")
-    @OpenApiExample("[Ryo Nagamatsu]")
+    //@OpenApiExample("[Ryo Nagamatsu]") //TODO: Doesn't work with arrays
     public String[] getArtists() {return artists;}
 
     @OpenApiDescription("MIDI file name of the song")
@@ -36,6 +42,18 @@ public final class Song implements Serializable {
     public String getArtwork() {return artwork;}
 
     @OpenApiDescription("Search tags for the song")
-    @OpenApiExample("[Nintendo, Mario Kart, Wii]")
+    //@OpenApiExample("[Nintendo, Mario Kart, Wii]") //TODO: Doesn't work with arrays
     public String[] getTags() {return tags;}
+
+    @OpenApiDescription("Number of notes in the song")
+    @OpenApiExample("1780")
+    public long getNoteCount() {return noteCount;}
+
+    @OpenApiDescription("Length of the song in milliseconds")
+    @OpenApiExample("123632")
+    public long getSongLengthMS() {return songLengthMS;}
+
+    @OpenApiDescription("Number of times the song has been played")
+    @OpenApiExample("5")
+    public long getTimesPlayed() {return timesPlayed;}
 }

@@ -2,3 +2,4 @@
 	path = res/songs-db
 	url = https://github.com/CS499-PlayerPiano/SongDB.git
 	branch = main
+	update = merge

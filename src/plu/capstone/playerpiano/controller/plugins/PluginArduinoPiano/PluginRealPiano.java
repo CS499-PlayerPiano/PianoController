@@ -6,6 +6,7 @@ import com.fazecast.jSerialComm.SerialPortMessageListener;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
@@ -123,8 +124,7 @@ public class PluginRealPiano extends Plugin {
             buffer.put((byte) MathUtilities.map(note.getVelocity(), 0, 127, 106, 235));
         }
 
-        logger.debug("Sending " + byteArrayToString(buffer.array()));
-        arduino.writeBytes(buffer.array(), buffer.array().length);
+        writeBytes(buffer.array());
 
     }
 
@@ -134,16 +134,35 @@ public class PluginRealPiano extends Plugin {
      * @param arr byte array to convert
      * @return nicely formatted string of bytes
      */
-    private String byteArrayToString(byte[] arr) {
+    private String byteArrayToStringColored(byte[] arr) {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
         for(int i = 0; i < arr.length; i++) {
             byte b = arr[i];
+
+
+            if (i == 0) {
+                sb.append(ConsoleColors.RED);
+            }
+            if(arr[0] == 'N') {
+                if (i == 1) {
+                    sb.append(ConsoleColors.YELLOW);
+                } else if ((i - 2) % 3 == 0) {
+                    sb.append(ConsoleColors.GREEN);
+                } else if ((i - 2) % 3 == 1) {
+                    sb.append(ConsoleColors.BLUE);
+                } else if ((i - 2) % 3 == 2) {
+                    sb.append(ConsoleColors.PURPLE);
+                }
+            }
+
             if(b == '\n') {
                 sb.append("NL");
             } else {
                 sb.append(b & 0xFF);
             }
+
+            sb.append(ConsoleColors.BLACK_BRIGHT);
 
             if(i != arr.length - 1)
                 sb.append(", ");
@@ -163,7 +182,8 @@ public class PluginRealPiano extends Plugin {
         byte[] data = {
                 'S'
         };
-        arduino.writeBytes(data, data.length);
+
+        writeBytes(data);
     }
 
     @Override
@@ -177,6 +197,12 @@ public class PluginRealPiano extends Plugin {
         byte[] data = {
                 'F'
         };
+
+        writeBytes(data);
+    }
+
+    private void writeBytes(byte[] data) {
+        logger.debug("Sending " + byteArrayToStringColored(data));
         arduino.writeBytes(data, data.length);
     }
 }

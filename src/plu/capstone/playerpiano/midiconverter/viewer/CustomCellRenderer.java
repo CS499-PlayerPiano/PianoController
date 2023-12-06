@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.midiconverter;
+package plu.capstone.playerpiano.midiconverter.viewer;
 
 import java.awt.Color;
 import java.awt.Component;

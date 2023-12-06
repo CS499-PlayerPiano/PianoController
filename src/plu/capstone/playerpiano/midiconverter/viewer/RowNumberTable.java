@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.midiconverter;
+package plu.capstone.playerpiano.midiconverter.viewer;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

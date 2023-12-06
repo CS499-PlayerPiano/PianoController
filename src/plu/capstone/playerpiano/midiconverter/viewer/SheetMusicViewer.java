@@ -1,19 +1,16 @@
-package plu.capstone.playerpiano.midiconverter;
+package plu.capstone.playerpiano.midiconverter.viewer;
 
 import java.awt.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import plu.capstone.playerpiano.sheetmusic.Note;
-import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
 public class SheetMusicViewer {
 

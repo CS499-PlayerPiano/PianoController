@@ -5,8 +5,10 @@ import com.google.gson.GsonBuilder;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
+import io.javalin.openapi.BasicAuth;
 import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
+import io.javalin.openapi.plugin.SecurityComponentConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.websocket.WsContext;
@@ -73,6 +75,7 @@ public class PluginWebAPI extends Plugin {
                                                 openApiInfo.setVersion("1.0.0");
                                                 openApiInfo.setDescription("API for controlling the piano");
                                             })
+
                                     )
                     )
 
@@ -81,6 +84,11 @@ public class PluginWebAPI extends Plugin {
             SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
             swaggerConfiguration.setUiPath(API_DOCS_SWAGGER_PATH);
             swaggerConfiguration.setDocumentationPath(API_DOCS_JSON);
+
+            swaggerConfiguration.injectStylesheet("/assets/swagger/hide-things-we-dont-need.css");
+
+            swaggerConfiguration.setValidatorUrl("");
+
 
             config.plugins.register(new SwaggerPlugin(swaggerConfiguration));
 

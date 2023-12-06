@@ -1,0 +1,14 @@
+/* Hide the auth button because currently we dont use authentication */
+.scheme-container {
+    display: none !important;
+}
+
+/*Hide the select a definition*/
+.topbar {
+    display: none !important;
+}
+
+/*Disable "Invalid" thingy*/
+.swagger-ui .float-right {
+    display: none !important;
+}

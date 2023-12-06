@@ -1,10 +1,9 @@
-package plu.capstone.playerpiano.notecountdb;
+package plu.capstone.playerpiano.miscprograms;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.swagger.util.Json;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,7 +12,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.Note;
 
-public class Main {
+public class FixExistingConfigEntries {
 
     private static final Gson PRETTY_GSON = new GsonBuilder().disableHtmlEscaping().serializeNulls().setPrettyPrinting().create();
 

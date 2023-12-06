@@ -106,4 +106,26 @@ public class SheetMusic {
         this.isPlaying = false;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || !(o instanceof SheetMusic)) return false;
+
+        SheetMusic that = (SheetMusic) o;
+
+        if (songLengthMS != that.songLengthMS) return false;
+        if (isPlaying != that.isPlaying) return false;
+
+        return noteMap.equals(that.noteMap);
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = noteMap.hashCode();
+        result = 31 * result + (int) (songLengthMS ^ (songLengthMS >>> 32));
+        result = 31 * result + (isPlaying ? 1 : 0);
+        return result;
+    }
+
 }

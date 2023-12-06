@@ -13,6 +13,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.midiconverter.viewer.SheetMusicViewer;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
 import plu.capstone.playerpiano.sheetmusic.Note;
 

@@ -10,8 +10,35 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.logger.Logger;
 
 public class PianorollFileParser {
+
+    private static final Logger LOGGER = new Logger(PianorollFileParser.class);
+
+    //Test read and write
+    public static void main(String[] args) throws IOException {
+        SheetMusic orig = new SheetMusic();
+        orig.songLengthMS = 1000;
+        orig.putNote(0, new Note(
+                (byte) 68,
+                (byte) 128,
+                true,
+                1
+        ));
+        orig.putNote(6, new Note(
+                (byte) 68,
+                (byte) 0,
+                false,
+                1
+        ));
+
+        File file = new File("tmp/test.pianoroll");
+        translateSheetMusicToPiannoroll(orig, file, 1);
+        SheetMusic newSheetMusic = translatePianorollToSheetMusic(file);
+
+        System.out.println(orig.equals(newSheetMusic));
+    }
 
     public static SheetMusic translatePianorollToSheetMusic(File pianoRollFile) throws IOException {
 
@@ -58,8 +85,13 @@ public class PianorollFileParser {
                 }
             }
         }
+        else {
+            LOGGER.error("Error reading file. Unknown version: " + version);
+        }
 
-        return null;
+        in.close();
+
+        return sheetMusic;
     }
 
     public static void translateSheetMusicToPiannoroll(SheetMusic sheetMusic, File pianoRollFile, int version) throws IOException {
@@ -108,6 +140,12 @@ public class PianorollFileParser {
             }
 
         }
+        else {
+            LOGGER.error("Error writing file. Unknown version: " + version);
+        }
+
+        out.flush();
+        out.close();
 
     }
 

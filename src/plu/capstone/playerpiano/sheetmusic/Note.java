@@ -10,7 +10,6 @@ import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
  * Represents a single note in a piece of sheet music.
  */
 @Getter
-@EqualsAndHashCode
 @ToString
 public class Note {
 
@@ -108,4 +107,23 @@ public class Note {
         return keyNumber - 21;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Note note = (Note) o;
+
+        if (channelNum != note.channelNum) return false;
+        if (velocity != note.velocity) return false;
+        return noteOn == note.noteOn;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = channelNum;
+        result = 31 * result + velocity;
+        result = 31 * result + (noteOn ? 1 : 0);
+        return result;
+    }
 }

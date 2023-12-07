@@ -2,6 +2,8 @@ package plu.capstone.playerpiano.controller.plugins.PluginWebAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
@@ -12,14 +14,19 @@ import io.javalin.openapi.plugin.SecurityComponentConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.websocket.WsContext;
+import io.swagger.util.Json;
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
+import plu.capstone.playerpiano.sheetmusic.Note;
 
 public class PluginWebAPI extends Plugin {
 
@@ -27,6 +34,11 @@ public class PluginWebAPI extends Plugin {
     private Javalin app;
 
     private Set<WsContext> wsClients = new HashSet<>();
+
+    public static final Duration WS_DURATION = Duration.ofSeconds(
+            Integer.MAX_VALUE,
+            0
+    );
 
     private final Set<Endpoint> ENDPOINTS = Set.of(
             new EndpointGetSongData(),
@@ -103,14 +115,18 @@ public class PluginWebAPI extends Plugin {
         }
 
         app.ws("/ws", ws -> {
+
             ws.onConnect(ctx -> {
                 wsClients.add(ctx);
+                ctx.session.setIdleTimeout(WS_DURATION);
                 System.out.println("[WS] Connected");
-                ctx.send("Hello from server");
+                JsonObject data = new JsonObject();
+                data.addProperty("sessionID", ctx.getSessionId());
+                sendWSPacket("connected", data);
             });
             ws.onMessage(ctx -> {
                 System.out.println("[WS] Received message: " + ctx.message());
-                ctx.send("Pong! " + ctx.message());
+
             });
             ws.onClose(ctx -> {
                 System.out.println("[WS] Closed");
@@ -126,5 +142,52 @@ public class PluginWebAPI extends Plugin {
 
 
 
+    }
+
+    public void sendWSPacket(String packedId) {
+        this.sendWSPacket(packedId, new JsonObject());
+    }
+    public void sendWSPacket(String packedId, JsonObject data) {
+        JsonObject packet = new JsonObject();
+        packet.addProperty("packetId", packedId);
+        packet.add("data", data);
+        for(WsContext ctx : wsClients) {
+            ctx.send(packet.toString());
+        }
+    }
+
+    long lastTimestamp = 0;
+    @Override
+    public void onTimestamp(long current, long end) {
+
+        //only send packet if one second has passed
+        if(current - lastTimestamp > 1000 || lastTimestamp == 0) {
+            lastTimestamp = current;
+            JsonObject data = new JsonObject();
+            data.addProperty("current", current);
+            data.addProperty("end", end);
+            sendWSPacket("timestamp", data);
+        }
+
+    }
+
+    @Override
+    public void onNotesPlayed2(Note[] notes, long timestamp) {
+        JsonObject data = new JsonObject();
+        data.addProperty("timestamp", timestamp);
+        data.add("notes", GSON.toJsonTree(notes));
+        sendWSPacket("notesPlayed", data);
+    }
+
+    @Override
+    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
+        sendWSPacket("songStarted");
+        lastTimestamp = 0;
+    }
+
+    @Override
+    public void onSongFinished(long timestamp) {
+        sendWSPacket("songFinished");
+        lastTimestamp = 0;
     }
 }

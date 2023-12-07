@@ -53,6 +53,7 @@ public class SheetMusic {
         this.isPlaying = true;
 
         for(NoteCallback callback : callbacks) {
+            callback.onTimestamp(0, songLengthMS);
             callback.onSongStarted(0, noteMap);
         }
 
@@ -89,11 +90,16 @@ public class SheetMusic {
                 }
             }
 
+            for(NoteCallback callback : callbacks) {
+                callback.onTimestamp(time, songLengthMS);
+            }
+
             prevTime = time;
 
         }
 
         for(NoteCallback callback : callbacks) {
+            callback.onTimestamp(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
             callback.onSongFinished(prevTime);
         }
 

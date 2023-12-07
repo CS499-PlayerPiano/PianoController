@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Jazz</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .button-red {
+            background-color: #ff4e4e !important;
+        }
+
+        .button-green {
+            background-color: #4eff4e !important;
+        }
+
+        #timestamp {
+            color: #fffc4e
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+            background-color: #4e89ff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        textarea {
+            resize: none;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        @media screen and (max-width: 600px) {
+            .text {
+                font-size: 18px;
+            }
+
+            .button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text">
+            <p>This page is to test the API backend</p>
+        </div>
+        <div class="buttons">
+            <a href="#" onclick='sendPostRequest("start", {"songName": "Coconut_Mall.mid"})'
+                class=" button button-green">Get Coconut Malled</a>
+            <a href="#" onclick='sendPostRequest("stop")' class="button button-red">STHAP!</a>
+        </div>
+
+        <div class="text">
+            <p>Current Time: <span id="timestamp">00:00:00 / 00:00:00</span></p>
+            <textarea id="noteList" cols="30" rows="10"></textarea>
+        </div>
+
+
+    </div>
+
+    <script>
+        //check if its https, then we need to use wss, else if its http use ws
+        let protocol = window.location.protocol == "https:" ? "wss" : "ws";
+
+        let socket = new WebSocket(protocol + "://" + window.location.host + "/ws");
+
+        socket.onopen = function (e) {
+            console.log("[open] Connection established");
+        };
+
+        socket.onmessage = function (event) {
+            console.log(`[message] Data received from server: ${event.data}`);
+
+            let pkt = JSON.parse(event.data)
+            if (pkt.packetId == "timestamp") {
+                let current = msToTime(pkt.data.current)
+                let end = msToTime(pkt.data.end)
+                document.getElementById("timestamp").innerHTML = current + " / " + end;
+            }
+            else if (pkt.packetId == "notesPlayed") {
+
+                let text = "[" + pkt.data.timestamp + "] ";
+
+                for (let i = 0; i < pkt.data.notes.length; i++) {
+                    let note = pkt.data.notes[i];
+                    text += note.noteName + " - " + (note.noteOn ? "On" : "Off") + ", ";
+                }
+
+                document.getElementById("noteList").innerHTML += text + "\n";
+                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
+            }
+            else if (pkt.packetId == "songFinished") {
+                document.getElementById("noteList").innerHTML += "Song Ended\n";
+                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
+            }
+            else if (pkt.packetId == "songStarted") {
+                document.getElementById("noteList").innerHTML = "Song Started\n";
+                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
+            }
+        };
+
+        socket.onclose = function (event) {
+            if (event.wasClean) {
+                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+            } else {
+                // e.g. server process killed or network down
+                // event.code is usually 1006 in this case
+                console.log('[close] Connection died');
+            }
+        };
+
+        socket.onerror = function (error) {
+            console.log(`[error] ` + error);
+        };
+
+        function sendPostRequest(loc, data = null) {
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", "/api/control/" + loc, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            if (data == null) {
+                xhr.send();
+            } else {
+                xhr.send(JSON.stringify(data));
+            }
+        }
+
+        function msToTime(duration) {
+            let seconds = Math.floor((duration / 1000) % 60),
+                minutes = Math.floor((duration / (1000 * 60)) % 60),
+                hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+            hours = (hours < 10) ? "0" + hours : hours;
+            minutes = (minutes < 10) ? "0" + minutes : minutes;
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+            return hours + ":" + minutes + ":" + seconds;
+        }
+
+    </script>
+</body>
+
+</html>

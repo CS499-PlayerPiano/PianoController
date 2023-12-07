@@ -2,6 +2,7 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.sheetmusic.Note;
 
 /**
  * This is the callback interface for the {@link plu.capstone.playerpiano.sheetmusic.SheetMusic} class.
@@ -43,4 +44,11 @@ public interface NoteCallback {
      *                  but is included for consistency and backwards compatibility.
      */
     default void onSongFinished(long timestamp) {}
+
+    /**
+     * Called every millisecond while the song is playing.
+     * @param current The current timestamp in milliseconds.
+     * @param end The timestamp of the end of the song in milliseconds.
+     */
+    default void onTimestamp(long current, long end) {}
 }

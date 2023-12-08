@@ -8,8 +8,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import plu.capstone.playerpiano.logger.Logger;
 
 public class PianorollFileParser {
@@ -89,9 +91,15 @@ public class PianorollFileParser {
             LOGGER.error("Error reading file. Unknown version: " + version);
         }
 
+        Test test = readEnum(in, Test.class);
+
         in.close();
 
         return sheetMusic;
+    }
+
+    enum Test {
+        ONE
     }
 
     public static void translateSheetMusicToPiannoroll(SheetMusic sheetMusic, File pianoRollFile, int version) throws IOException {
@@ -230,6 +238,38 @@ public class PianorollFileParser {
         byte[] buffer = new byte[stringLength];
         in.read(buffer, 0, stringLength);
         return new String(buffer);
+    }
+
+    private static void writeEnum(BufferedOutputStream out, Enum value) throws IOException {
+        writeInt(out, value.ordinal());
+    }
+
+    private static <T extends Enum<T>> T readEnum(BufferedInputStream in, Class<T> clazz) throws IOException {
+        int ordinal = readInt(in);
+        return clazz.getEnumConstants()[ordinal];
+    }
+
+
+
+    private static void writeEnumsBitwiseByte(BufferedOutputStream out, Enum[] values) throws IOException {
+        byte num = 0;
+        for(Enum value : values) {
+            num |= 1 << (byte)value.ordinal();
+        }
+        writeByte(out, num);
+    }
+
+    private static <T extends Enum<T>> Set<T> readEnumsBitwiseByte(BufferedInputStream in, Class<? extends Enum> clazz) throws IOException {
+        byte num = readByte(in);
+
+        Set<T> values = new HashSet<>();
+
+        for(int i = 0; i < 8; ++i) {
+            if((num & (1 << i)) != 0) {
+               values.add((T) clazz.getEnumConstants()[i]);
+            }
+        }
+        return values;
     }
 
 }

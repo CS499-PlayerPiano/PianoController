@@ -2,8 +2,7 @@ package test;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.jupiter.api.Assertions;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;

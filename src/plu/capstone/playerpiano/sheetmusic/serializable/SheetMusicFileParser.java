@@ -65,7 +65,7 @@ public abstract class SheetMusicFileParser {
         out.write((int) num);
     }
 
-    protected static final  long readLong(BufferedInputStream in) throws IOException {
+    protected static final long readLong(BufferedInputStream in) throws IOException {
         long num = 0;
         num |= (long) in.read() << 56;
         num |= (long) in.read() << 48;

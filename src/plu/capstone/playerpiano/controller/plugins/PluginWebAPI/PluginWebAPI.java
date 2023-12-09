@@ -27,6 +27,7 @@ import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoi
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
 import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
 
 public class PluginWebAPI extends Plugin {
 
@@ -158,7 +159,7 @@ public class PluginWebAPI extends Plugin {
 
     long lastTimestamp = 0;
     @Override
-    public void onTimestamp(long current, long end) {
+    public void onTimestampEvent(long current, long end) {
 
         //only send packet if one second has passed
         if(current - lastTimestamp > 1000 || lastTimestamp == 0) {
@@ -172,7 +173,7 @@ public class PluginWebAPI extends Plugin {
     }
 
     @Override
-    public void onNotesPlayed2(Note[] notes, long timestamp) {
+    public void onNotesPlayed(List<Note> notes, long timestamp) {
         JsonObject data = new JsonObject();
         data.addProperty("timestamp", timestamp);
         data.add("notes", GSON.toJsonTree(notes));
@@ -180,7 +181,7 @@ public class PluginWebAPI extends Plugin {
     }
 
     @Override
-    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
+    public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         sendWSPacket("songStarted");
         lastTimestamp = 0;
     }

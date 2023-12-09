@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.controller.plugin;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -11,14 +12,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
 import plu.capstone.playerpiano.sheetmusic.Note;
-import plu.capstone.playerpiano.sheetmusic.NoteCallback;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
 
 /**
  * Base class for all plugins.
  */
-public abstract class Plugin implements NoteCallback {
+public abstract class Plugin implements SheetMusicCallback {
 
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().serializeNulls().disableHtmlEscaping().create();
 
@@ -35,7 +38,7 @@ public abstract class Plugin implements NoteCallback {
     @Getter
     protected final Logger logger = new Logger(this);
 
-    private final Queue<TimedNotes> noteQueue = new ConcurrentLinkedQueue<>();
+    private final Queue<TimedEvents> eventQueue = new ConcurrentLinkedQueue<>();
 
 
     /**
@@ -63,7 +66,7 @@ public abstract class Plugin implements NoteCallback {
 
         new Thread(() -> {
             while(enabled) {
-                TimedNotes timedNotes = noteQueue.poll();
+                TimedEvents timedNotes = eventQueue.poll();
                 if(timedNotes == null) {
                     try {
                         //so we don't spin the cpu
@@ -72,7 +75,8 @@ public abstract class Plugin implements NoteCallback {
                     catch (InterruptedException e) {}
                     continue;
                 }
-                onNotesPlayed2(timedNotes.getNotes(), timedNotes.getTimestamp());
+
+                splitEvents(timedNotes.getEvents(), timedNotes.getTimestamp());
             }
         }, this.name + " - Note Queue Poller").start();
     }
@@ -87,19 +91,47 @@ public abstract class Plugin implements NoteCallback {
         logger.info("Goodbye!");
         onDisable();
 
-        noteQueue.clear();
+        eventQueue.clear();
     }
 
     /**
-     * Called when X note(s) are played / state changed at a given timestamp.
-     * @param notes array of notes that were played / changed
+     * Splits the events into notes and time change events.
+     * @param events events to split
+     * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
+     */
+    private void splitEvents(List<SheetMusicEvent> events, long timestamp) {
+
+        List<Note> notes = new ArrayList<>();
+
+        for(SheetMusicEvent event : events) {
+            if(event instanceof Note) {
+                notes.add((Note) event);
+            }
+            else if(event instanceof TempoChangeEvent) {
+                onTempoChangeEvent((TempoChangeEvent) event, timestamp);
+            }
+        }
+
+        onNotesPlayed(notes, timestamp);
+    }
+
+    /**
+     * Called when X events(s) are played / state changed at a given timestamp.
+     * @param events array of event that were played / changed
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public final void onNotesPlayed(Note[] notes, long timestamp) {
-        noteQueue.add(new TimedNotes(timestamp, notes));
+    public final void onEventsPlayed(List<SheetMusicEvent> events, long timestamp) {
+        eventQueue.add(new TimedEvents(timestamp, events));
     }
+
+    /**
+     * Called when a time change event is played / state changed at a given timestamp.
+     * @param event the event that was played / changed
+     * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
+     */
+    public void onTempoChangeEvent(TempoChangeEvent event, long timestamp) {}
 
     /**
      * Called when X note(s) are played / state changed at a given timestamp.
@@ -107,25 +139,25 @@ public abstract class Plugin implements NoteCallback {
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      *                  and the timestamp will be the time since the song started.
      */
-    public void onNotesPlayed2(Note[] notes, long timestamp) {
+    public void onNotesPlayed(List<Note> notes, long timestamp) {
         for(Note note : notes) {
             onNotePlayed(note, timestamp);
         }
     }
 
     @Override
-    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
-        noteQueue.clear();
+    public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
+        eventQueue.clear();
     }
 
     @Override
     public void onSongFinished(long timestamp) {
-        noteQueue.clear();
+        eventQueue.clear();
     }
 
     /**
      * Called when a single note is played / state changed at a given timestamp.
-     * This method is not called if you override {@link #onNotesPlayed(Note[], long)}.
+     * This method is not called if you override {@link #onEventsPlayed(java.util.List, long)} .
      * @param note
      * @param timestamp
      */
@@ -139,14 +171,14 @@ public abstract class Plugin implements NoteCallback {
      * @param note The note to play live.
      */
     public final void playNote(Note note) {
-        this.playNotes(new Note[] { note });
+        this.playNotes(List.of(note));
     }
 
     /**
      * Plays multiple notes.
      * @param notes The notes to play live.
      */
-    public final void playNotes(Note[] notes) {
+    public final void playNotes(List<Note> notes) {
         PlayerPianoController.getInstance().playNotes(notes);
     }
 
@@ -182,8 +214,8 @@ public abstract class Plugin implements NoteCallback {
 
     @AllArgsConstructor
     @Getter
-    public class TimedNotes {
+    public class TimedEvents {
         private final long timestamp;
-        private final Note[] notes;
+        private final List<SheetMusicEvent> events;
     }
 }

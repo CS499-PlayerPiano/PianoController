@@ -2,11 +2,12 @@ package plu.capstone.playerpiano.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.Note;
-import plu.capstone.playerpiano.sheetmusic.NoteCallback;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugin.PluginLoader;
@@ -42,41 +43,41 @@ public class PlayerPianoController implements Runnable {
             plugin.loadPlugin();
         }
 
-//        try {
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/ABBA/Money Money.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/mididownload.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/RUSH_E_FINAL.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/River_Flows_In_You.mid")));
-//            playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Coconut_Mall.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Rockefeller_Street.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Levan_Polkka.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Bad_Piggies_Theme.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Dance_Monkey.mid")));
-//        } catch (InvalidMidiDataException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/ABBA/Money Money.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/mididownload.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
+            playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/RUSH_E_FINAL.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/River_Flows_In_You.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Coconut_Mall.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Rockefeller_Street.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Levan_Polkka.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Bad_Piggies_Theme.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Dance_Monkey.mid")));
+        } catch (InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
      * Plays multiple notes.
      * @param notes The notes to play live.
      */
-    public void playNotes(Note[] notes) {
-        this.playNotes(notes, NoteCallback.LIVE_TIMESTAMP);
+    public void playNotes(List<Note> notes) {
+        this.playNotes(notes, SheetMusicCallback.LIVE_TIMESTAMP);
     }
 
     /**
      * Plays multiple notes.
      * @param notes The notes to play.
      * @param timestamp The timestamp of the notes.
-     *                  Use {@link NoteCallback#LIVE_TIMESTAMP} for live playing, or {@link #playNotes(Note[])} for a shortcut
+     *                  Use {@link plu.capstone.playerpiano.sheetmusic.SheetMusicCallback#LIVE_TIMESTAMP} for live playing, or {@link #playNotes(java.util.List)} for a shortcut
      */
-    public void playNotes(Note[] notes, long timestamp) {
-        if(notes == null || notes.length == 0) {
+    public void playNotes(List<Note> notes, long timestamp) {
+        if(notes == null || notes.size() == 0) {
             logger.warning("Attempted to play null note!");
             return;
         }

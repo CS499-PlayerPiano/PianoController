@@ -11,6 +11,7 @@ import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
 
 public class FixExistingConfigEntries {
 
@@ -57,15 +58,18 @@ public class FixExistingConfigEntries {
     static long getNoteCount(MidiSheetMusic sheetMusic, boolean onlyValidKeys) {
         long count = 0;
 
-        for(List<Note> notes : sheetMusic.getNoteMap().values()) {
-            for(Note note : notes) {
-                if(note.isNoteOn()) {
-                    if(onlyValidKeys) {
-                        if(note.isValidPianoKey()) {
+        for(List<SheetMusicEvent> events : sheetMusic.getEventMap().values()) {
+            for(SheetMusicEvent event : events) {
+                if(event instanceof Note) {
+                    Note note = (Note) event;
+                    if (note.isNoteOn()) {
+                        if (onlyValidKeys) {
+                            if (note.isValidPianoKey()) {
+                                count++;
+                            }
+                        } else {
                             count++;
                         }
-                    } else {
-                        count++;
                     }
                 }
             }

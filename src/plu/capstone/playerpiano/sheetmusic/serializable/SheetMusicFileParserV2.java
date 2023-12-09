@@ -10,7 +10,22 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
 
-public class SheetMusicFileParserV2 extends SheetMusicFileWriter {
+/*
+Version 2:
+        - long SongLengthMS
+        - int number of timeslots
+        - for each timeslot:
+        - long time
+        - int number of events at this time
+        - for each event at this time:
+        - byte eventTypeId
+        if(eventTypeId == EVENT_NOTE)
+        - byte keyNumber
+        - byte velocity
+        - boolean noteOn
+        - byte channelNum
+*/
+public class SheetMusicFileParserV2 extends SheetMusicFileParser {
 
     @Override
     public SheetMusic readSheetMusic(BufferedInputStream in) throws IOException {

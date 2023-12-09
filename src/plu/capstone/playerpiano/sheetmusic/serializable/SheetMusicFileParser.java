@@ -3,7 +3,6 @@ package plu.capstone.playerpiano.sheetmusic.serializable;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.EOFException;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +10,7 @@ import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.PianorollFileParser;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
-public abstract class SheetMusicFileWriter {
+public abstract class SheetMusicFileParser {
 
     protected final Logger LOGGER = new Logger(new Logger(PianorollFileParser.class), this.getClass().getSimpleName());
 

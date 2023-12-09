@@ -15,5 +15,37 @@
     <orderEntry type="library" name="io.javalin.community.openapi.swagger.plugin" level="project" />
     <orderEntry type="library" name="io.javalin.community.openapi.plugin" level="project" />
     <orderEntry type="library" name="io.javalin.community.openapi.annotation.processor" level="project" />
+    <orderEntry type="module-library" scope="TEST">
+      <library name="JUnit5.8.1">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-api-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/opentest4j-1.2.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-platform-commons-1.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/apiguardian-api-1.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-params-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-engine-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-platform-engine-1.8.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-api-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/opentest4j-1.2.0.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-platform-commons-1.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/apiguardian-api-1.1.2.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-params-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-jupiter-engine-5.8.1.jar!/" />
+          <root url="jar://$MODULE_DIR$/lib/junit5/junit-platform-engine-1.8.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
   </component>
 </module>

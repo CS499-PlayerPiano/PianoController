@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.component.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.controller.plugin.PluginStateKeeper;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
 
 /**
  * Plugin to visualize the piano keys.
@@ -48,7 +49,7 @@ public class PluginGui extends PluginStateKeeper {
     }
 
     @Override
-    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
+    public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         piano.clearLitKeys();
     }
 

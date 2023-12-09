@@ -1,5 +1,6 @@
 package plu.capstone.playerpiano.controller.plugin;
 
+import java.util.List;
 import plu.capstone.playerpiano.sheetmusic.Note;
 
 /**
@@ -32,7 +33,7 @@ public abstract class PluginStateKeeper extends Plugin {
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public final void onNotesPlayed2(Note[] notes, long timestamp) {
+    public final void onNotesPlayed(List<Note> notes, long timestamp) {
         for(Note note : notes) {
             final int key = note.getKeyNumber();
             this.notes[key] = note;
@@ -68,7 +69,7 @@ public abstract class PluginStateKeeper extends Plugin {
     /**
      * Called when the state of the notes changes.
      * @param keys The new state of the keys.
-     * @param timestamp The timestamp of the event in milliseconds. If this is a live event, this will be {@link plu.capstone.playerpiano.controller.midi.NoteCallback#LIVE_TIMESTAMP}
+     * @param timestamp The timestamp of the event in milliseconds. If this is a live event, this will be {@link plu.capstone.playerpiano.sheetmusic.SheetMusicCallback#LIVE_TIMESTAMP}
      */
     public abstract void onNoteChange(Note[] keys, long timestamp);
 

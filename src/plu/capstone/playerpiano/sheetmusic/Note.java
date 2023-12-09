@@ -11,7 +11,7 @@ import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
  */
 @Getter
 @ToString
-public class Note {
+public class Note implements SheetMusicEvent{
 
     public static final int NO_CHANNEL = -1;
 
@@ -125,5 +125,10 @@ public class Note {
         result = 31 * result + velocity;
         result = 31 * result + (noteOn ? 1 : 0);
         return result;
+    }
+
+    @Override
+    public byte getEventTypeId() {
+        return EVENT_NOTE;
     }
 }

@@ -16,32 +16,42 @@ public class SheetMusic {
     private final Logger logger = new Logger(this);
 
     @Getter
-    private Map<Long, List<Note>> noteMap = new HashMap<>();
+    private Map<Long, List<SheetMusicEvent>> eventMap = new HashMap<>();
 
     @Getter
     protected long songLengthMS = 0;
 
     @Getter
     private boolean isPlaying = false;
-    private List<NoteCallback> callbacks = new ArrayList<>();
+    private List<SheetMusicCallback> callbacks = new ArrayList<>();
 
     /**
      * Creates a new SheetMusic object.
      * @param time The time in milliseconds that this note starts.
      * @param note The note to add.
      */
+    @Deprecated
     public final void putNote(long time, Note note) {
-        if(!noteMap.containsKey(time)) {
-            noteMap.put(time, new ArrayList<>());
+        putEvent(time, note);
+    }
+
+    /**
+     * Creates a new SheetMusic object.
+     * @param time The time in milliseconds that this event starts.
+     * @param event The event to add.
+     */
+    public final void putEvent(long time, SheetMusicEvent event) {
+        if(!eventMap.containsKey(time)) {
+            eventMap.put(time, new ArrayList<>());
         }
-        noteMap.get(time).add(note);
+        eventMap.get(time).add(event);
     }
 
     /**
      * Adds a callback to this SheetMusic object.
      * @param callback The callback to add.
      */
-    public final void addCallback(NoteCallback callback) {
+    public final void addCallback(SheetMusicCallback callback) {
         callbacks.add(callback);
     }
 
@@ -52,9 +62,9 @@ public class SheetMusic {
         if(isPlaying) {throw new IllegalStateException("Already playing");}
         this.isPlaying = true;
 
-        for(NoteCallback callback : callbacks) {
-            callback.onTimestamp(0, songLengthMS);
-            callback.onSongStarted(0, noteMap);
+        for(SheetMusicCallback callback : callbacks) {
+            callback.onTimestampEvent(0, songLengthMS);
+            callback.onSongStarted(0, eventMap);
         }
 
         final long startTime = System.nanoTime();
@@ -80,26 +90,27 @@ public class SheetMusic {
                     //System.out.println("Time: " + time + " PrevTime: " + prevTime);
                     ++prevTime;
 
-                    for(NoteCallback callback : callbacks) {
+                    for(SheetMusicCallback callback : callbacks) {
                         final long newTime = prevTime + callback.getOffset();
-                        List<Note> msgs = noteMap.getOrDefault(newTime, null);
+                        List<SheetMusicEvent> msgs = eventMap.getOrDefault(newTime, null);
+
                         if(msgs != null) {
-                            callback.onNotesPlayed(msgs.toArray(new Note[0]), newTime);
+                            callback.onEventsPlayed(msgs, newTime);
                         }
                     }
                 }
             }
 
-            for(NoteCallback callback : callbacks) {
-                callback.onTimestamp(time, songLengthMS);
+            for(SheetMusicCallback callback : callbacks) {
+                callback.onTimestampEvent(time, songLengthMS);
             }
 
             prevTime = time;
 
         }
 
-        for(NoteCallback callback : callbacks) {
-            callback.onTimestamp(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
+        for(SheetMusicCallback callback : callbacks) {
+            callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
             callback.onSongFinished(prevTime);
         }
 
@@ -122,13 +133,13 @@ public class SheetMusic {
         if (songLengthMS != that.songLengthMS) return false;
         if (isPlaying != that.isPlaying) return false;
 
-        return noteMap.equals(that.noteMap);
+        return eventMap.equals(that.eventMap);
     }
 
 
     @Override
     public int hashCode() {
-        int result = noteMap.hashCode();
+        int result = eventMap.hashCode();
         result = 31 * result + (int) (songLengthMS ^ (songLengthMS >>> 32));
         result = 31 * result + (isPlaying ? 1 : 0);
         return result;

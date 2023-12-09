@@ -57,7 +57,16 @@ public class MidiSheetMusic extends SheetMusic {
                         byte[] data = mm.getData();
                         int tempo = ((data[0] & 0xFF) << 16) | ((data[1] & 0xFF) << 8) | (data[2] & 0xFF);
                         us_per_quarter = tempo;
+
+                        // Calculate the time in milliseconds of the note
+                        long tick = event.getTick();
+                        long ticks_per_quarter = sequence.getResolution();
+                        long us_per_tick = us_per_quarter / ticks_per_quarter;
+                        long where = tick * us_per_tick;
+                        long whereMS = where / 1000;
+
                         logger.debug("Tempo change: " + tempo);
+                        putEvent(whereMS, new TempoChangeEvent(tempo));
                     }
                     //MidiMessagePrinter.printMetaMessage(-1, mm);
                 }
@@ -90,8 +99,8 @@ public class MidiSheetMusic extends SheetMusic {
         logger.debug("Finished parsing midi file");
         long amountOfNotesTotal = 0;
         long maxForTime = 0;
-        for(long key : getNoteMap().keySet()) {
-            long tmp = getNoteMap().get(key).size();
+        for(long key : getEventMap().keySet()) {
+            long tmp = getEventMap().get(key).size();
             amountOfNotesTotal += tmp;
 
             if(tmp > maxForTime) {

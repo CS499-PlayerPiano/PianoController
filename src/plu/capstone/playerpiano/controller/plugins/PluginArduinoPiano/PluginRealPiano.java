@@ -11,6 +11,7 @@ import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.utilities.MathUtilities;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
 
 /**
  * Plugin to communicate with an Arduino to play notes on a real piano.
@@ -97,11 +98,11 @@ public class PluginRealPiano extends Plugin {
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public void onNotesPlayed2(Note[] notes, long timestamp) {
+    public void onNotesPlayed(List<Note> notes, long timestamp) {
 
         if(!arduino.isOpen()) {return;}
 
-        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.length * 3));
+        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 3));
 
         /*
         N - Packet to tell the arduino we are sending a list of notes
@@ -113,7 +114,7 @@ public class PluginRealPiano extends Plugin {
          */
 
         buffer.put((byte) 'N');
-        buffer.put((byte) notes.length);
+        buffer.put((byte) notes.size());
 
         for(Note note : notes) {
             buffer.put((byte) note.toPianoKey());
@@ -172,7 +173,7 @@ public class PluginRealPiano extends Plugin {
     }
 
     @Override
-    public void onSongStarted(long timestamp, Map<Long, List<Note>> entireNoteMap) {
+    public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         if(!arduino.isOpen()) {return;}
 
         /*

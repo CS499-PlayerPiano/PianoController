@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashSet;
@@ -14,32 +13,113 @@ import java.util.Map;
 import java.util.Set;
 import plu.capstone.playerpiano.logger.Logger;
 
+/*
+        Version 1:
+        - long SongLengthMS
+        - int number of timeslots
+        - for each timeslot:
+            - long time
+            - int number of notes at this time
+            - for each note at this time:
+                - byte keyNumber
+                - byte velocity
+                - boolean noteOn
+                - byte channelNum
+
+Version 2:
+- long SongLengthMS
+- int number of timeslots
+- for each timeslot:
+    - long time
+    - int number of events at this time
+    - for each event at this time:
+        - byte eventTypeId
+        if(eventTypeId == EVENT_NOTE)
+            - byte keyNumber
+            - byte velocity
+            - boolean noteOn
+            - byte channelNum
+ */
 public class PianorollFileParser {
 
     private static final Logger LOGGER = new Logger(PianorollFileParser.class);
 
     //Test read and write
     public static void main(String[] args) throws IOException {
-        SheetMusic orig = new SheetMusic();
-        orig.songLengthMS = 1000;
-        orig.putNote(0, new Note(
+        SheetMusic origv1 = new SheetMusic();
+        SheetMusic origv2 = new SheetMusic();
+        origv1.songLengthMS = 1000;
+        origv1.putNote(0, new Note(
                 (byte) 68,
                 (byte) 128,
                 true,
                 1
         ));
-        orig.putNote(6, new Note(
+        origv2.putNote(6, new Note(
                 (byte) 68,
                 (byte) 0,
                 false,
                 1
         ));
 
-        File file = new File("tmp/test.pianoroll");
-        translateSheetMusicToPiannoroll(orig, file, 1);
-        SheetMusic newSheetMusic = translatePianorollToSheetMusic(file);
+        origv2.songLengthMS = 1000;
+        origv2.putNote(0, new Note(
+                (byte) 68,
+                (byte) 128,
+                true,
+                1
+        ));
+        origv2.putNote(6, new Note(
+                (byte) 68,
+                (byte) 0,
+                false,
+                1
+        ));
 
-        System.out.println(orig.equals(newSheetMusic));
+        origv2.putEvent(23, new TempoChangeEvent(120));
+
+        File file = new File("tmp/v1.pianoroll");
+        translateSheetMusicToPiannoroll(origv1, file, 1);
+        SheetMusic newSheetMusicv1 = translatePianorollToSheetMusic(file);
+        verifySheetMusic(origv1, newSheetMusicv1, "v1");
+
+        file = new File("tmp/v2.pianoroll");
+        translateSheetMusicToPiannoroll(origv2, file, 2);
+        SheetMusic newSheetMusicv2 = translatePianorollToSheetMusic(file);
+        verifySheetMusic(origv2, newSheetMusicv2, "v2");
+    }
+
+    private static void verifySheetMusic(SheetMusic orig, SheetMusic newSheetMusic, String version) {
+        boolean success = orig.equals(newSheetMusic);
+        LOGGER.info("Verifying " + version + "...");
+        if(!success) {
+            LOGGER.error("Failed!");
+            LOGGER.debug("songLengthMS: " + (orig.songLengthMS == newSheetMusic.songLengthMS) + " " + orig.songLengthMS + " " + newSheetMusic.songLengthMS);
+            LOGGER.debug("eventMapSize: " + (orig.getEventMap().size() == newSheetMusic.getEventMap().size()) + " " + orig.getEventMap().size() + " " + newSheetMusic.getEventMap().size());
+            LOGGER.debug("eventMap: " + (orig.getEventMap().equals(newSheetMusic.getEventMap())));
+
+            for(long key : orig.getEventMap().keySet()) {
+                List<SheetMusicEvent> origEvents = orig.getEventMap().get(key);
+                List<SheetMusicEvent> newEvents = newSheetMusic.getEventMap().get(key);
+                LOGGER.debug("key: " + key);
+                LOGGER.debug("origEvents: " + origEvents);
+                LOGGER.debug("newEvents: " + newEvents);
+                LOGGER.debug("origEventsSize: " + origEvents.size());
+                LOGGER.debug("newEventsSize: " + newEvents.size());
+                LOGGER.debug("origEventsEquals: " + origEvents.equals(newEvents));
+                for(int i = 0; i < origEvents.size(); ++i) {
+                    SheetMusicEvent origEvent = origEvents.get(i);
+                    SheetMusicEvent newEvent = newEvents.get(i);
+                    LOGGER.debug("origEvent: " + origEvent);
+                    LOGGER.debug("newEvent: " + newEvent);
+                    LOGGER.debug("origEventEquals: " + origEvent.equals(newEvent));
+                }
+            }
+
+        }
+        else {
+            LOGGER.info("Success!");
+        }
     }
 
     public static SheetMusic translatePianorollToSheetMusic(File pianoRollFile) throws IOException {
@@ -87,19 +167,59 @@ public class PianorollFileParser {
                 }
             }
         }
+        else if(version == 2) {
+            //length in ms
+            sheetMusic.songLengthMS = readLong(in);
+
+            //number of timeslots
+            final int numTimeslots = readInt(in);
+
+            //for each note
+            for(int i = 0; i < numTimeslots; ++i) {
+                //time
+                long time = readLong(in);
+
+                //number of events at this time
+                int numEventsAtTime = readInt(in);
+
+                //for each note at this time
+                for(int j = 0; j < numEventsAtTime; ++j) {
+
+                    final byte eventTypeId = readByte(in);
+
+                    if(eventTypeId == SheetMusicEvent.EVENT_NOTE) {
+                        final byte keyNumber = readByte(in);
+                        final byte velocity = readByte(in);
+                        final boolean noteOn = readBoolean(in);
+                        final byte channelNum = readByte(in);
+
+                        Note note = new Note(
+                                keyNumber,
+                                velocity,
+                                noteOn,
+                                channelNum
+                        );
+
+                        sheetMusic.putNote(time, note);
+                    }
+                    else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
+                        final int tempo = readInt(in);
+                        sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
+                    }
+                    else {
+                        LOGGER.warning("Unknown event type: " + eventTypeId);
+                    }
+
+                }
+            }
+        }
         else {
             LOGGER.error("Error reading file. Unknown version: " + version);
         }
 
-        Test test = readEnum(in, Test.class);
-
         in.close();
 
         return sheetMusic;
-    }
-
-    enum Test {
-        ONE
     }
 
     public static void translateSheetMusicToPiannoroll(SheetMusic sheetMusic, File pianoRollFile, int version) throws IOException {
@@ -109,41 +229,81 @@ public class PianorollFileParser {
         //version
         writeInt(out, version);
 
-        /*
-        Version 1:
-        - long SongLengthMS
-        - int number of timeslots
-        - for each timeslot:
-            - long time
-            - int number of notes at this time
-            - for each note at this time:
-                - byte keyNumber
-                - byte velocity
-                - boolean noteOn
-                - byte channelNum
-         */
         if(version == 1) {
 
             //song length
             writeLong(out, sheetMusic.getSongLengthMS());
 
             //number of timeslots
-            writeInt(out, sheetMusic.getNoteMap().size());
+            writeInt(out, sheetMusic.getEventMap().size());
 
             //for each timeslot
-            for(Map.Entry<Long, List<Note>> entry : sheetMusic.getNoteMap().entrySet()) {
+            for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
                 //time
                 writeLong(out, entry.getKey());
 
+                //We only need to write out the amount of NOTES, not EVENTS!
+                int numNotes = 0;
+                for(SheetMusicEvent event : entry.getValue()) {
+                    if(event instanceof Note) {
+                        ++numNotes;
+                    }
+                }
+
                 //number of notes at this time
-                writeInt(out, entry.getValue().size());
+                writeInt(out, numNotes);
 
                 //for each note at this time
-                for(Note note : entry.getValue()) {
-                    writeByte(out, (byte) note.getKeyNumber());
-                    writeByte(out, (byte) note.getVelocity());
-                    writeBoolean(out, note.isNoteOn());
-                    writeByte(out, (byte) note.getChannelNum());
+                for(SheetMusicEvent event : entry.getValue()) {
+
+                    if(event instanceof Note) {
+                        Note note = (Note) event;
+                        writeByte(out, (byte) note.getKeyNumber());
+                        writeByte(out, (byte) note.getVelocity());
+                        writeBoolean(out, note.isNoteOn());
+                        writeByte(out, (byte) note.getChannelNum());
+                    }
+                }
+            }
+
+        }
+        else if(version == 2) {
+
+            //song length
+            writeLong(out, sheetMusic.getSongLengthMS());
+
+            //number of timeslots
+            writeInt(out, sheetMusic.getEventMap().size());
+
+            //for each timeslot
+            for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
+                //time
+                writeLong(out, entry.getKey());
+
+                //number of events at this time
+                writeInt(out, entry.getValue().size());
+
+                //for each event at this time
+                for(SheetMusicEvent event : entry.getValue()) {
+
+                    writeByte(out, event.getEventTypeId());
+
+                    //write out notes as normal
+                    if(event.getEventTypeId() == SheetMusicEvent.EVENT_NOTE) {
+                        Note note = (Note) event;
+                        writeByte(out, (byte) note.getKeyNumber());
+                        writeByte(out, (byte) note.getVelocity());
+                        writeBoolean(out, note.isNoteOn());
+                        writeByte(out, (byte) note.getChannelNum());
+                    }
+                    //write out tempo change events as normal
+                    else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
+                        TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
+                        writeInt(out, tempoChangeEvent.getTempo());
+                    }
+                    else {
+                        LOGGER.warning("Unknown event type: " + event.getClass().getName());
+                    }
                 }
             }
 
@@ -266,7 +426,7 @@ public class PianorollFileParser {
 
         for(int i = 0; i < 8; ++i) {
             if((num & (1 << i)) != 0) {
-               values.add((T) clazz.getEnumConstants()[i]);
+                values.add((T) clazz.getEnumConstants()[i]);
             }
         }
         return values;

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
+import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.Note;
@@ -16,7 +17,9 @@ public class PlayerPianoController implements Runnable {
 
     private static PlayerPianoController INSTANCE;
     private final Logger logger = new Logger(this);
-    private SheetMusic currentSheetMusic;
+
+   @Getter
+   private SheetMusic currentSheetMusic;
 
     private PluginLoader pluginLoader;
 

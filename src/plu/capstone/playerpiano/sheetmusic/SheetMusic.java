@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
+import lombok.Setter;
 import plu.capstone.playerpiano.logger.Logger;
 
 /**
@@ -19,6 +20,7 @@ public class SheetMusic {
     private Map<Long, List<SheetMusicEvent>> eventMap = new HashMap<>();
 
     @Getter
+    @Setter
     protected long songLengthMS = 0;
 
     @Getter

@@ -21,6 +21,12 @@ public enum SheetMusicReaderWriter {
     private final SheetMusicFileParser fileParser;
     private static final Logger LOGGER = new Logger(SheetMusicReaderWriter.class);
 
+    public static final int LATEST_VERSION;
+
+    static {
+        LATEST_VERSION = values()[values().length - 1].version;
+    }
+
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(pianoRollFile));
 

@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.midiconverter2.steps;
 
 import plu.capstone.playerpiano.midiconverter2.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
 public class Step2RemoveInvalidChannels implements MidiConversionStep {

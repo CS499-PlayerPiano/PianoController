@@ -5,10 +5,10 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
-import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /*
 Version 2:

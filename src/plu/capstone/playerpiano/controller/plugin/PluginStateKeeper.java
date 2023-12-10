@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.controller.plugin;
 
 import java.util.List;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 /**
  * An extension of the Plugin class that keeps track of the state of the piano notes.

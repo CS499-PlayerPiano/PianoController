@@ -6,9 +6,9 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.component.ComponentPiano;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.controller.plugin.PluginStateKeeper;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 /**
  * Plugin to visualize the piano keys.

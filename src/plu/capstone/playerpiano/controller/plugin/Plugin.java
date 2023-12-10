@@ -11,12 +11,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
-import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /**
  * Base class for all plugins.

@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.sheetmusic;
+package plu.capstone.playerpiano.sheetmusic.events;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

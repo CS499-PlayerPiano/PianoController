@@ -15,7 +15,7 @@ import javax.sound.midi.Track;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.midiconverter.viewer.SheetMusicViewer;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 public class MainMidiConverter {
 

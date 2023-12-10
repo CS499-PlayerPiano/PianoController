@@ -1,10 +1,9 @@
 package plu.capstone.playerpiano.midiconverter2.steps;
 
-import java.util.List;
 import plu.capstone.playerpiano.midiconverter2.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 public class Step3OnNoteVelocity0Fix implements MidiConversionStep {
 

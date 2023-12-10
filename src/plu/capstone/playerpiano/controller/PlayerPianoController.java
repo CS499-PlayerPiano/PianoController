@@ -7,7 +7,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
@@ -46,23 +46,23 @@ public class PlayerPianoController implements Runnable {
             plugin.loadPlugin();
         }
 
-//        try {
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/ABBA/Money Money.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/mididownload.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
-//            playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/RUSH_E_FINAL.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/River_Flows_In_You.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Coconut_Mall.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Rockefeller_Street.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Levan_Polkka.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Bad_Piggies_Theme.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Dance_Monkey.mid")));
-//        } catch (InvalidMidiDataException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/ABBA/Money Money.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/mididownload.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/Beethoven_Virus.mid")));
+            playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/RUSH_E_FINAL.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/River_Flows_In_You.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Coconut_Mall.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Rockefeller_Street.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Levan_Polkka.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Bad_Piggies_Theme.mid")));
+            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Dance_Monkey.mid")));
+        } catch (InvalidMidiDataException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

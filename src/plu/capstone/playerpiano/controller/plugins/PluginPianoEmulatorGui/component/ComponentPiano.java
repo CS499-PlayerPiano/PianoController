@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui.ColorMode;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 
 public class ComponentPiano extends JComponent {

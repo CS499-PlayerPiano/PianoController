@@ -10,8 +10,8 @@ import java.nio.file.Files;
 import java.util.List;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
-import plu.capstone.playerpiano.sheetmusic.Note;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 public class FixExistingConfigEntries {
 

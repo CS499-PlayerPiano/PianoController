@@ -2,6 +2,7 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 /**
  * This is the callback interface for the {@link plu.capstone.playerpiano.sheetmusic.SheetMusic} class.

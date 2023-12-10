@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.SustainPedalEffect;
-import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEffect;
+import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
 class SheetMusicReaderWriterTest {

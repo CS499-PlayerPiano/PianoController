@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.midiconverter2.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 @AllArgsConstructor
 public class Step5InsertingOffNotes implements MidiConversionStep {

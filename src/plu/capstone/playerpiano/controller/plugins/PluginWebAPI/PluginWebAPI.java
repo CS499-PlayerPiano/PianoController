@@ -2,19 +2,15 @@ package plu.capstone.playerpiano.controller.plugins.PluginWebAPI;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
 import io.javalin.json.JsonMapper;
-import io.javalin.openapi.BasicAuth;
 import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
-import io.javalin.openapi.plugin.SecurityComponentConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.websocket.WsContext;
-import io.swagger.util.Json;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.HashSet;
@@ -26,8 +22,8 @@ import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
-import plu.capstone.playerpiano.sheetmusic.Note;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 public class PluginWebAPI extends Plugin {
 

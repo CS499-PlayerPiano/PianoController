@@ -1,7 +1,6 @@
-package plu.capstone.playerpiano.sheetmusic;
+package plu.capstone.playerpiano.sheetmusic.events;
 
 import javax.sound.midi.ShortMessage;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

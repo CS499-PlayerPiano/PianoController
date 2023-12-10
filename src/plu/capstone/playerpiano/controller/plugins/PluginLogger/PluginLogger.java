@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.controller.plugins.PluginLogger;
 
 import plu.capstone.playerpiano.logger.ConsoleColors;
-import plu.capstone.playerpiano.sheetmusic.Note;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 
 /**

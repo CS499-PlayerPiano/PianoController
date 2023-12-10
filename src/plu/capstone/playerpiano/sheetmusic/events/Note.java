@@ -42,7 +42,7 @@ public class Note implements SheetMusicEvent, Cloneable {
      * Byte from 0-255
      * TODO: This should be a byte...
      */
-    private final int velocity;
+    @Setter private int velocity;
 
     /**
      * Whether this note is on or off.

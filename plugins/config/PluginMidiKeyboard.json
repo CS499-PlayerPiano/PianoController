@@ -1,0 +1,6 @@
+{
+  "enabled": true,
+  "printAllDeviceNames": true,
+  "deviceName": "AKM320",
+  "ignoreVelocity": true
+}

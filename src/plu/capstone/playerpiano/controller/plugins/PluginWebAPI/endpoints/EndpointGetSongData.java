@@ -48,11 +48,17 @@ public class EndpointGetSongData implements Endpoint {
 
         Song[] songs = GSON.fromJson(Files.readString(SONGS_DB.toPath()), Song[].class);
 
+        final String FULL_URL = ctx.req().getRequestURL().toString().replace("/songs", "");
+
         for(Song song : songs) {
             //TODO: Replace this with the actual number of times the song has been played
             int constantPlayCount = song.getName().hashCode() % 1000;
             constantPlayCount = Math.abs(constantPlayCount);
             song.setTimesPlayed(constantPlayCount);
+
+
+            //Set the album art to a URL that will return the album art
+            song.setArtwork(FULL_URL + "/album-art/" + song.getArtwork());
         }
 
         ctx.result(GSON.toJson(songs));

@@ -17,7 +17,7 @@ public final class Song implements Serializable {
     private String name;
     private String[] artists;
     private String midiFile;
-    private String artwork;
+    @Setter private String artwork;
     private String[] tags;
     private long noteCount;
     private long songLengthMS;

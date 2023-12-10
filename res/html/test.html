@@ -74,10 +74,14 @@
         <div class="text">
             <p>This page is to test the API backend</p>
         </div>
+        <div class="text">
+            <p>Choose a song to play</p>
+
+            <select id="songList"></select>
+        </div>
         <div class="buttons">
-            <a href="#" onclick='sendPostRequest("start", {"songName": "Coconut_Mall.mid"})'
-                class=" button button-green">Get Coconut Malled</a>
-            <a href="#" onclick='sendPostRequest("stop")' class="button button-red">STHAP!</a>
+            <a href="#" onclick='playSelectedSong()' class=" button button-green">Play selected song</a>
+            <a href="#" onclick='piano.stopSong()' class="button button-red">STHAP!</a>
         </div>
 
         <div class="text">
@@ -88,73 +92,91 @@
 
     </div>
 
+    <!-- Load the piano script. Should be done in the Body not the head! -->
+    <script src="piano.js"></script>
     <script>
-        //check if its https, then we need to use wss, else if its http use ws
-        let protocol = window.location.protocol == "https:" ? "wss" : "ws";
 
-        let socket = new WebSocket(protocol + "://" + window.location.host + "/ws");
 
-        socket.onopen = function (e) {
-            console.log("[open] Connection established");
-        };
+        // Shortcuts to commonly used HTML elements
+        let songListElement = document.getElementById("songList");
+        let noteListElement = document.getElementById("noteList");
+        let timestampElement = document.getElementById("timestamp");
 
-        socket.onmessage = function (event) {
-            console.log(`[message] Data received from server: ${event.data}`);
+        // Create a new piano instance
+        const piano = new Piano();
 
-            let pkt = JSON.parse(event.data)
-            if (pkt.packetId == "timestamp") {
-                let current = msToTime(pkt.data.current)
-                let end = msToTime(pkt.data.end)
-                document.getElementById("timestamp").innerHTML = current + " / " + end;
+        // Initialize the piano, should be called on BODY load, not HEAD load.
+        piano.init();
+
+        // Get the list of songs from the API
+        piano.getSongList((songs) => {
+
+            // Add each song to the list, name is the text, midiFile is the value
+            for (let i = 0; i < songs.length; i++) {
+                let song = songs[i];
+                let option = document.createElement("option");
+                option.text = song.name;
+                option.value = song.midiFile;
+                songListElement.add(option);
             }
-            else if (pkt.packetId == "notesPlayed") {
+        });
 
-                let text = "[" + pkt.data.timestamp + "] ";
+        // Called by the green button
+        playSelectedSong = () => {
 
-                for (let i = 0; i < pkt.data.notes.length; i++) {
-                    let note = pkt.data.notes[i];
-                    text += note.noteName + " - " + (note.noteOn ? "On" : "Off") + ", ";
-                }
+            let midiFile = songListElement.options[songListElement.selectedIndex].value;
 
-                document.getElementById("noteList").innerHTML += text + "\n";
-                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
-            }
-            else if (pkt.packetId == "songFinished") {
-                document.getElementById("noteList").innerHTML += "Song Ended\n";
-                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
-            }
-            else if (pkt.packetId == "songStarted") {
-                document.getElementById("noteList").innerHTML = "Song Started\n";
-                document.getElementById("noteList").scrollTop = document.getElementById("noteList").scrollHeight;
-            }
-        };
-
-        socket.onclose = function (event) {
-            if (event.wasClean) {
-                console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-            } else {
-                // e.g. server process killed or network down
-                // event.code is usually 1006 in this case
-                console.log('[close] Connection died');
-            }
-        };
-
-        socket.onerror = function (error) {
-            console.log(`[error] ` + error);
-        };
-
-        function sendPostRequest(loc, data = null) {
-            let xhr = new XMLHttpRequest();
-            xhr.open("POST", "/api/control/" + loc, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-
-            if (data == null) {
-                xhr.send();
-            } else {
-                xhr.send(JSON.stringify(data));
-            }
+            //Normally you would just pass the entire song object, but for this example I am only passing the midiFile
+            piano.playSong({
+                "midiFile": midiFile
+            });
         }
 
+        // Called when the song starts
+        piano.onSongStarted(() => {
+            printToNoteList("Song Started");
+        });
+
+        // Called when the song ends
+        piano.onSongFinished(() => {
+            printToNoteList("Song Ended");
+        });
+
+        // Called when notes are played
+        // Packet contains a timestamp, and an array of notes
+        piano.onNotesPlayed((packet) => {
+            let text = "[" + packet.timestamp + "] ";
+
+            for (let i = 0; i < packet.notes.length; i++) {
+                let note = packet.notes[i];
+                text += note.noteName + " - " + (note.noteOn ? "On" : "Off") + ", ";
+            }
+
+            printToNoteList(text);
+        });
+
+        // Called when the timestamp is updated
+        piano.onTimestampUpdated((timestamp) => {
+
+            // Make the timestamp look nice
+            let current = msToTime(timestamp.current)
+            let end = msToTime(timestamp.end)
+
+            // Update the timestamp element
+            timestampElement.innerHTML = current + " / " + end;
+        });
+
+
+        // Utility function to print to the note list
+        function printToNoteList(text) {
+            // Add the text to the note list
+            noteListElement.innerHTML += text + "\n";
+
+            // Scroll to the bottom of the note list
+            noteListElement.scrollTop = noteListElement.scrollHeight;
+        }
+
+        // Utility function to convert milliseconds to a time string
         function msToTime(duration) {
             let seconds = Math.floor((duration / 1000) % 60),
                 minutes = Math.floor((duration / (1000 * 60)) % 60),

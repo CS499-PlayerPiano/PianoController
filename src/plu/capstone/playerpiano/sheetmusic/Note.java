@@ -96,7 +96,7 @@ public class Note implements SheetMusicEvent{
      * @return true if this note is a valid piano key, false otherwise.
      */
     public boolean isValidPianoKey() {
-        return keyNumber >= 21 && keyNumber <= 88;
+        return keyNumber >= 21 && keyNumber <= 108;
     }
 
     /**

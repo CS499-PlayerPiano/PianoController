@@ -15,7 +15,7 @@ import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.ControlMessages;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEffect;
+import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /**
@@ -100,7 +100,7 @@ public class MidiSheetMusic extends SheetMusic {
                         if(sm.getData1() == ControlMessages.DAMPER_PEDAL) {
                             boolean on = sm.getData2() >= 64; //0-63 is off, 64-127 is on
                             logger.debug("Sustain pedal: " + on);
-                            putEvent(event.getTick(), new SustainPedalEffect(on));
+                            putEvent(event.getTick(), new SustainPedalEvent(on));
                         }
                     }
 

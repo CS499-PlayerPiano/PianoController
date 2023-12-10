@@ -16,6 +16,7 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /**
@@ -110,6 +111,9 @@ public abstract class Plugin implements SheetMusicCallback {
             else if(event instanceof TempoChangeEvent) {
                 onTempoChangeEvent((TempoChangeEvent) event, timestamp);
             }
+            else if(event instanceof SustainPedalEvent) {
+                onSustainPedal((SustainPedalEvent) event, timestamp);
+            }
         }
 
         onNotesPlayed(notes, timestamp);
@@ -128,10 +132,19 @@ public abstract class Plugin implements SheetMusicCallback {
 
     /**
      * Called when a time change event is played / state changed at a given timestamp.
+     * Only supported with version 2 file formats!
      * @param event the event that was played / changed
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      */
     public void onTempoChangeEvent(TempoChangeEvent event, long timestamp) {}
+
+    /**
+     * Called when a sustain pedal event is played / state changed at a given timestamp.
+     * Only supported with version 3 file formats!
+     * @param event the event that was played / changed
+     * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
+     */
+    public void onSustainPedal(SustainPedalEvent event, long timestamp) {}
 
     /**
      * Called when X note(s) are played / state changed at a given timestamp.

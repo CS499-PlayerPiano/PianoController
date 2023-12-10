@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEffect;
+import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
@@ -90,8 +90,8 @@ class SheetMusicReaderWriterTest {
 
         orig.putEvent(23, new TempoChangeEvent(120));
         orig.putEvent(24, new TempoChangeEvent(240));
-        orig.putEvent(28, new SustainPedalEffect(true));
-        orig.putEvent(30, new SustainPedalEffect(false));
+        orig.putEvent(28, new SustainPedalEvent(true));
+        orig.putEvent(30, new SustainPedalEvent(false));
 
         File file = new File("tmp/v3.pianoroll");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 3);

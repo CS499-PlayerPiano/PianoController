@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class SustainPedalEffect implements SheetMusicEvent{
+public class SustainPedalEvent implements SheetMusicEvent{
 
     private final boolean on;
 
@@ -26,7 +26,7 @@ public class SustainPedalEffect implements SheetMusicEvent{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SustainPedalEffect that = (SustainPedalEffect) o;
+        SustainPedalEvent that = (SustainPedalEvent) o;
 
         return on == that.on;
     }

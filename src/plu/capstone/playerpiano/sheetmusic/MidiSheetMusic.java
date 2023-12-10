@@ -97,9 +97,6 @@ public class MidiSheetMusic extends SheetMusic {
                         int controller = sm.getData1();
                         int value = sm.getData2();
                         String name = MidiConstants.CONTROL_NAMES.getOrDefault(controller, "Undefined (" + controller + ")");
-                        if(controller >= 32 && controller < 64) {
-                            name = "LSB (" + (controller - 32) + ")";
-                        }
                         logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
                     }
 

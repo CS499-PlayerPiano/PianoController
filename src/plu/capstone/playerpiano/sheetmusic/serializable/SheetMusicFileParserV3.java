@@ -8,10 +8,11 @@ import java.util.Map;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.SustainPedalEffect;
 import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
 
 /*
-Version 2:
+Version 3:
         - long SongLengthMS
         - int number of timeslots
         - for each timeslot:
@@ -26,8 +27,10 @@ Version 2:
         - byte channelNum
         if(eventTypeId == EVENT_TEMPO_CHANGE)
         - int tempo
+        if(eventTypeId == EVENT_SUSTAIN_PEDAL)
+        - boolean on
 */
-public class SheetMusicFileParserV2 extends SheetMusicFileParser {
+public class SheetMusicFileParserV3 extends SheetMusicFileParser {
 
     @Override
     public SheetMusic readSheetMusic(BufferedInputStream in) throws IOException {
@@ -52,6 +55,7 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
 
                 final byte eventTypeId = readByte(in);
 
+                //read in notes events
                 if(eventTypeId == SheetMusicEvent.EVENT_NOTE) {
                     final byte keyNumber = readByte(in);
                     final byte velocity = readByte(in);
@@ -67,9 +71,17 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
 
                     sheetMusic.putEvent(time, note);
                 }
+
+                //read in tempo change events
                 else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     final int tempo = readInt(in);
                     sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
+                }
+
+                //read in sustain pedal events
+                else if(eventTypeId == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
+                    final boolean on = readBoolean(in);
+                    sheetMusic.putEvent(time, new SustainPedalEffect(on));
                 }
                 else {
                     LOGGER.warning("Unknown event type: " + eventTypeId);
@@ -110,11 +122,20 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                     writeBoolean(out, note.isNoteOn());
                     writeByte(out, (byte) note.getChannelNum());
                 }
+
                 //write out tempo change events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
                     writeInt(out, tempoChangeEvent.getUsPerQuarterNote());
                 }
+
+                //write out sustain pedal events as normal
+                else if(event.getEventTypeId() == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
+                    SustainPedalEffect sustainPedalEffect = (SustainPedalEffect) event;
+                    writeBoolean(out, sustainPedalEffect.isOn());
+                }
+
+                // We don't know what this event is
                 else {
                     LOGGER.warning("Unknown event type: " + event.getClass().getName());
                 }

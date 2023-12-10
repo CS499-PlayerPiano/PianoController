@@ -13,8 +13,9 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 @AllArgsConstructor
 public enum SheetMusicReaderWriter {
 
-    V1(1, new SheetMusicFileParserV1()),
-    V2(2, new SheetMusicFileParserV2()),
+    V1(1, new SheetMusicFileParserV1()), //(Assume all Notes) Notes
+    V2(2, new SheetMusicFileParserV2()), //(Events) Notes + Tempo
+    V3(3, new SheetMusicFileParserV3()), //(Events) Notes + Tempo + Sustain Pedal
     ;
 
     private final int version;
@@ -25,6 +26,7 @@ public enum SheetMusicReaderWriter {
 
     static {
         LATEST_VERSION = values()[values().length - 1].version;
+        LOGGER.debug("Latest file version: " + LATEST_VERSION);
     }
 
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {

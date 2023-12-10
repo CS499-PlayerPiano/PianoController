@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.sheetmusic;
 import javax.sound.midi.ShortMessage;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 
@@ -11,7 +12,7 @@ import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
  */
 @Getter
 @ToString
-public class Note implements SheetMusicEvent{
+public class Note implements SheetMusicEvent, Cloneable {
 
     public static final int NO_CHANNEL = -1;
 
@@ -47,7 +48,8 @@ public class Note implements SheetMusicEvent{
     /**
      * Whether this note is on or off.
      */
-    private final boolean noteOn;
+    @Setter
+    private boolean noteOn;
 
     /**
      * Creates a new Note object.
@@ -107,6 +109,14 @@ public class Note implements SheetMusicEvent{
         return keyNumber - 21;
     }
 
+    /**
+     * Gets the piano number of this note. This is from 0-87
+     * @return The piano number of this note.
+     */
+    public int getPianoNumber() {
+        return keyNumber - 21;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,5 +140,14 @@ public class Note implements SheetMusicEvent{
     @Override
     public byte getEventTypeId() {
         return EVENT_NOTE;
+    }
+
+    @Override
+    public Note clone() {
+        return new Note(
+                (byte) keyNumber,
+                (byte) velocity,
+                noteOn,
+                channelNum);
     }
 }

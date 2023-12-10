@@ -57,7 +57,7 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
                         channelNum
                 );
 
-                sheetMusic.putNote(time, note);
+                sheetMusic.putEvent(time, note);
             }
         }
 

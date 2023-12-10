@@ -1,13 +1,17 @@
 package plu.capstone.playerpiano.sheetmusic;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class TempoChangeEvent implements SheetMusicEvent {
 
-    private int tempo;
+    private final int usPerQuarterNote;
+    private final int BPM;
+
+    public TempoChangeEvent(int tempo) {
+        this.usPerQuarterNote = tempo;
+        this.BPM = 60000000 / tempo;
+    }
 
     @Override
     public byte getEventTypeId() {
@@ -17,7 +21,8 @@ public class TempoChangeEvent implements SheetMusicEvent {
     @Override
     public String toString() {
         return "TimeChangeEvent{" +
-                "tempo=" + tempo +
+                "us_per_quarter_note=" + usPerQuarterNote +
+                ", BPM=" + BPM +
                 '}';
     }
 
@@ -28,11 +33,13 @@ public class TempoChangeEvent implements SheetMusicEvent {
 
         TempoChangeEvent that = (TempoChangeEvent) o;
 
-        return tempo == that.tempo;
+        //BPM is not included in equals because it is derived from tempo
+        return usPerQuarterNote == that.usPerQuarterNote;
     }
 
+    //BPM is not included in hashCode because it is derived from tempo
     @Override
     public int hashCode() {
-        return Integer.hashCode(tempo);
+        return Integer.hashCode(usPerQuarterNote);
     }
 }

@@ -10,6 +10,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
+import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
 
@@ -68,7 +69,6 @@ public class MidiSheetMusic extends SheetMusic {
                         logger.debug("Tempo change: " + tempo);
                         putEvent(whereMS, new TempoChangeEvent(tempo));
                     }
-                    //MidiMessagePrinter.printMetaMessage(-1, mm);
                 }
 
                 if (message instanceof ShortMessage) {
@@ -88,9 +88,20 @@ public class MidiSheetMusic extends SheetMusic {
                         if(note.isNoteOn() && note.getVelocity() == 0) {
                             logger.warning("Note on with velocity 0 at " + whereMS + "ms");
                         }
-                        putNote(whereMS, note);
+                        putEvent(whereMS, note);
                     }
 
+                    //Test to see if the midi file has any control changes for the pedals.
+                    //Most midi songs seem to fake the pedal by just holding the notes for a long time.
+                    else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
+                        int controller = sm.getData1();
+                        int value = sm.getData2();
+                        String name = MidiConstants.CONTROL_NAMES.getOrDefault(controller, "Undefined (" + controller + ")");
+                        if(controller >= 32 && controller < 64) {
+                            name = "LSB (" + (controller - 32) + ")";
+                        }
+                        logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
+                    }
 
                 }
             }

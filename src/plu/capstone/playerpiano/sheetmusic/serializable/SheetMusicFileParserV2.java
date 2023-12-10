@@ -63,7 +63,7 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                             channelNum
                     );
 
-                    sheetMusic.putNote(time, note);
+                    sheetMusic.putEvent(time, note);
                 }
                 else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     final int tempo = readInt(in);
@@ -111,7 +111,7 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                 //write out tempo change events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
-                    writeInt(out, tempoChangeEvent.getTempo());
+                    writeInt(out, tempoChangeEvent.getUsPerQuarterNote());
                 }
                 else {
                     LOGGER.warning("Unknown event type: " + event.getClass().getName());

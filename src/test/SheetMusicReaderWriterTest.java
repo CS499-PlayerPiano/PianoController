@@ -15,13 +15,13 @@ class SheetMusicReaderWriterTest {
     public void testV1ReadWrite() throws IOException {
         SheetMusic orig = new SheetMusic();
         orig.setSongLengthMS(1000);
-        orig.putNote(0, new Note(
+        orig.putEvent(0, new Note(
                 (byte) 68,
                 (byte) 128,
                 true,
                 1
         ));
-        orig.putNote(6, new Note(
+        orig.putEvent(6, new Note(
                 (byte) 68,
                 (byte) 0,
                 false,
@@ -43,13 +43,13 @@ class SheetMusicReaderWriterTest {
     public void testV2ReadWrite() throws IOException {
         SheetMusic orig = new SheetMusic();
         orig.setSongLengthMS(1000);
-        orig.putNote(0, new Note(
+        orig.putEvent(0, new Note(
                 (byte) 68,
                 (byte) 128,
                 true,
                 1
         ));
-        orig.putNote(6, new Note(
+        orig.putEvent(6, new Note(
                 (byte) 68,
                 (byte) 0,
                 false,

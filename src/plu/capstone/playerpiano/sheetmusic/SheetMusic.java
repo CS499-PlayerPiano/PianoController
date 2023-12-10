@@ -28,17 +28,8 @@ public class SheetMusic {
     private List<SheetMusicCallback> callbacks = new ArrayList<>();
 
     /**
-     * Creates a new SheetMusic object.
-     * @param time The time in milliseconds that this note starts.
-     * @param note The note to add.
-     */
-    @Deprecated
-    public final void putNote(long time, Note note) {
-        putEvent(time, note);
-    }
-
-    /**
-     * Creates a new SheetMusic object.
+     * Put an event into the event map at the given time.
+     * This can be a Note, TempoChangeEvent, or any other SheetMusicEvent.
      * @param time The time in milliseconds that this event starts.
      * @param event The event to add.
      */

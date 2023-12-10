@@ -156,9 +156,9 @@ public class EndpointControlPiano implements Endpoint {
             })
     private void startSong(Context context) {
         JsonObject body = context.bodyAsClass(JsonObject.class);
-        String songName = body.get("songName").getAsString();
+        String midiFile = body.get("midiFile").getAsString();
 
-        File songFile = new File("res" + File.separator + "songs-db" + File.separator + "songs" + File.separator + songName);
+        File songFile = new File("res" + File.separator + "songs-db" + File.separator + "songs" + File.separator + midiFile);
         if(!songFile.exists()) {
             context.status(HttpStatus.NOT_FOUND);
             context.result("Song not found");

@@ -33,23 +33,23 @@ public class MidiCleaner {
 
         TimingsReport timingsReport = new TimingsReport();
 
-        Timing createSheetMusic = timingsReport.newTiming("Read midi file");
+        timingsReport.start("Read midi file");
         SheetMusic sheetMusic = new MidiSheetMusic(MIDI_FILE);
-        createSheetMusic.stop();
+        timingsReport.stop();
 
         for(int i = 0; i < steps.length; i++) {
-            Timing timing = timingsReport.newTiming("Step " + (i + 1) + ": " + steps[i].getName());
+            timingsReport.start("Step " + (i + 1) + ": " + steps[i].getName());
             final MidiConversionStep step = steps[i];
             LOGGER.info("Running step: " + step.getName());
             step.process(sheetMusic);
-            timing.stop();
+            timingsReport.stop();
         }
 
         //Write the file
 
-        Timing writeSheetMusic = timingsReport.newTiming("Write File");
+        timingsReport.start("Write File");
         SheetMusicReaderWriter.saveSheetMusic(sheetMusic, new File("tmp/RushECleaned.piano"), SheetMusicReaderWriter.LATEST_VERSION);
-        writeSheetMusic.stop();
+        timingsReport.stop();
 
         timingsReport.printReport();
 

@@ -1,25 +1,37 @@
 package plu.capstone.playerpiano.controller.utilities.timings;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import plu.capstone.playerpiano.logger.Logger;
 
 public class TimingsReport {
 
     private final Logger LOGGER = new Logger(this);
 
-    private List<Timing> timings = new ArrayList<>();
+    private List<Timing> allTimings = new ArrayList<>();
+    private Queue<Timing> stopQueue = new LinkedList<>();
 
-    public Timing newTiming(String name) {
+    public void start(String name) {
         Timing timing = new Timing(name);
-        timings.add(timing);
+        stopQueue.add(timing);
+        allTimings.add(timing);
         timing.start();
-        return timing;
+    }
+
+    public void stop() {
+        Timing timing = stopQueue.poll();
+        if(timing == null) {
+            LOGGER.error("Tried to stop a timing that was never pushed! Did you forget to start a timing?");
+            return;
+        }
+        timing.stop();
     }
 
     private long getTotalTime() {
         long total = 0;
-        for(Timing timing : timings) {
+        for(Timing timing : allTimings) {
             total += timing.getDuration();
         }
         return total;
@@ -29,7 +41,7 @@ public class TimingsReport {
         LOGGER.info("--- Timings Report ---");
         LOGGER.info("Total time: " + getTotalTime() + "ms");
         LOGGER.info("Steps breakdown:");
-        for(Timing timing : timings) {
+        for(Timing timing : allTimings) {
             LOGGER.info("  - Step \"" + timing.getName() + "\" took " + timing.getDuration() + "ms");
         }
         LOGGER.info("--- End Timings Report ---");

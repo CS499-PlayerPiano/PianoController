@@ -186,9 +186,9 @@ public class EndpointControlPiano implements Endpoint {
 
     class SongEntryInput {
 
-        @OpenApiDescription("The name of the song to play")
+        @OpenApiDescription("The midi file of the song to play")
         @OpenApiExample("Coconut_Mall.mid")
-        public String getSongName() {
+        public String getMidiFile() {
             return null;
         }
     }

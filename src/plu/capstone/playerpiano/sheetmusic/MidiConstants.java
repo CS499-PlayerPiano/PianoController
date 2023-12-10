@@ -12,100 +12,189 @@ import lombok.Getter;
 public class MidiConstants {
 
     public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
-    public static final Map<Integer, String> CONTROL_NAMES = Map.ofEntries(
-            entry(0, "Bank Select"),
-            entry(1, "Modulation"),
-            entry(2, "Breath Controller"),
-            entry(3, "Undefined"),
-            entry(4, "Foot Controller"),
-            entry(5, "Portamento Time"),
-            entry(6, "Data Entry Most Significant Bit (MSB)"),
-            entry(7, "Volume"),
-            entry(8, "Balance"),
-            entry(9, "Undefined"),
-            entry(10, "Pan"),
-            entry(11, "Expression"),
-            entry(12, "Effect Controller 1"),
-            entry(13, "Effect Controller 2"),
-            entry(14, "Undefined"),
-            entry(15, "Undefined"),
-            entry(16, "General Purpose"),
-            entry(20, "Undefined"),
-            entry(32, "LAB (1)"),
-            entry(33, "LSB (2)"),
-            entry(34, "LSB (3)"),
-            entry(35, "LSB (4)"),
-            entry(36, "LSB (5)"),
-            entry(37, "LSB (6)"),
-            entry(38, "LSB (7)"),
-            entry(39, "LSB (8)"),
-            entry(40, "LSB (9)"),
-            entry(41, "LSB (10)"),
-            entry(42, "LSB (11)"),
-            entry(43, "LSB (12)"),
-            entry(44, "LSB (13)"),
-            entry(45, "LSB (14)"),
-            entry(46, "LSB (15)"),
-            entry(47, "LSB (16)"),
-            entry(48, "LSB (17)"),
-            entry(49, "LSB (18)"),
-            entry(50, "LSB (19)"),
-            entry(51, "LSB (20)"),
-            entry(52, "LSB (21)"),
-            entry(53, "LSB (22)"),
-            entry(54, "LSB (23)"),
-            entry(55, "LSB (24)"),
-            entry(56, "LSB (25)"),
-            entry(57, "LSB (26)"),
-            entry(58, "LSB (27)"),
-            entry(59, "LSB (28)"),
-            entry(60, "LSB (29)"),
-            entry(61, "LSB (30)"),
-            entry(62, "LSB (31)"),
-            entry(63, "LSB (32)"),
-            entry(64, "Damper Pedal / Sustain Pedal"),
-            entry(65, "Portamento On/Off Switch"),
-            entry(66, "Sostenuto On/Off Switch"),
-            entry(67, "Soft Pedal On/Off Switch"),
-            entry(68, "Legato FootSwitch"),
-            entry(69, "Hold 2"),
-            entry(70, "Sound Controller 1"),
-            entry(71, "Sound Controller 2"),
-            entry(72, "Sound Controller 3"),
-            entry(73, "Sound Controller 4"),
-            entry(74, "Sound Controller 5"),
-            entry(75, "Sound Controller 6"),
-            entry(76, "Sound Controller 7"),
-            entry(77, "Sound Controller 8"),
-            entry(78, "Sound Controller 9"),
-            entry(79, "Sound Controller 10"),
-            entry(80, "General Purpose MIDI CC Controller"),
-            entry(81, "General Purpose MIDI CC Controller"),
-            entry(82, "General Purpose MIDI CC Controller"),
-            entry(83, "General Purpose MIDI CC Controller"),
-            entry(84, "Portamento CC Control"),
-            entry(88, "Undefined"),
-            entry(91, "Effect 1 Depth"),
-            entry(92, "Effect 2 Depth"),
-            entry(93, "Effect 3 Depth"),
-            entry(94, "Effect 4 Depth"),
-            entry(95, "Effect 5 Depth"),
-            entry(96, "(+1) Data Increment"),
-            entry(97, "(-1) Data Decrement"),
-            entry(98, "Non-Registered Parameter Number LSB (NRPN)"),
-            entry(99, "Non-Registered Parameter Number MSB (NRPN)"),
-            entry(100, "Registered Parameter Number LSB (RPN)"),
-            entry(101, "Registered Parameter Number MSB (RPN)"),
-            entry(102, "Undefined"),
-            entry(120, "All Sound Off"),
-            entry(121, "Reset All Controllers"),
-            entry(122, "Local On/Off Switch"),
-            entry(123, "All Notes Off"),
-            entry(124, "Omni Mode Off"),
-            entry(125, "Omni Mode On"),
-            entry(126, "Mono Mode"),
-            entry(127, "Poly Mode")
-    );
+
+    public static class ControlMessages {
+        public static final int BANK_SELECT = 0;
+        public static final int MODULATION = 1;
+        public static final int BREATH_CONTROLLER = 2;
+        public static final int FOOT_CONTROLLER = 4;
+        public static final int PORTAMENTO_TIME = 5;
+        public static final int DATA_ENTRY_MSB = 6;
+        public static final int VOLUME = 7;
+        public static final int BALANCE = 8;
+        public static final int PAN = 10;
+        public static final int EXPRESSION = 11;
+        public static final int EFFECT_CONTROLLER_1 = 12;
+        public static final int EFFECT_CONTROLLER_2 = 13;
+        public static final int GENERAL_PURPOSE = 16;
+        public static final int LAB_1 = 32;
+        public static final int LSB_2 = 33;
+        public static final int LSB_3 = 34;
+        public static final int LSB_4 = 35;
+        public static final int LSB_5 = 36;
+        public static final int LSB_6 = 37;
+        public static final int LSB_7 = 38;
+        public static final int LSB_8 = 39;
+        public static final int LSB_9 = 40;
+        public static final int LSB_10 = 41;
+        public static final int LSB_11 = 42;
+        public static final int LSB_12 = 43;
+        public static final int LSB_13 = 44;
+        public static final int LSB_14 = 45;
+        public static final int LSB_15 = 46;
+        public static final int LSB_16 = 47;
+        public static final int LSB_17 = 48;
+        public static final int LSB_18 = 49;
+        public static final int LSB_19 = 50;
+        public static final int LSB_20 = 51;
+        public static final int LSB_21 = 52;
+        public static final int LSB_22 = 53;
+        public static final int LSB_23 = 54;
+        public static final int LSB_24 = 55;
+        public static final int LSB_25 = 56;
+        public static final int LSB_26 = 57;
+        public static final int LSB_27 = 58;
+        public static final int LSB_28 = 59;
+        public static final int LSB_29 = 60;
+        public static final int LSB_30 = 61;
+        public static final int LSB_31 = 62;
+        public static final int LSB_32 = 63;
+        public static final int DAMPER_PEDAL = 64;
+        public static final int PORTAMENTO_SWITCH = 65;
+        public static final int SOSTENUTO_SWITCH = 66;
+        public static final int SOFT_PEDAL_SWITCH = 67;
+        public static final int LEGATO_FOOTSWITCH = 68;
+        public static final int HOLD_2 = 69;
+        public static final int SOUND_CONTROLLER_1 = 70;
+        public static final int SOUND_CONTROLLER_2 = 71;
+        public static final int SOUND_CONTROLLER_3 = 72;
+        public static final int SOUND_CONTROLLER_4 = 73;
+        public static final int SOUND_CONTROLLER_5 = 74;
+        public static final int SOUND_CONTROLLER_6 = 75;
+        public static final int SOUND_CONTROLLER_7 = 76;
+        public static final int SOUND_CONTROLLER_8 = 77;
+        public static final int SOUND_CONTROLLER_9 = 78;
+        public static final int SOUND_CONTROLLER_10 = 79;
+        public static final int GENERAL_PURPOSE_80 = 80;
+        public static final int GENERAL_PURPOSE_81 = 81;
+        public static final int GENERAL_PURPOSE_82 = 82;
+        public static final int GENERAL_PURPOSE_83 = 83;
+        public static final int PORTAMENTO_CC_CONTROL = 84;
+        public static final int EFFECT_1_DEPTH = 91;
+        public static final int EFFECT_2_DEPTH = 92;
+        public static final int EFFECT_3_DEPTH = 93;
+        public static final int EFFECT_4_DEPTH = 94;
+        public static final int EFFECT_5_DEPTH = 95;
+        public static final int DATA_INCREMENT = 96;
+        public static final int DATA_DECREMENT = 97;
+        public static final int NRPN_LSB = 98;
+        public static final int NRPN_MSB = 99;
+        public static final int RPN_LSB = 100;
+        public static final int RPN_MSB = 101;
+        public static final int UNDEFINED = 102;
+        public static final int ALL_SOUND_OFF = 120;
+        public static final int RESET_ALL_CONTROLLERS = 121;
+        public static final int LOCAL_ON_OFF_SWITCH = 122;
+        public static final int ALL_NOTES_OFF = 123;
+        public static final int OMNI_MODE_OFF = 124;
+        public static final int OMNI_MODE_ON = 125;
+        public static final int MONO_MODE = 126;
+        public static final int POLY_MODE = 127;
+
+        private static final Map<Integer, String> CONTROL_NAMES = Map.ofEntries(
+                entry(BANK_SELECT, "Bank Select"),
+                entry(MODULATION, "Modulation"),
+                entry(BREATH_CONTROLLER, "Breath Controller"),
+                entry(FOOT_CONTROLLER, "Foot Controller"),
+                entry(PORTAMENTO_TIME, "Portamento Time"),
+                entry(DATA_ENTRY_MSB, "Data Entry Most Significant Bit (MSB)"),
+                entry(VOLUME, "Volume"),
+                entry(BALANCE, "Balance"),
+                entry(PAN, "Pan"),
+                entry(EXPRESSION, "Expression"),
+                entry(EFFECT_CONTROLLER_1, "Effect Controller 1"),
+                entry(EFFECT_CONTROLLER_2, "Effect Controller 2"),
+                entry(GENERAL_PURPOSE, "General Purpose"),
+                entry(LAB_1, "LAB (1)"),
+                entry(LSB_2, "LSB (2)"),
+                entry(LSB_3, "LSB (3)"),
+                entry(LSB_4, "LSB (4)"),
+                entry(LSB_5, "LSB (5)"),
+                entry(LSB_6, "LSB (6)"),
+                entry(LSB_7, "LSB (7)"),
+                entry(LSB_8, "LSB (8)"),
+                entry(LSB_9, "LSB (9)"),
+                entry(LSB_10, "LSB (10)"),
+                entry(LSB_11, "LSB (11)"),
+                entry(LSB_12, "LSB (12)"),
+                entry(LSB_13, "LSB (13)"),
+                entry(LSB_14, "LSB (14)"),
+                entry(LSB_15, "LSB (15)"),
+                entry(LSB_16, "LSB (16)"),
+                entry(LSB_17, "LSB (17)"),
+                entry(LSB_18, "LSB (18)"),
+                entry(LSB_19, "LSB (19)"),
+                entry(LSB_20, "LSB (20)"),
+                entry(LSB_21, "LSB (21)"),
+                entry(LSB_22, "LSB (22)"),
+                entry(LSB_23, "LSB (23)"),
+                entry(LSB_24, "LSB (24)"),
+                entry(LSB_25, "LSB (25)"),
+                entry(LSB_26, "LSB (26)"),
+                entry(LSB_27, "LSB (27)"),
+                entry(LSB_28, "LSB (28)"),
+                entry(LSB_29, "LSB (29)"),
+                entry(LSB_30, "LSB (30)"),
+                entry(LSB_31, "LSB (31)"),
+                entry(LSB_32, "LSB (32)"),
+                entry(DAMPER_PEDAL, "Damper Pedal / Sustain Pedal"),
+                entry(PORTAMENTO_SWITCH, "Portamento On/Off Switch"),
+                entry(SOSTENUTO_SWITCH, "Sostenuto On/Off Switch"),
+                entry(SOFT_PEDAL_SWITCH, "Soft Pedal On/Off Switch"),
+                entry(LEGATO_FOOTSWITCH, "Legato FootSwitch"),
+                entry(HOLD_2, "Hold 2"),
+                entry(SOUND_CONTROLLER_1, "Sound Controller 1"),
+                entry(SOUND_CONTROLLER_2, "Sound Controller 2"),
+                entry(SOUND_CONTROLLER_3, "Sound Controller 3"),
+                entry(SOUND_CONTROLLER_4, "Sound Controller 4"),
+                entry(SOUND_CONTROLLER_5, "Sound Controller 5"),
+                entry(SOUND_CONTROLLER_6, "Sound Controller 6"),
+                entry(SOUND_CONTROLLER_7, "Sound Controller 7"),
+                entry(SOUND_CONTROLLER_8, "Sound Controller 8"),
+                entry(SOUND_CONTROLLER_9, "Sound Controller 9"),
+                entry(SOUND_CONTROLLER_10, "Sound Controller 10"),
+                entry(GENERAL_PURPOSE_80, "General Purpose MIDI CC Controller"),
+                entry(GENERAL_PURPOSE_81, "General Purpose MIDI CC Controller"),
+                entry(GENERAL_PURPOSE_82, "General Purpose MIDI CC Controller"),
+                entry(GENERAL_PURPOSE_83, "General Purpose MIDI CC Controller"),
+                entry(PORTAMENTO_CC_CONTROL, "Portamento CC Control"),
+                entry(EFFECT_1_DEPTH, "Effect 1 Depth"),
+                entry(EFFECT_2_DEPTH, "Effect 2 Depth"),
+                entry(EFFECT_3_DEPTH, "Effect 3 Depth"),
+                entry(EFFECT_4_DEPTH, "Effect 4 Depth"),
+                entry(EFFECT_5_DEPTH, "Effect 5 Depth"),
+                entry(DATA_INCREMENT, "(+1) Data Increment"),
+                entry(DATA_DECREMENT, "(-1) Data Decrement"),
+                entry(NRPN_LSB, "Non-Registered Parameter Number LSB (NRPN)"),
+                entry(NRPN_MSB, "Non-Registered Parameter Number MSB (NRPN)"),
+                entry(RPN_LSB, "Registered Parameter Number LSB (RPN)"),
+                entry(RPN_MSB, "Registered Parameter Number MSB (RPN)"),
+                entry(UNDEFINED, "Undefined"),
+                entry(ALL_SOUND_OFF, "All Sound Off"),
+                entry(RESET_ALL_CONTROLLERS, "Reset All Controllers"),
+                entry(LOCAL_ON_OFF_SWITCH, "Local On/Off Switch"),
+                entry(ALL_NOTES_OFF, "All Notes Off"),
+                entry(OMNI_MODE_OFF, "Omni Mode Off"),
+                entry(OMNI_MODE_ON, "Omni Mode On"),
+                entry(MONO_MODE, "Mono Mode"),
+                entry(POLY_MODE, "Poly Mode")
+
+        );
+
+        public static String getControlName(int control) {
+            return CONTROL_NAMES.getOrDefault(control, "Undefined (" + control + ")");
+        }
+    }
 
     public static class MetaMessages {
         public static final int SEQUENCE_NUMBER = 0x00;

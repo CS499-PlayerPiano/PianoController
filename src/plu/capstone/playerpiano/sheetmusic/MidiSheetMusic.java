@@ -2,6 +2,7 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.io.File;
 import java.io.IOException;
+import javax.naming.ldap.Control;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -12,6 +13,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.sheetmusic.MidiConstants.ControlMessages;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
 
 /**
@@ -42,7 +44,8 @@ public class MidiSheetMusic extends SheetMusic {
         // Get the length of the song in milliseconds
         songLengthMS = sequence.getMicrosecondLength() / 1000;
 
-        long us_per_quarter = -1;
+        //Default tempo is 500,000 microseconds per quarter note, or 120 BPM
+        long us_per_quarter = 500_000;
 
         for (int trackNum = 0; trackNum < sequence.getTracks().length; trackNum++) {
             Track track = sequence.getTracks()[trackNum];
@@ -74,16 +77,16 @@ public class MidiSheetMusic extends SheetMusic {
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
 
+                    // Calculate the time in milliseconds of the event
+                    long tick = event.getTick();
+                    long ticks_per_quarter = sequence.getResolution();
+                    long us_per_tick = us_per_quarter / ticks_per_quarter;
+                    long where = tick * us_per_tick;
+                    long whereMS = where / 1000;
+
                     if(sm.getCommand() == ShortMessage.NOTE_ON || sm.getCommand() == ShortMessage.NOTE_OFF) {
 
                         Note note = Note.fromMidiMessage(sm);
-
-                        // Calculate the time in milliseconds of the note
-                        long tick = event.getTick();
-                        long ticks_per_quarter = sequence.getResolution();
-                        long us_per_tick = us_per_quarter / ticks_per_quarter;
-                        long where = tick * us_per_tick;
-                        long whereMS = where / 1000;
 
                         if(note.isNoteOn() && note.getVelocity() == 0) {
                             logger.warning("Note on with velocity 0 at " + whereMS + "ms");
@@ -91,12 +94,20 @@ public class MidiSheetMusic extends SheetMusic {
                         putEvent(whereMS, note);
                     }
 
+                    else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
+                        if(sm.getData1() == ControlMessages.DAMPER_PEDAL) {
+                            boolean on = sm.getData2() >= 64; //0-63 is off, 64-127 is on
+                            logger.debug("Sustain pedal: " + on);
+                            putEvent(event.getTick(), new SustainPedalEffect(on));
+                        }
+                    }
+
                     //Test to see if the midi file has any control changes for the pedals.
                     //Most midi songs seem to fake the pedal by just holding the notes for a long time.
                     else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
                         int controller = sm.getData1();
                         int value = sm.getData2();
-                        String name = MidiConstants.CONTROL_NAMES.getOrDefault(controller, "Undefined (" + controller + ")");
+                        String name = ControlMessages.getControlName(controller);
                         logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
                     }
 

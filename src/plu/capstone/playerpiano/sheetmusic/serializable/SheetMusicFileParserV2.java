@@ -8,6 +8,7 @@ import java.util.Map;
 import plu.capstone.playerpiano.sheetmusic.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.SustainPedalEffect;
 import plu.capstone.playerpiano.sheetmusic.TempoChangeEvent;
 
 /*
@@ -69,6 +70,10 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                     final int tempo = readInt(in);
                     sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
                 }
+                else if(eventTypeId == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
+                    final boolean on = readBoolean(in);
+                    sheetMusic.putEvent(time, new SustainPedalEffect(on));
+                }
                 else {
                     LOGGER.warning("Unknown event type: " + eventTypeId);
                 }
@@ -112,6 +117,11 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
                     writeInt(out, tempoChangeEvent.getUsPerQuarterNote());
+                }
+                //write out sustain pedal events as normal
+                else if(event.getEventTypeId() == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
+                    SustainPedalEffect sustainPedalEffect = (SustainPedalEffect) event;
+                    writeBoolean(out, sustainPedalEffect.isOn());
                 }
                 else {
                     LOGGER.warning("Unknown event type: " + event.getClass().getName());

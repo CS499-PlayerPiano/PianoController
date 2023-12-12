@@ -28,6 +28,12 @@ class SheetMusicReaderWriterTest {
                 false,
                 1
         ));
+        orig.putEvent(6, new Note(
+                (byte) 79,
+                (byte) 0,
+                false,
+                2
+        ));
 
         File file = new File("tmp/v1.pianoroll");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 1);
@@ -55,6 +61,12 @@ class SheetMusicReaderWriterTest {
                 (byte) 0,
                 false,
                 1
+        ));
+        orig.putEvent(6, new Note(
+                (byte) 79,
+                (byte) 0,
+                false,
+                2
         ));
 
         orig.putEvent(23, new TempoChangeEvent(120));
@@ -86,6 +98,12 @@ class SheetMusicReaderWriterTest {
                 (byte) 0,
                 false,
                 1
+        ));
+        orig.putEvent(6, new Note(
+                (byte) 79,
+                (byte) 0,
+                false,
+                2
         ));
 
         orig.putEvent(23, new TempoChangeEvent(120));

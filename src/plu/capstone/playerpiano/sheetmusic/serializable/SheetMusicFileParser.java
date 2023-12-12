@@ -78,6 +78,18 @@ public abstract class SheetMusicFileParser {
         return num;
     }
 
+    protected static final void writeShort(BufferedOutputStream out, short num) throws IOException {
+        out.write(num >> 8);
+        out.write(num);
+    }
+
+    protected static final short readShort(BufferedInputStream in) throws IOException {
+        short num = 0;
+        num |= in.read() << 8;
+        num |= in.read();
+        return num;
+    }
+
     protected static final void writeString(BufferedOutputStream out, String str) throws IOException {
 
         if(str.length() > Integer.MAX_VALUE - 1) {

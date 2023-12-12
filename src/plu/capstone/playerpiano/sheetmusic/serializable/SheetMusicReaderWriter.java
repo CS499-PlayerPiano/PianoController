@@ -17,6 +17,7 @@ public enum SheetMusicReaderWriter {
     V2(2, new SheetMusicFileParserV2()), //(Events) Notes + Tempo
     V3(3, new SheetMusicFileParserV3()), //(Events) Notes + Tempo + Sustain Pedal
     V4(4, new SheetMusicFileParserV4()), //(Events) Notes + Tempo + Sustain Pedal, short for number of events, and store notes more efficiently
+    V5(5, new SheetMusicFileParserV5()), //(Events) Notes + Tempo + Sustain Pedal, long for number of events, and store notes more efficiently, int for timestamps
     ;
 
     private final int version;

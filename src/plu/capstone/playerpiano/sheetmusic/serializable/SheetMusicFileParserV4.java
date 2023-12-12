@@ -12,7 +12,7 @@ import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /*
-Version 3:
+Version 4:
         - long SongLengthMS
         - int number of timeslots
         - for each timeslot:

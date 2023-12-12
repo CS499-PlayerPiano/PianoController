@@ -27,7 +27,7 @@ public class MidiCleaner {
             new Step5InsertingOffNotes(200),
     };
 
-    private static final File MIDI_FILE = new File("res/songs/Testing/RUSH_E_FINAL.mid");
+    private static final File MIDI_FILE = new File("res/songs/Testing/02 - B Major - Basic (IV-I-vim7-V).mid");
 
     public static void main(String[] args) throws InvalidMidiDataException, IOException {
 
@@ -48,7 +48,7 @@ public class MidiCleaner {
         //Write the file
 
         timingsReport.start("Write File");
-        SheetMusicReaderWriter.saveSheetMusic(sheetMusic, new File("tmp/RushECleaned.piano"), SheetMusicReaderWriter.LATEST_VERSION);
+        SheetMusicReaderWriter.saveSheetMusic(sheetMusic, new File("tmp/02 - B Major - Basic (IV-I-vim7-V).piano"), SheetMusicReaderWriter.LATEST_VERSION);
         timingsReport.stop();
 
         timingsReport.printReport();

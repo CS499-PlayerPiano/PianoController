@@ -100,7 +100,7 @@ public class MidiSheetMusic extends SheetMusic {
                         if(sm.getData1() == ControlMessages.DAMPER_PEDAL) {
                             boolean on = sm.getData2() >= 64; //0-63 is off, 64-127 is on
                             logger.debug("Sustain pedal: " + on);
-                            putEvent(event.getTick(), new SustainPedalEvent(on));
+                            putEvent(whereMS, new SustainPedalEvent(on));
                         }
                     }
 

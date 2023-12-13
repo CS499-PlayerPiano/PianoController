@@ -10,14 +10,25 @@ import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
+/**
+ * Enum for reading and writing sheet music files.
+ * <p>
+ *     V1: (Assume all Notes) Notes
+ *     V2: (Events) Notes + Tempo
+ *     V3: (Events) Notes + Tempo + Sustain Pedal
+ *     V4: (Events) Notes + Tempo + Sustain Pedal, short for number of events, and store notes more efficiently
+ *     V5: (Events) Notes + Tempo + Sustain Pedal, long for number of events, and store notes more efficiently, int for timestamps
+ *     V6: (Events) Notes + Tempo + Sustain Pedal, long for number of events, and store notes more efficiently, int for timestamps, int for song length
+ */
 @AllArgsConstructor
 public enum SheetMusicReaderWriter {
 
-    V1(1, new SheetMusicFileParserV1()), //(Assume all Notes) Notes
-    V2(2, new SheetMusicFileParserV2()), //(Events) Notes + Tempo
-    V3(3, new SheetMusicFileParserV3()), //(Events) Notes + Tempo + Sustain Pedal
-    V4(4, new SheetMusicFileParserV4()), //(Events) Notes + Tempo + Sustain Pedal, short for number of events, and store notes more efficiently
-    V5(5, new SheetMusicFileParserV5()), //(Events) Notes + Tempo + Sustain Pedal, long for number of events, and store notes more efficiently, int for timestamps
+    V1(1, new SheetMusicFileParserV1()),
+    V2(2, new SheetMusicFileParserV2()),
+    V3(3, new SheetMusicFileParserV3()),
+    V4(4, new SheetMusicFileParserV4()),
+    V5(5, new SheetMusicFileParserV5()),
+    V6(6, new SheetMusicFileParserV6())
     ;
 
     private final int version;

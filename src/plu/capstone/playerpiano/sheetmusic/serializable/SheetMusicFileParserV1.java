@@ -68,15 +68,15 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
     public void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException {
 
         //song length
-        out.writeLong(sheetMusic.getSongLengthMS());
+        out.writeLong(sheetMusic.getSongLengthMS(), SONG_LENGTH);
 
         //number of timeslots
-        out.writeInt(sheetMusic.getEventMap().size());
+        out.writeInt(sheetMusic.getEventMap().size(), TIMESLOT_COUNT);
 
         //for each timeslot
         for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
             //time
-            out.writeLong(entry.getKey());
+            out.writeLong(entry.getKey(), TIMESLOT);
 
             //We only need to write out the amount of NOTES, not EVENTS!
             int numNotes = 0;
@@ -87,17 +87,17 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
             }
 
             //number of notes at this time
-            out.writeInt(numNotes);
+            out.writeInt(numNotes, NOTE_COUNT);
 
             //for each note at this time
             for(SheetMusicEvent event : entry.getValue()) {
 
                 if(event instanceof Note) {
                     Note note = (Note) event;
-                    out.writeByte((byte) note.getKeyNumber());
-                    out.writeByte((byte) note.getVelocity());
-                    out.writeBoolean(note.isNoteOn());
-                    out.writeByte((byte) note.getChannelNum());
+                    out.writeByte((byte) note.getKeyNumber(), NOTE_OBJECT);
+                    out.writeByte((byte) note.getVelocity(), NOTE_OBJECT);
+                    out.writeBoolean(note.isNoteOn(), NOTE_OBJECT);
+                    out.writeByte((byte) note.getChannelNum(), NOTE_OBJECT);
                 }
             }
         }

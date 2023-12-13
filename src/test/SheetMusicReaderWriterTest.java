@@ -35,7 +35,7 @@ class SheetMusicReaderWriterTest {
                 2
         ));
 
-        File file = new File("tmp/v1.pianoroll");
+        File file = new File("tmp/v1.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 1);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 
@@ -72,7 +72,7 @@ class SheetMusicReaderWriterTest {
         orig.putEvent(23, new TempoChangeEvent(120));
         orig.putEvent(24, new TempoChangeEvent(240));
 
-        File file = new File("tmp/v2.pianoroll");
+        File file = new File("tmp/v2.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 2);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 
@@ -111,7 +111,7 @@ class SheetMusicReaderWriterTest {
         orig.putEvent(28, new SustainPedalEvent(true));
         orig.putEvent(30, new SustainPedalEvent(false));
 
-        File file = new File("tmp/v3.pianoroll");
+        File file = new File("tmp/v3.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 3);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 
@@ -150,7 +150,7 @@ class SheetMusicReaderWriterTest {
         orig.putEvent(28, new SustainPedalEvent(true));
         orig.putEvent(30, new SustainPedalEvent(false));
 
-        File file = new File("tmp/v4.pianoroll");
+        File file = new File("tmp/v4.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 4);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 
@@ -189,7 +189,7 @@ class SheetMusicReaderWriterTest {
         orig.putEvent(28, new SustainPedalEvent(true));
         orig.putEvent(30, new SustainPedalEvent(false));
 
-        File file = new File("tmp/v5.pianoroll");
+        File file = new File("tmp/v5.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 5);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 
@@ -228,7 +228,7 @@ class SheetMusicReaderWriterTest {
         orig.putEvent(28, new SustainPedalEvent(true));
         orig.putEvent(30, new SustainPedalEvent(false));
 
-        File file = new File("tmp/v6.pianoroll");
+        File file = new File("tmp/v6.piano");
         SheetMusicReaderWriter.saveSheetMusic(orig, file, 6);
         SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
 

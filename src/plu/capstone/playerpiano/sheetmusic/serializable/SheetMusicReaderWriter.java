@@ -37,6 +37,10 @@ public enum SheetMusicReaderWriter {
 
     public static final int LATEST_VERSION;
 
+    public short getVersion() {
+        return (short) version;
+    }
+
     static {
         LATEST_VERSION = values()[values().length - 1].version;
         LOGGER.debug("Latest file version: " + LATEST_VERSION);
@@ -45,7 +49,7 @@ public enum SheetMusicReaderWriter {
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {
         BufferedInputStream in = new BufferedInputStream(new FileInputStream(pianoRollFile));
 
-        final int version = SheetMusicFileParser.readInt(in);
+        final short version = SheetMusicFileParser.readShort(in);
         SheetMusic sheetMusic = new SheetMusic();
 
         SheetMusicFileParser fileParser = getByVersion(version);
@@ -63,11 +67,14 @@ public enum SheetMusicReaderWriter {
     }
 
     public static void saveSheetMusic(SheetMusic sheetMusic, File pianoRollFile, int version) throws IOException {
+        saveSheetMusic(sheetMusic, pianoRollFile, (short)version);
+    }
+    public static void saveSheetMusic(SheetMusic sheetMusic, File pianoRollFile, short version) throws IOException {
 
         BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(pianoRollFile.toPath()));
 
         //version
-        SheetMusicFileParser.writeInt(out, version);
+        SheetMusicFileParser.writeShort(out, version);
 
         SheetMusicFileParser fileParser = getByVersion(version);
 
@@ -81,9 +88,9 @@ public enum SheetMusicReaderWriter {
         out.close();
     }
 
-    private static final SheetMusicFileParser getByVersion(int version) {
+    private static final SheetMusicFileParser getByVersion(short version) {
         for(SheetMusicReaderWriter parser : values()) {
-            if(parser.version == version) return parser.fileParser;
+            if(parser.getVersion() == version) return parser.fileParser;
         }
         return null;
     }

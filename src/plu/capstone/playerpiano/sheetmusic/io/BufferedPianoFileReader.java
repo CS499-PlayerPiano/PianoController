@@ -61,8 +61,8 @@ public class BufferedPianoFileReader {
         in.read(buffer, 0, stringLength);
         return new String(buffer);
     }
-    public <T extends Enum<T>> T readEnum(Class<T> clazz) throws IOException {
-        int ordinal = readInt();
+    public <T extends Enum<T>> T readEnumByte(Class<T> clazz) throws IOException {
+        int ordinal = readByte();
         return clazz.getEnumConstants()[ordinal];
     }
 
@@ -78,5 +78,8 @@ public class BufferedPianoFileReader {
         }
         return values;
     }
-    
+
+    public void close() throws IOException {
+        in.close();
+    }
 }

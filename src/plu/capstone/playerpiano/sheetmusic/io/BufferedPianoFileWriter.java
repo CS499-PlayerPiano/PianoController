@@ -13,7 +13,7 @@ public class BufferedPianoFileWriter {
 
     private final BufferedOutputStream out;
 
-    public BufferedPianoFileWriter(File pianoFile) throws Exception {
+    public BufferedPianoFileWriter(File pianoFile) throws IOException {
         this.out = new BufferedOutputStream(Files.newOutputStream(pianoFile.toPath()));
     }
 
@@ -59,8 +59,8 @@ public class BufferedPianoFileWriter {
 
     }
 
-    public void writeEnum(Enum value) throws IOException {
-        writeInt(value.ordinal());
+    public void writeEnumByte(Enum value) throws IOException {
+        writeByte((byte)value.ordinal());
     }
     public void writeEnumsBitwiseByte(Enum[] values) throws IOException {
         byte num = 0;
@@ -68,6 +68,14 @@ public class BufferedPianoFileWriter {
             num |= 1 << (byte)value.ordinal();
         }
         writeByte(num);
+    }
+
+    public void flush() throws IOException {
+        out.flush();
+    }
+
+    public void close() throws IOException {
+        out.close();
     }
 
 }

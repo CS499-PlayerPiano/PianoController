@@ -7,8 +7,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import lombok.AllArgsConstructor;
+import org.eclipse.jetty.util.IO;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /**
  * Enum for reading and writing sheet music files.
@@ -47,9 +50,9 @@ public enum SheetMusicReaderWriter {
     }
 
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(pianoRollFile));
+        BufferedPianoFileReader in = new BufferedPianoFileReader(pianoRollFile);
 
-        final short version = SheetMusicFileParser.readShort(in);
+        final short version = in.readShort();
         SheetMusic sheetMusic = new SheetMusic();
 
         SheetMusicFileParser fileParser = getByVersion(version);
@@ -71,10 +74,10 @@ public enum SheetMusicReaderWriter {
     }
     public static void saveSheetMusic(SheetMusic sheetMusic, File pianoRollFile, short version) throws IOException {
 
-        BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(pianoRollFile.toPath()));
+        BufferedPianoFileWriter out = new BufferedPianoFileWriter(pianoRollFile);
 
         //version
-        SheetMusicFileParser.writeShort(out, version);
+        out.writeShort(version);
 
         SheetMusicFileParser fileParser = getByVersion(version);
 

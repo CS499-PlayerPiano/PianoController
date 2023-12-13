@@ -1,13 +1,13 @@
 package plu.capstone.playerpiano.sheetmusic.serializable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /*
 Version 1:
@@ -25,30 +25,30 @@ Version 1:
 public class SheetMusicFileParserV1 extends SheetMusicFileParser {
 
     @Override
-    public SheetMusic readSheetMusic(BufferedInputStream in) throws IOException {
+    public SheetMusic readSheetMusic(BufferedPianoFileReader in) throws IOException {
         SheetMusic sheetMusic = new SheetMusic();
 
         //length in ms
-        sheetMusic.setSongLengthMS(readLong(in));
+        sheetMusic.setSongLengthMS(in.readLong());
 
         //number of timeslots
-        final int numTimeslots = readInt(in);
+        final int numTimeslots = in.readInt();
 
         //for each note
         for(int i = 0; i < numTimeslots; ++i) {
             //time
-            long time = readLong(in);
+            long time = in.readLong();
 
             //number of notes at this time
-            int numNotesAtTime = readInt(in);
+            int numNotesAtTime = in.readInt();
 
             //for each note at this time
             for(int j = 0; j < numNotesAtTime; ++j) {
 
-                final byte keyNumber = readByte(in);
-                final byte velocity = readByte(in);
-                final boolean noteOn = readBoolean(in);
-                final byte channelNum = readByte(in);
+                final byte keyNumber = in.readByte();
+                final byte velocity = in.readByte();
+                final boolean noteOn = in.readBoolean();
+                final byte channelNum = in.readByte();
 
                 Note note = new Note(
                         keyNumber,
@@ -65,18 +65,18 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
     }
 
     @Override
-    public void writeSheetMusic(BufferedOutputStream out, SheetMusic sheetMusic) throws IOException {
+    public void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException {
 
         //song length
-        writeLong(out, sheetMusic.getSongLengthMS());
+        out.writeLong(sheetMusic.getSongLengthMS());
 
         //number of timeslots
-        writeInt(out, sheetMusic.getEventMap().size());
+        out.writeInt(sheetMusic.getEventMap().size());
 
         //for each timeslot
         for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
             //time
-            writeLong(out, entry.getKey());
+            out.writeLong(entry.getKey());
 
             //We only need to write out the amount of NOTES, not EVENTS!
             int numNotes = 0;
@@ -87,17 +87,17 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
             }
 
             //number of notes at this time
-            writeInt(out, numNotes);
+            out.writeInt(numNotes);
 
             //for each note at this time
             for(SheetMusicEvent event : entry.getValue()) {
 
                 if(event instanceof Note) {
                     Note note = (Note) event;
-                    writeByte(out, (byte) note.getKeyNumber());
-                    writeByte(out, (byte) note.getVelocity());
-                    writeBoolean(out, note.isNoteOn());
-                    writeByte(out, (byte) note.getChannelNum());
+                    out.writeByte((byte) note.getKeyNumber());
+                    out.writeByte((byte) note.getVelocity());
+                    out.writeBoolean(note.isNoteOn());
+                    out.writeByte((byte) note.getChannelNum());
                 }
             }
         }

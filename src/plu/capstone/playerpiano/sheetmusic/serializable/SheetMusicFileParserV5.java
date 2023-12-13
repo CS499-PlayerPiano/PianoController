@@ -1,7 +1,5 @@
 package plu.capstone.playerpiano.sheetmusic.serializable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +8,8 @@ import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /*
 Version 5:
@@ -34,39 +34,39 @@ Version 5:
 public class SheetMusicFileParserV5 extends SheetMusicFileParser {
 
     @Override
-    public SheetMusic readSheetMusic(BufferedInputStream in) throws IOException {
+    public SheetMusic readSheetMusic(BufferedPianoFileReader in) throws IOException {
         SheetMusic sheetMusic = new SheetMusic();
 
         //length in ms
-        sheetMusic.setSongLengthMS(readLong(in));
+        sheetMusic.setSongLengthMS(in.readLong());
 
         //number of timeslots
-        final int numTimeslots = readInt(in);
+        final int numTimeslots = in.readInt();
 
         //for each note
         for(int i = 0; i < numTimeslots; ++i) {
             //time
-            long time = readInt(in);
+            long time = in.readInt();
 
             //number of events at this time
-            short numEventsAtTime = readShort(in);
+            short numEventsAtTime = in.readShort();
 
             //for each note at this time
             for(short j = 0; j < numEventsAtTime; ++j) {
 
-                final byte eventTypeId = readByte(in);
+                final byte eventTypeId = in.readByte();
 
                 //read in notes events
                 if(eventTypeId == SheetMusicEvent.EVENT_NOTE) {
 
-                    final boolean noteOn = readBoolean(in);
-                    final byte keyNumber = readByte(in);
-                    final byte channelNum = readByte(in);
+                    final boolean noteOn = in.readBoolean();
+                    final byte keyNumber = in.readByte();
+                    final byte channelNum = in.readByte();
 
                     byte velocity = 0;
 
                     if(noteOn) {
-                        velocity = readByte(in);
+                        velocity = in.readByte();
                     }
 
                     Note note = new Note(
@@ -81,13 +81,13 @@ public class SheetMusicFileParserV5 extends SheetMusicFileParser {
 
                 //read in tempo change events
                 else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
-                    final int tempo = readInt(in);
+                    final int tempo = in.readInt();
                     sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
                 }
 
                 //read in sustain pedal events
                 else if(eventTypeId == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
-                    final boolean on = readBoolean(in);
+                    final boolean on = in.readBoolean();
                     sheetMusic.putEvent(time, new SustainPedalEvent(on));
                 }
 
@@ -102,35 +102,35 @@ public class SheetMusicFileParserV5 extends SheetMusicFileParser {
     }
 
     @Override
-    public void writeSheetMusic(BufferedOutputStream out, SheetMusic sheetMusic) throws IOException {
+    public void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException {
         //song length
-        writeLong(out, sheetMusic.getSongLengthMS());
+        out.writeLong(sheetMusic.getSongLengthMS());
 
         //number of timeslots
-        writeInt(out, sheetMusic.getEventMap().size());
+        out.writeInt(sheetMusic.getEventMap().size());
 
         //for each timeslot
         for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
             //time
-            writeInt(out, entry.getKey().intValue()); // Never actually going to be the size of a long, so we can cast to int
+            out.writeInt(entry.getKey().intValue()); // Never actually going to be the size of a long, so we can cast to int
 
             //number of events at this time
-            writeShort(out, (short) entry.getValue().size());
+            out.writeShort((short) entry.getValue().size());
 
             //for each event at this time
             for(SheetMusicEvent event : entry.getValue()) {
 
-                writeByte(out, event.getEventTypeId());
+                out.writeByte(event.getEventTypeId());
 
                 //write out notes as normal
                 if(event.getEventTypeId() == SheetMusicEvent.EVENT_NOTE) {
                     Note note = (Note) event;
 
-                    writeBoolean(out, note.isNoteOn());
-                    writeByte(out, (byte) note.getKeyNumber());
-                    writeByte(out, (byte) note.getChannelNum());
+                    out.writeBoolean(note.isNoteOn());
+                    out.writeByte((byte) note.getKeyNumber());
+                    out.writeByte((byte) note.getChannelNum());
                     if(note.isNoteOn()) {
-                        writeByte(out, (byte) note.getVelocity());
+                        out.writeByte((byte) note.getVelocity());
                     }
 
 
@@ -139,13 +139,13 @@ public class SheetMusicFileParserV5 extends SheetMusicFileParser {
                 //write out tempo change events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
-                    writeInt(out, tempoChangeEvent.getUsPerQuarterNote());
+                    out.writeInt(tempoChangeEvent.getUsPerQuarterNote());
                 }
 
                 //write out sustain pedal events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
                     SustainPedalEvent sustainPedalEffect = (SustainPedalEvent) event;
-                    writeBoolean(out, sustainPedalEffect.isOn());
+                    out.writeBoolean(sustainPedalEffect.isOn());
                 }
 
                 // We don't know what this event is

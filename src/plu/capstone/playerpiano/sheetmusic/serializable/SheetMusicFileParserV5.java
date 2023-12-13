@@ -17,7 +17,7 @@ Version 5:
         - int number of timeslots
         - for each timeslot:
         - int time
-        - int number of events at this time
+        - short number of events at this time
         - for each event at this time:
         - byte eventTypeId
         if(eventTypeId == EVENT_NOTE)

@@ -37,30 +37,30 @@ public class SheetMusicFileParserV3 extends SheetMusicFileParser {
         SheetMusic sheetMusic = new SheetMusic();
 
         //length in ms
-        sheetMusic.setSongLengthMS(in.readLong());
+        sheetMusic.setSongLengthMS(in.readLong(SONG_LENGTH));
 
         //number of timeslots
-        final int numTimeslots = in.readInt();
+        final int numTimeslots = in.readInt(TIMESLOT_COUNT);
 
         //for each note
         for(int i = 0; i < numTimeslots; ++i) {
             //time
-            long time = in.readLong();
+            long time = in.readLong(TIMESLOT);
 
             //number of events at this time
-            int numEventsAtTime = in.readInt();
+            int numEventsAtTime = in.readInt(EVENT_COUNT);
 
             //for each note at this time
             for(int j = 0; j < numEventsAtTime; ++j) {
 
-                final byte eventTypeId = in.readByte();
+                final byte eventTypeId = in.readByte(EVENT_TYPE);
 
                 //read in notes events
                 if(eventTypeId == SheetMusicEvent.EVENT_NOTE) {
-                    final byte keyNumber = in.readByte();
-                    final byte velocity = in.readByte();
-                    final boolean noteOn = in.readBoolean();
-                    final byte channelNum = in.readByte();
+                    final byte keyNumber = in.readByte(NOTE_OBJECT);
+                    final byte velocity = in.readByte(NOTE_OBJECT);
+                    final boolean noteOn = in.readBoolean(NOTE_OBJECT);
+                    final byte channelNum = in.readByte(NOTE_OBJECT);
 
                     Note note = new Note(
                             keyNumber,
@@ -74,13 +74,13 @@ public class SheetMusicFileParserV3 extends SheetMusicFileParser {
 
                 //read in tempo change events
                 else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
-                    final int tempo = in.readInt();
+                    final int tempo = in.readInt(TEMPO_CHANGE_OBJECT);
                     sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
                 }
 
                 //read in sustain pedal events
                 else if(eventTypeId == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
-                    final boolean on = in.readBoolean();
+                    final boolean on = in.readBoolean(SUSTAIN_PEDAL_OBJECT);
                     sheetMusic.putEvent(time, new SustainPedalEvent(on));
                 }
                 else {

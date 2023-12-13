@@ -16,17 +16,17 @@ public class BufferedPianoFileReader {
         this.in = new BufferedInputStream(new FileInputStream(pianoFile));;
     }
 
-    public byte readByte() throws IOException {
+    public byte readByte(String whatIsItFor) throws IOException {
         int read = in.read();
 
         return (byte) read;
     }
 
-    public boolean readBoolean() throws IOException {
+    public boolean readBoolean(String whatIsItFor) throws IOException {
         return in.read() == 1;
     }
 
-    public int readInt() throws IOException {
+    public int readInt(String whatIsItFor) throws IOException {
         int num = 0;
         num |= in.read() << 24;
         num |= in.read() << 16;
@@ -35,7 +35,7 @@ public class BufferedPianoFileReader {
         return num;
     }
 
-    public long readLong() throws IOException {
+    public long readLong(String whatIsItFor) throws IOException {
         long num = 0;
         num |= (long) in.read() << 56;
         num |= (long) in.read() << 48;
@@ -48,25 +48,25 @@ public class BufferedPianoFileReader {
         return num;
     }
 
-    public short readShort() throws IOException {
+    public short readShort(String whatIsItFor) throws IOException {
         short num = 0;
         num |= in.read() << 8;
         num |= in.read();
         return num;
     }
     
-    public String readString() throws IOException {
-        int stringLength = readInt();
+    public String readString(String whatIsItFor) throws IOException {
+        int stringLength = readInt(whatIsItFor);
         byte[] buffer = new byte[stringLength];
         in.read(buffer, 0, stringLength);
         return new String(buffer);
     }
-    public <T extends Enum<T>> T readEnumByte(Class<T> clazz) throws IOException {
-        int ordinal = readByte();
+    public <T extends Enum<T>> T readEnumByte(Class<T> clazz, String whatIsItFor) throws IOException {
+        int ordinal = readByte(whatIsItFor);
         return clazz.getEnumConstants()[ordinal];
     }
 
-    public <T extends Enum<T>> Set<T> readEnumsBitwiseByte(Class<? extends Enum> clazz) throws IOException {
+    public <T extends Enum<T>> Set<T> readEnumsBitwiseByte(Class<? extends Enum> clazz, String whatIsItFor) throws IOException {
         byte num = (byte) in.read();
 
         Set<T> values = new HashSet<>();

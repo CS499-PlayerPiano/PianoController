@@ -52,7 +52,7 @@ public enum SheetMusicReaderWriter {
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {
         BufferedPianoFileReader in = new BufferedPianoFileReader(pianoRollFile);
 
-        final short version = in.readShort();
+        final short version = in.readShort(SheetMusicFileParser.VERSION);
         SheetMusic sheetMusic = new SheetMusic();
 
         SheetMusicFileParser fileParser = getByVersion(version);
@@ -77,7 +77,7 @@ public enum SheetMusicReaderWriter {
         BufferedPianoFileWriter out = new BufferedPianoFileWriter(pianoRollFile);
 
         //version
-        out.writeShort(version);
+        out.writeShort(version, SheetMusicFileParser.VERSION);
 
         SheetMusicFileParser fileParser = getByVersion(version);
 

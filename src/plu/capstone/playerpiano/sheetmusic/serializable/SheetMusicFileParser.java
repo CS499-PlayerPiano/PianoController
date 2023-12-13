@@ -18,7 +18,7 @@ public abstract class SheetMusicFileParser {
     public abstract SheetMusic readSheetMusic(BufferedPianoFileReader in) throws IOException;
     public abstract void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException;
 
-    
+    protected static final String VERSION = "Version";
     protected static final String SONG_LENGTH = "Song Length";
     protected static final String TIMESLOT_COUNT = "Timeslot Count";
     protected static final String TIMESLOT = "Time an event occurs";

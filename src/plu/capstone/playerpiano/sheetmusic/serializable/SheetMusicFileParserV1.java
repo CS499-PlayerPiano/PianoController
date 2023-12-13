@@ -29,26 +29,26 @@ public class SheetMusicFileParserV1 extends SheetMusicFileParser {
         SheetMusic sheetMusic = new SheetMusic();
 
         //length in ms
-        sheetMusic.setSongLengthMS(in.readLong());
+        sheetMusic.setSongLengthMS(in.readLong(SONG_LENGTH));
 
         //number of timeslots
-        final int numTimeslots = in.readInt();
+        final int numTimeslots = in.readInt(TIMESLOT_COUNT);
 
         //for each note
         for(int i = 0; i < numTimeslots; ++i) {
             //time
-            long time = in.readLong();
+            long time = in.readLong(TIMESLOT);
 
             //number of notes at this time
-            int numNotesAtTime = in.readInt();
+            int numNotesAtTime = in.readInt(NOTE_COUNT);
 
             //for each note at this time
             for(int j = 0; j < numNotesAtTime; ++j) {
 
-                final byte keyNumber = in.readByte();
-                final byte velocity = in.readByte();
-                final boolean noteOn = in.readBoolean();
-                final byte channelNum = in.readByte();
+                final byte keyNumber = in.readByte(NOTE_OBJECT);
+                final byte velocity = in.readByte(NOTE_OBJECT);
+                final boolean noteOn = in.readBoolean(NOTE_OBJECT);
+                final byte channelNum = in.readByte(NOTE_OBJECT);
 
                 Note note = new Note(
                         keyNumber,

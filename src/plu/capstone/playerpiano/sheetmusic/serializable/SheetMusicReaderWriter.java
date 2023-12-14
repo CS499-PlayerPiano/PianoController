@@ -1,13 +1,8 @@
 package plu.capstone.playerpiano.sheetmusic.serializable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import lombok.AllArgsConstructor;
-import org.eclipse.jetty.util.IO;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
@@ -77,7 +72,7 @@ public enum SheetMusicReaderWriter {
         BufferedPianoFileWriter out = new BufferedPianoFileWriter(pianoRollFile);
 
         //version
-        out.writeShort(version, SheetMusicFileParser.VERSION);
+        out.writeShort(version);
 
         SheetMusicFileParser fileParser = getByVersion(version);
 

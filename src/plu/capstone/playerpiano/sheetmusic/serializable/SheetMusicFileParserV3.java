@@ -96,43 +96,43 @@ public class SheetMusicFileParserV3 extends SheetMusicFileParser {
     @Override
     public void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException {
         //song length
-        out.writeLong(sheetMusic.getSongLengthMS(), SONG_LENGTH);
+        out.writeLong(sheetMusic.getSongLengthMS());
 
         //number of timeslots
-        out.writeInt(sheetMusic.getEventMap().size(), TIMESLOT_COUNT);
+        out.writeInt(sheetMusic.getEventMap().size());
 
         //for each timeslot
         for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
             //time
-            out.writeLong(entry.getKey(), TIMESLOT);
+            out.writeLong(entry.getKey());
 
             //number of events at this time
-            out.writeInt(entry.getValue().size(), EVENT_COUNT);
+            out.writeInt(entry.getValue().size());
 
             //for each event at this time
             for(SheetMusicEvent event : entry.getValue()) {
 
-                out.writeByte(event.getEventTypeId(), EVENT_TYPE);
+                out.writeByte(event.getEventTypeId());
 
                 //write out notes as normal
                 if(event.getEventTypeId() == SheetMusicEvent.EVENT_NOTE) {
                     Note note = (Note) event;
-                    out.writeByte((byte) note.getKeyNumber(), NOTE_OBJECT);
-                    out.writeByte((byte) note.getVelocity(), NOTE_OBJECT);
-                    out.writeBoolean(note.isNoteOn(), NOTE_OBJECT);
-                    out.writeByte((byte) note.getChannelNum(), NOTE_OBJECT);
+                    out.writeByte((byte) note.getKeyNumber());
+                    out.writeByte((byte) note.getVelocity());
+                    out.writeBoolean(note.isNoteOn());
+                    out.writeByte((byte) note.getChannelNum());
                 }
 
                 //write out tempo change events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
-                    out.writeInt(tempoChangeEvent.getUsPerQuarterNote(), TEMPO_CHANGE_OBJECT);
+                    out.writeInt(tempoChangeEvent.getUsPerQuarterNote());
                 }
 
                 //write out sustain pedal events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_SUSTAIN_PEDAL) {
                     SustainPedalEvent sustainPedalEffect = (SustainPedalEvent) event;
-                    out.writeBoolean(sustainPedalEffect.isOn(), SUSTAIN_PEDAL_OBJECT);
+                    out.writeBoolean(sustainPedalEffect.isOn());
                 }
 
                 // We don't know what this event is

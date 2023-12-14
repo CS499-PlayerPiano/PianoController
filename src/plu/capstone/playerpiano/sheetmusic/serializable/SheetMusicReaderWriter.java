@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.sheetmusic.serializable;
 import java.io.File;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
@@ -30,7 +31,8 @@ public enum SheetMusicReaderWriter {
     ;
 
     private final int version;
-    private final SheetMusicFileParser fileParser;
+    @Getter
+    final SheetMusicFileParser fileParser;
     private static final Logger LOGGER = new Logger(SheetMusicReaderWriter.class);
 
     public static final int LATEST_VERSION;

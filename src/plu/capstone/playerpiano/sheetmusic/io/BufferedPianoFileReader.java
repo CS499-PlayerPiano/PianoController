@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicFileParser.WhatIsItFor;
 
 public class BufferedPianoFileReader {
 
@@ -16,58 +17,67 @@ public class BufferedPianoFileReader {
         this.in = new BufferedInputStream(new FileInputStream(pianoFile));;
     }
 
-    public byte readByte(String whatIsItFor) throws IOException {
+    public byte readByte(WhatIsItFor whatIsItFor) throws IOException {
         int read = in.read();
-
+        if(read == -1) {
+            throw new IOException("Unexpected end of file while reading PianoFile!");
+        }
         return (byte) read;
     }
 
-    public boolean readBoolean(String whatIsItFor) throws IOException {
-        return in.read() == 1;
+    public void readBytes(byte[] buffer, WhatIsItFor whatIsItFor) throws IOException {
+        int read = in.read(buffer);
+        if(read == -1) {
+            throw new IOException("Unexpected end of file while reading PianoFile!");
+        }
     }
 
-    public int readInt(String whatIsItFor) throws IOException {
+    public boolean readBoolean(WhatIsItFor whatIsItFor) throws IOException {
+        return readByte(whatIsItFor) == 1;
+    }
+
+    public int readInt(WhatIsItFor whatIsItFor) throws IOException {
         int num = 0;
-        num |= in.read() << 24;
-        num |= in.read() << 16;
-        num |= in.read() << 8;
-        num |= in.read();
+        num |= readByte(whatIsItFor) << 24;
+        num |= readByte(whatIsItFor) << 16;
+        num |= readByte(whatIsItFor) << 8;
+        num |= readByte(whatIsItFor);
         return num;
     }
 
-    public long readLong(String whatIsItFor) throws IOException {
+    public long readLong(WhatIsItFor whatIsItFor) throws IOException {
         long num = 0;
-        num |= (long) in.read() << 56;
-        num |= (long) in.read() << 48;
-        num |= (long) in.read() << 40;
-        num |= (long) in.read() << 32;
-        num |= (long) in.read() << 24;
-        num |= (long) in.read() << 16;
-        num |= (long) in.read() << 8;
-        num |= (long) in.read();
+        num |= (long) readByte(whatIsItFor) << 56;
+        num |= (long) readByte(whatIsItFor) << 48;
+        num |= (long) readByte(whatIsItFor) << 40;
+        num |= (long) readByte(whatIsItFor) << 32;
+        num |= (long) readByte(whatIsItFor) << 24;
+        num |= (long) readByte(whatIsItFor) << 16;
+        num |= (long) readByte(whatIsItFor) << 8;
+        num |= (long) readByte(whatIsItFor);
         return num;
     }
 
-    public short readShort(String whatIsItFor) throws IOException {
+    public short readShort(WhatIsItFor whatIsItFor) throws IOException {
         short num = 0;
-        num |= in.read() << 8;
-        num |= in.read();
+        num |= readByte(whatIsItFor) << 8;
+        num |= readByte(whatIsItFor);
         return num;
     }
     
-    public String readString(String whatIsItFor) throws IOException {
+    public String readString(WhatIsItFor whatIsItFor) throws IOException {
         int stringLength = readInt(whatIsItFor);
         byte[] buffer = new byte[stringLength];
-        in.read(buffer, 0, stringLength);
+        readBytes(buffer, whatIsItFor);
         return new String(buffer);
     }
-    public <T extends Enum<T>> T readEnumByte(Class<T> clazz, String whatIsItFor) throws IOException {
+    public <T extends Enum<T>> T readEnumByte(Class<T> clazz, WhatIsItFor whatIsItFor) throws IOException {
         int ordinal = readByte(whatIsItFor);
         return clazz.getEnumConstants()[ordinal];
     }
 
-    public <T extends Enum<T>> Set<T> readEnumsBitwiseByte(Class<? extends Enum> clazz, String whatIsItFor) throws IOException {
-        byte num = (byte) in.read();
+    public <T extends Enum<T>> Set<T> readEnumsBitwiseByte(Class<? extends Enum> clazz, WhatIsItFor whatIsItFor) throws IOException {
+        byte num = readByte(whatIsItFor);
 
         Set<T> values = new HashSet<>();
 

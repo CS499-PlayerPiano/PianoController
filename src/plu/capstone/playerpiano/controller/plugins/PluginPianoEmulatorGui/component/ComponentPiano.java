@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui;
-import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginGui.ColorMode;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 
@@ -37,7 +36,7 @@ public class ComponentPiano extends JComponent {
     private List<KeyShape> keyShapes;
     private final Map<Integer, Color> litKeys = new HashMap<>();
 
-    private static final Color COLOR_BACKGROUND = Color.BLUE;
+    private Color COLOR_BACKGROUND = Color.BLUE;
     private static final Color COLOR_WHITE_KEY = Color.WHITE;
 //    private static final Color COLOR_WHITE_KEY_LIT = new Color(0xDF3030);
     private static final Color[] COLOR_WHITE_KEY_GRADIENT = {
@@ -60,10 +59,8 @@ public class ComponentPiano extends JComponent {
 
     private static final float KEY_BEVEL = 0.15f;
 
-    private final PluginGui pluginGui;
-
-    public ComponentPiano(PluginGui pluginGui) {
-        this.pluginGui = pluginGui;
+    public void setBackgroundColor(Color bg) {
+        this.COLOR_BACKGROUND = bg;
     }
 
     @Override
@@ -236,72 +233,21 @@ public class ComponentPiano extends JComponent {
         return -1;
     }
 
-    public void setKeyLit(Note note) {
+    public void setKeyLit(Note note, Color color) {
         if(note.isValidPianoKey()) {
-            setKeyLit(note.toPianoKey(), note);
+            setKeyLit(note.toPianoKey(), note, color);
         }
     }
 
-    private void setKeyLit(int index, Note note) {
+    private void setKeyLit(int index, Note note, Color color) {
         if (index < 0 || index > getKeyShapes().size()) return;
         if (note != null && note.isNoteOn()) {
-
-            final Color color;
-
-            ColorMode colorMode = pluginGui.getConfig().getEnum("colorMode", ColorMode.class);
-
-            if(colorMode == ColorMode.TRACK_NUMBER) {
-                color = getColorForNoteTrackNumber(note);
-            }
-            else if(colorMode == ColorMode.RAINBOW_GRADIENT) {
-                color = getColorForNoteRainbowGradient(note);
-            }
-            else {
-                pluginGui.getLogger().warning("Invalid color mode: " + pluginGui.getConfig().getString("colorMode"));
-                color = Color.RED;
-            }
-
             litKeys.put(index, color);
-        } else {
+        }
+        else {
             litKeys.remove(index);
         }
         repaint(getKeyShapes().get(index).getShape().getBounds());
-    }
-
-    private static Color getColorForNoteRainbowGradient(Note note) {
-        int totalNotes = 88;
-        int key = note.getKeyNumber();
-
-        float percent = (float)key / totalNotes;
-        if(percent > 1) {
-            percent = 1;
-        }
-
-        if(percent < 0) {
-            percent = 0;
-        }
-
-        return Color.getHSBColor(percent, 1, 1);
-    }
-
-    private static Color getColorForNoteTrackNumber(Note note) {
-        int totalTracks = 16;
-        int channel = note.getChannelNum();
-
-        if(channel == Note.NO_CHANNEL) {
-            return Color.RED;
-        }
-
-        float percent = (float)channel / totalTracks;
-        if(percent > 1) {
-            percent = 1;
-        }
-
-        if(percent < 0) {
-            percent = 0;
-        }
-
-        return Color.getHSBColor(percent, 1, 1);
     }
 
     public boolean isKeyLit(int index) {

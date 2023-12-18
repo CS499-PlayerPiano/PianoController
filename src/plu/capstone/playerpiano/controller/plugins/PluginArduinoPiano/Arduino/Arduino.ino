@@ -1,23 +1,31 @@
+// Note: When you recompile this, you need to delete: "C:\Users\eric\AppData\Local\Temp\arduino\cores\arduino_avr_uno_f742622285952b9ea3aafa09dbdb4e60" folder for some reason
+
 #include <Arduino.h>
 #include "ShiftRegisterPWM.h"
 
-const int shiftRegisterCount = 2;
-const int amountOfPins = shiftRegisterCount * 8;
-ShiftRegisterPWM sr(shiftRegisterCount, 8);
+#define DATA_PIN 2
+#define CLOCK_PIN 3
+#define LATCH_PIN 4
+
+const int SHIFT_REGISTER_COUNT = 1;
+const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
+ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 8);
 
 // Print debugging over serial port
 // #define DEBUG_SERIAL
 
-// Play the note on the physical piano
-void playNote(int note, bool isOn, int velocity)
+void setPin(int pin, int value)
 {
-
-    // TODO: Remove this code when we have the physical piano.
-    //      This is just for testing with LEDS
-    if (note >= 42 && note < 58)
+    if (pin < 0 || pin >= TOTAL_PINS)
     {
-        sr.set(note - 42, isOn ? velocity : 0);
+        return;
     }
+
+    /*
+    Currently the shift register code, 0 is the last pin on the last shift register
+    We want 0 to be the first pin on the first shift register.
+    */
+    sr.set(TOTAL_PINS - pin - 1, value);
 }
 
 // Read the serial port and process the incoming data from the PianoController software.
@@ -83,7 +91,7 @@ void processIncomingSerial()
                 bool isOn = noteData[i * 3 + 1] == 1;
                 byte velocity = noteData[i * 3 + 2];
 
-                playNote(note, isOn, velocity);
+                setPin(note, isOn ? velocity : 0);
             }
         }
 
@@ -92,9 +100,9 @@ void processIncomingSerial()
         else if (command == 'F' || command == 'S')
         {
             // turn all the lights off
-            for (int i = 0; i < amountOfPins; i++)
+            for (int i = 0; i < TOTAL_PINS; i++)
             {
-                sr.set(i, 0);
+                setPin(i, 0);
             }
         }
     }
@@ -105,14 +113,11 @@ void setup()
     Serial.begin(115200); // 115200
 
     // Setup the shift register
-    pinMode(2, OUTPUT); // sr data pin
-    pinMode(3, OUTPUT); // sr clock pin
-    pinMode(4, OUTPUT); // sr latch pin
+    pinMode(DATA_PIN, OUTPUT);  // sr data pin
+    pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
+    pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
     sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
-
-    pinMode(13, OUTPUT);
-    digitalWrite(13, LOW);
 
     // Wait for the serial port to connect
     while (!Serial)
@@ -120,7 +125,7 @@ void setup()
         ;
     }
 
-    Serial.println(F("Hello World!."));
+    Serial.println(F("Hello from Arduino!"));
 }
 
 void loop()

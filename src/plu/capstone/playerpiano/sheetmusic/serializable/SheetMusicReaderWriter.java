@@ -1,14 +1,13 @@
 package plu.capstone.playerpiano.sheetmusic.serializable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /**
  * Enum for reading and writing sheet music files.
@@ -32,7 +31,8 @@ public enum SheetMusicReaderWriter {
     ;
 
     private final int version;
-    private final SheetMusicFileParser fileParser;
+    @Getter
+    final SheetMusicFileParser fileParser;
     private static final Logger LOGGER = new Logger(SheetMusicReaderWriter.class);
 
     public static final int LATEST_VERSION;
@@ -47,9 +47,9 @@ public enum SheetMusicReaderWriter {
     }
 
     public static SheetMusic readSheetMusic(File pianoRollFile) throws IOException {
-        BufferedInputStream in = new BufferedInputStream(new FileInputStream(pianoRollFile));
+        BufferedPianoFileReader in = new BufferedPianoFileReader(pianoRollFile);
 
-        final short version = SheetMusicFileParser.readShort(in);
+        final short version = in.readShort(SheetMusicFileParser.VERSION);
         SheetMusic sheetMusic = new SheetMusic();
 
         SheetMusicFileParser fileParser = getByVersion(version);
@@ -71,10 +71,10 @@ public enum SheetMusicReaderWriter {
     }
     public static void saveSheetMusic(SheetMusic sheetMusic, File pianoRollFile, short version) throws IOException {
 
-        BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(pianoRollFile.toPath()));
+        BufferedPianoFileWriter out = new BufferedPianoFileWriter(pianoRollFile);
 
         //version
-        SheetMusicFileParser.writeShort(out, version);
+        out.writeShort(version);
 
         SheetMusicFileParser fileParser = getByVersion(version);
 

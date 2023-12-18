@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.midiconverter.viewer;
+package plu.capstone.playerpiano.controller.utilities.graphics;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -81,8 +81,7 @@ public class RowNumberTable extends JTable
      */
     @Override
     public Object getValueAt(int row, int column) {
-        //return rowNames.get(row);
-        return Integer.toString(row + 1);
+        return rowNames.get(row);
     }
 
     /*

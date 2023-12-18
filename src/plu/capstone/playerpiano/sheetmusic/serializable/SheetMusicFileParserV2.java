@@ -1,14 +1,14 @@
 package plu.capstone.playerpiano.sheetmusic.serializable;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
+import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /*
 Version 2:
@@ -30,33 +30,33 @@ Version 2:
 public class SheetMusicFileParserV2 extends SheetMusicFileParser {
 
     @Override
-    public SheetMusic readSheetMusic(BufferedInputStream in) throws IOException {
+    public SheetMusic readSheetMusic(BufferedPianoFileReader in) throws IOException {
         SheetMusic sheetMusic = new SheetMusic();
 
         //length in ms
-        sheetMusic.setSongLengthMS(readLong(in));
+        sheetMusic.setSongLengthMS(in.readLong(SONG_LENGTH));
 
         //number of timeslots
-        final int numTimeslots = readInt(in);
+        final int numTimeslots = in.readInt(TIMESLOT_COUNT);
 
         //for each note
         for(int i = 0; i < numTimeslots; ++i) {
             //time
-            long time = readLong(in);
+            long time = in.readLong(TIMESLOT);
 
             //number of events at this time
-            int numEventsAtTime = readInt(in);
+            int numEventsAtTime = in.readInt(EVENT_COUNT);
 
             //for each note at this time
             for(int j = 0; j < numEventsAtTime; ++j) {
 
-                final byte eventTypeId = readByte(in);
+                final byte eventTypeId = in.readByte(EVENT_TYPE);
 
                 if(eventTypeId == SheetMusicEvent.EVENT_NOTE) {
-                    final byte keyNumber = readByte(in);
-                    final byte velocity = readByte(in);
-                    final boolean noteOn = readBoolean(in);
-                    final byte channelNum = readByte(in);
+                    final byte keyNumber = in.readByte(NOTE_OBJECT);
+                    final byte velocity = in.readByte(NOTE_OBJECT);
+                    final boolean noteOn = in.readBoolean(NOTE_OBJECT);
+                    final byte channelNum = in.readByte(NOTE_OBJECT);
 
                     Note note = new Note(
                             keyNumber,
@@ -68,7 +68,7 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
                     sheetMusic.putEvent(time, note);
                 }
                 else if(eventTypeId == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
-                    final int tempo = readInt(in);
+                    final int tempo = in.readInt(TEMPO_CHANGE_OBJECT);
                     sheetMusic.putEvent(time, new TempoChangeEvent(tempo));
                 }
                 else {
@@ -82,38 +82,38 @@ public class SheetMusicFileParserV2 extends SheetMusicFileParser {
     }
 
     @Override
-    public void writeSheetMusic(BufferedOutputStream out, SheetMusic sheetMusic) throws IOException {
+    public void writeSheetMusic(BufferedPianoFileWriter out, SheetMusic sheetMusic) throws IOException {
         //song length
-        writeLong(out, sheetMusic.getSongLengthMS());
+        out.writeLong(sheetMusic.getSongLengthMS());
 
         //number of timeslots
-        writeInt(out, sheetMusic.getEventMap().size());
+        out.writeInt(sheetMusic.getEventMap().size());
 
         //for each timeslot
         for(Map.Entry<Long, List<SheetMusicEvent>> entry : sheetMusic.getEventMap().entrySet()) {
             //time
-            writeLong(out, entry.getKey());
+            out.writeLong(entry.getKey());
 
             //number of events at this time
-            writeInt(out, entry.getValue().size());
+            out.writeInt(entry.getValue().size());
 
             //for each event at this time
             for(SheetMusicEvent event : entry.getValue()) {
 
-                writeByte(out, event.getEventTypeId());
+                out.writeByte(event.getEventTypeId());
 
                 //write out notes as normal
                 if(event.getEventTypeId() == SheetMusicEvent.EVENT_NOTE) {
                     Note note = (Note) event;
-                    writeByte(out, (byte) note.getKeyNumber());
-                    writeByte(out, (byte) note.getVelocity());
-                    writeBoolean(out, note.isNoteOn());
-                    writeByte(out, (byte) note.getChannelNum());
+                    out.writeByte((byte) note.getKeyNumber());
+                    out.writeByte((byte) note.getVelocity());
+                    out.writeBoolean(note.isNoteOn());
+                    out.writeByte((byte) note.getChannelNum());
                 }
                 //write out tempo change events as normal
                 else if(event.getEventTypeId() == SheetMusicEvent.EVENT_TEMPO_CHANGE) {
                     TempoChangeEvent tempoChangeEvent = (TempoChangeEvent) event;
-                    writeInt(out, tempoChangeEvent.getUsPerQuarterNote());
+                    out.writeInt(tempoChangeEvent.getUsPerQuarterNote());
                 }
                 else {
                     LOGGER.warning("Unknown event type: " + event.getClass().getName());

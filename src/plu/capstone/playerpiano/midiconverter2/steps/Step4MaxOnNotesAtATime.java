@@ -38,14 +38,14 @@ public class Step4MaxOnNotesAtATime implements MidiConversionStep {
 
                     Note note = (Note) event;
 
-                    if(note.isNoteOn() && !isNoteOn[note.getPianoNumber()]) {
+                    if(note.isNoteOn() && !isNoteOn[note.toPianoKey()]) {
                         notesOn++;
                     }
-                    else if(!note.isNoteOn() && isNoteOn[note.getPianoNumber()]) {
+                    else if(!note.isNoteOn() && isNoteOn[note.toPianoKey()]) {
                         notesOn--;
                     }
 
-                    isNoteOn[note.getPianoNumber()] = note.isNoteOn();
+                    isNoteOn[note.toPianoKey()] = note.isNoteOn();
 
                     if(notesOn > MAX_NOTES_ON) {
 
@@ -61,7 +61,7 @@ public class Step4MaxOnNotesAtATime implements MidiConversionStep {
                         }
 
                         notesOn--;
-                        isNoteOn[note.getPianoNumber()] = false;
+                        isNoteOn[note.toPianoKey()] = false;
                     }
 
                 }

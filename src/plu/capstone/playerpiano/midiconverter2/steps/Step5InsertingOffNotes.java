@@ -44,8 +44,8 @@ public class Step5InsertingOffNotes implements MidiConversionStep {
                         boolean didWeRemoveThisNote = false;
 
                         //last time the note was on
-                        if(lastTimeNoteOn[note.getPianoNumber()] != -1) {
-                            final long timeSinceLastNoteOn = timestamp - lastTimeNoteOn[note.getPianoNumber()];
+                        if(lastTimeNoteOn[note.toPianoKey()] != -1) {
+                            final long timeSinceLastNoteOn = timestamp - lastTimeNoteOn[note.toPianoKey()];
                             if(timeSinceLastNoteOn > DUPLICATE_ON_LAG_TIME) {
                                 //TODO: Insert off note @ (timestamp - DUPLICATE_ON_LAG_TIME)
 
@@ -74,11 +74,11 @@ public class Step5InsertingOffNotes implements MidiConversionStep {
                         }
 
                         if(!didWeRemoveThisNote) {
-                            lastTimeNoteOn[note.getPianoNumber()] = timestamp;
+                            lastTimeNoteOn[note.toPianoKey()] = timestamp;
                         }
                     }
                     else {
-                        lastTimeNoteOn[note.getPianoNumber()] = -1;
+                        lastTimeNoteOn[note.toPianoKey()] = -1;
                     }
                 }
             }

@@ -29,7 +29,7 @@ public class ComponentPiano extends JComponent {
     private static final float BLACK_KEY_HEIGHT = 3.5f / 6f;
 
     private static final EnumNotes FIRST_NOTE = EnumNotes.C;
-    private static final int WHITE_KEY_COUNT = 88;
+    private static final int WHITE_KEY_COUNT = 52;
     private static final int WHITE_KEY_WIDTH = Math.round(220 * WHITE_KEY_ASPECT);
     private static final int WHITE_KEY_HEIGHT = 220;
     private List<KeyShape> keyShapes;
@@ -238,7 +238,7 @@ public class ComponentPiano extends JComponent {
         }
     }
 
-    public void setKeyLit(int index, boolean lit, Color color) {
+    private void setKeyLit(int index, boolean lit, Color color) {
         if (index < 0 || index > getKeyShapes().size()) return;
         if (lit) {
             litKeys.put(index, color);

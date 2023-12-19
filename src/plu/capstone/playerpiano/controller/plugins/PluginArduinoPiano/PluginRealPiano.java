@@ -120,9 +120,15 @@ public class PluginRealPiano extends Plugin {
             buffer.put((byte) note.toPianoKey());
             buffer.put((byte) (note.isNoteOn() ? 1 : 0));
 
-            // Map the velocity from 0-127 to 106-235
-            //TODO: Make this configurable
-            buffer.put((byte) MathUtilities.map(note.getVelocity(), 0, 127, 106, 235));
+            byte velocity = 0;
+
+            if(note.isNoteOn()){
+                // Map the velocity from 0-127 to 106-235
+                //TODO: Make this configurable
+                velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, 106, 255);
+            }
+
+            buffer.put(velocity);
         }
 
         writeBytes(buffer.array());

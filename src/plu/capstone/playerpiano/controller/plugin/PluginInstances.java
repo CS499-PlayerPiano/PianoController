@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.controller.plugins.PluginArduinoPiano.PluginRealPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginLogger.PluginLogger;
 import plu.capstone.playerpiano.controller.plugins.PluginMidiKeyboard.PluginMidiKeyboard;
+import plu.capstone.playerpiano.controller.plugins.PluginPatternDebugGui.PluginPatternDebugGui;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginVirtualPianoEmulatorGui;
 import plu.capstone.playerpiano.controller.plugins.PluginSynth.PluginSynth;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
@@ -17,6 +18,7 @@ public enum PluginInstances {
     SYNTH(PluginSynth.class),
     WEB_SERVER(PluginWebAPI.class),
     MIDI_KEYBOARD(PluginMidiKeyboard.class),
+    PATTERN_DEBUG(PluginPatternDebugGui.class),
 
     //TEST_PLUGIN(TestPlugin.class),
     //TEST_PLUGIN_CONFIG(PluginConfigTester.class)

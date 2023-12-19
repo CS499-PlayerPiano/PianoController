@@ -234,13 +234,13 @@ public class ComponentPiano extends JComponent {
 
     public void setKeyLit(Note note, Color color) {
         if(note.isValidPianoKey()) {
-            setKeyLit(note.toPianoKey(), note, color);
+            setKeyLit(note.toPianoKey(), note.isNoteOn(), color);
         }
     }
 
-    private void setKeyLit(int index, Note note, Color color) {
+    public void setKeyLit(int index, boolean lit, Color color) {
         if (index < 0 || index > getKeyShapes().size()) return;
-        if (note != null && note.isNoteOn()) {
+        if (lit) {
             litKeys.put(index, color);
         }
         else {

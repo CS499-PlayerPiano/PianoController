@@ -13,6 +13,9 @@ import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 @ToString
 public class Note implements SheetMusicEvent, Cloneable {
 
+    public static final byte MAX_VELOCITY = 127;
+    public static final byte MIN_VELOCITY = 0;
+
     public static final int NO_CHANNEL = -1;
 
     /**
@@ -69,6 +72,10 @@ public class Note implements SheetMusicEvent, Cloneable {
         this.velocity = velocity;
         this.noteOn = noteOn;
         this.channelNum = channelNum;
+
+        if(this.velocity > 127) {
+            this.velocity = 127;
+        }
     }
 
     /**
@@ -122,8 +129,8 @@ public class Note implements SheetMusicEvent, Cloneable {
      * @param keyNumber The piano key index to convert 0-87
      * @return the midi key number of this note.
      */
-    public static int fromPianoKeyIndexToMidiNote(int keyNumber) {
-        return keyNumber + 21;
+    public static byte fromPianoKeyIndexToMidiNote(int keyNumber) {
+        return (byte) (keyNumber + 21);
     }
 
     @Override

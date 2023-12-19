@@ -45,14 +45,18 @@ public class PluginSynth extends Plugin {
     @Override
     public void onNotePlayed(Note note, long timestamp) {
 
-        final Synthesizer synth = midiSynth[note.getChannelNum()];
+
+        final int channelNum = note.getChannelNum() == -1 ? 0 : note.getChannelNum();
+
+        final Synthesizer synth = midiSynth[channelNum];
         if(synth == null) {return;}
-        final MidiChannel channel = synth.getChannels()[note.getChannelNum()];
+        final MidiChannel channel = synth.getChannels()[channelNum];
         final int keyNum = note.getKeyNumber();
         final int velocity = note.getVelocity();
 
         if(note.isNoteOn()) {
             channel.noteOn(keyNum, velocity);
+           // logger.info("Note on: " + keyNum + " " + velocity);
         }
         else {
             channel.noteOff(keyNum, velocity);

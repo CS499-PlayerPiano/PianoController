@@ -28,7 +28,7 @@ public class ComponentPiano extends JComponent {
     private static final float WHITE_KEY_ASPECT = (7f / 8f) / (5.7f);
     private static final float BLACK_KEY_HEIGHT = 3.5f / 6f;
 
-    private static final EnumNotes FIRST_NOTE = EnumNotes.C;
+    private static final EnumNotes FIRST_NOTE = EnumNotes.A;
     private static final int WHITE_KEY_COUNT = 52;
     private static final int WHITE_KEY_WIDTH = Math.round(220 * WHITE_KEY_ASPECT);
     private static final int WHITE_KEY_HEIGHT = 220;

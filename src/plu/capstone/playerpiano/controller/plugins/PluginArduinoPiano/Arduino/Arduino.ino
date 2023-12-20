@@ -9,7 +9,7 @@
 
 const int SHIFT_REGISTER_COUNT = 1;
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
-ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 8);
+ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
 
 // Print debugging over serial port
 // #define DEBUG_SERIAL
@@ -117,7 +117,7 @@ void setup()
     pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
-    sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
+    sr.interrupt(ShiftRegisterPWM::UpdateFrequency::Medium);
 
     // Wait for the serial port to connect
     while (!Serial)

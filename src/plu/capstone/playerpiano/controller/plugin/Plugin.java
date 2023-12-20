@@ -31,7 +31,6 @@ public abstract class Plugin implements SheetMusicCallback {
 
     @Getter
     private final String name = getClass().getSimpleName();
-    private final File CONFIG_FILE = new File("plugins/config/" + name + ".json");
 
     @Getter
     protected PluginConfig config = new PluginConfig(this);
@@ -62,10 +61,12 @@ public abstract class Plugin implements SheetMusicCallback {
         if(!config.getBoolean("enabled", true)) return;
 
         enabled = true;
-        logger.info("Hello world!");
-        onEnable();
 
         new Thread(() -> {
+
+            logger.info("Hello world!");
+            onEnable();
+
             while(enabled) {
                 TimedEvents timedNotes = eventQueue.poll();
                 if(timedNotes == null) {
@@ -79,7 +80,13 @@ public abstract class Plugin implements SheetMusicCallback {
 
                 splitEvents(timedNotes.getEvents(), timedNotes.getTimestamp());
             }
-        }, this.name + " - Note Queue Poller").start();
+
+            logger.info("Goodbye!");
+            onDisable();
+
+            eventQueue.clear();
+
+        }, this.name + " - Master Thread").start();
     }
 
     /**
@@ -89,10 +96,6 @@ public abstract class Plugin implements SheetMusicCallback {
     public final void disablePlugin() {
         if(!enabled) return;
         enabled = false;
-        logger.info("Goodbye!");
-        onDisable();
-
-        eventQueue.clear();
     }
 
     /**

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Website</title>
+    <style>
+        body {
+            background-color: #111;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            margin-top: 50px;
+            padding: 0 20px;
+        }
+
+        .text {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .text {
+                font-size: 18px;
+            }
+
+            .button {
+                font-size: 14px;
+            }
+        }
+
+        /* grid */
+
+        .grid {
+            border: 1px solid #333;
+        }
+
+        /* clear fix */
+        .grid:after {
+            content: '';
+            display: block;
+            clear: both;
+        }
+
+        /* Song element */
+
+        .song-element {
+            position: relative;
+            float: left;
+            width: 150px;
+            /* Adjust width to accommodate image and text */
+            height: auto;
+            /* Let height adjust based on content */
+            margin: 5px;
+            padding: 10px;
+            background: #181818;
+            color: #262524;
+            text-align: center;
+            /* Center align text */
+            /* Ensure the text doesn't overflow the container */
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 150px;
+            /* Adjust height for the image */
+            overflow: hidden;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            /* Center the image horizontally */
+        }
+
+        .song-info {
+            text-align: center;
+            padding-top: 10px;
+            /* Adjust top padding as needed */
+        }
+
+        .song-title,
+        .artist {
+            margin: 5px 0;
+            font-weight: bold;
+            /* Truncate text with ellipsis */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="text">
+            <p>Search test</p>
+        </div>
+        <p><input type="text" id="quicksearch" placeholder="Search" /></p>
+
+        <div class="grid">
+
+            <!-- <div class="song-element">
+                <p>ABCDEFU</p>
+            </div>
+
+            <div class="song-element">
+                <p>Song name</p>
+            </div> -->
+
+        </div>
+
+
+    </div>
+
+    <script src="assets/js/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+
+    <script src="assets/js/piano.js"></script>
+
+    <script>
+
+        // Create a new piano instance
+        const piano = new Piano();
+
+        // Initialize the piano, should be called on BODY load, not HEAD load.
+        piano.init();
+
+        // Get the list of songs from the API
+        piano.getSongList((songs) => {
+
+            const html = `
+            <div class="song-element" data-tags="%tags%">
+                <div class="image-container">
+                    <img src="%artwork%" alt="Song Image">
+                </div>
+                <div class="song-info">
+                    <p class="song-title">%title%</p>
+                    <p class="artist">%artist%</p>
+                </div>
+            </div>
+`
+
+            // Add each song to the list, name is the text, midiFile is the value
+            for (let i = 0; i < songs.length; i++) {
+                let song = songs[i];
+
+                console.log(song);
+
+                let songElement = html;
+                songElement = songElement.replace('%artwork%', song.artwork);
+                songElement = songElement.replace('%title%', song.name);
+                songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
+                songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
+
+                $('.grid').append(songElement);
+
+            }
+
+            // initialize isotope
+            initSearchBarThingy();
+
+        });
+
+        function arrayToCommaSeparatedString(array) {
+            let string = '';
+            for (let i = 0; i < array.length; i++) {
+                string += array[i] + ',';
+            }
+            string = string.substring(0, string.length - 1);
+            return string;
+        }
+
+        function initSearchBarThingy() {
+
+            // quick search regex
+            let qsRegex;
+
+            // init Isotope
+            let $grid = $('.grid').isotope({
+                itemSelector: '.song-element',
+                layoutMode: 'fitRows',
+                filter: function () {
+                    let $this = $(this);
+                    let searchResult = qsRegex ? $this.text().match(qsRegex) : true;
+
+                    let tagResult = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
+
+                    return searchResult || tagResult;
+                }
+            });
+
+            // use value of search field to filter
+            let $quicksearch = $('#quicksearch').keyup(debounce(function () {
+                qsRegex = new RegExp($quicksearch.val(), 'gi');
+                $grid.isotope();
+            }));
+
+        }
+
+
+        // debounce so filtering doesn't happen every millisecond
+        function debounce(fn, threshold) {
+            let timeout;
+            threshold = threshold || 100;
+            return function debounced() {
+                clearTimeout(timeout);
+                let args = arguments;
+                let _this = this;
+                function delayed() {
+                    fn.apply(_this, args);
+                }
+                timeout = setTimeout(delayed, threshold);
+            };
+        }
+
+    </script>
+
+</body>
+
+</html>

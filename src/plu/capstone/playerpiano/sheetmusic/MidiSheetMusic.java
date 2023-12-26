@@ -23,7 +23,10 @@ import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
  */
 public class MidiSheetMusic extends SheetMusic {
 
-    private final Logger logger = new Logger(this);
+    private static final Logger logger = new Logger(MidiSheetMusic.class);
+    static {
+        logger.setDebugEnabled(false);
+    }
 
     /**
      * Creates a new MidiSheetMusic object from a midi file

@@ -130,8 +130,8 @@ public class SongDBVerification implements Runnable {
 
         //check the file extension
         String extension = path.substring(path.lastIndexOf('.') + 1);
-        if(!extension.equalsIgnoreCase("jpg")) {
-            logger.warning("  - Song album art is not a jpg! Currently this isn't a mandatory change, but will be informed in the future! (" + path + ")");
+        if(!extension.equalsIgnoreCase("jpg") && !extension.equalsIgnoreCase("jpeg") && !extension.equalsIgnoreCase("png")) {
+            logger.warning("  - Song album art is not a png / jpg! Currently this isn't a mandatory change, but will be informed in the future! (" + path + ")");
         }
 
         //if it exists, check to make sure it's a buffered image

@@ -5,11 +5,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import javax.imageio.ImageIO;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
@@ -77,7 +80,10 @@ public class SongDBVerification implements Runnable {
                 checkAndFixSongFields(song);
 
                 //check to make sure the album art exists
-                if(!doesAlbumArtExist(song.get(FIELD_ARTWORK).getAsString())) {
+                if(doesAlbumArtExist(song.get(FIELD_ARTWORK).getAsString())) {
+                    isAlbumArtValid(song.get(FIELD_ARTWORK).getAsString());
+                }
+                else {
                     logger.warning("  - Song album art does not exist! (" + song.get(FIELD_ARTWORK).getAsString() + ")");
                 }
 
@@ -112,6 +118,43 @@ public class SongDBVerification implements Runnable {
         catch(Exception e) {
             logger.error(e.getMessage());
         }
+    }
+
+    private boolean isAlbumArtValid(String path) {
+
+        File file = new File(ARTWORK_DIR, path);
+        if(!file.exists()) {
+            logger.warning("  - Song album art does not exist! (" + path + ")");
+            return false;
+        }
+
+        //check the file extension
+        String extension = path.substring(path.lastIndexOf('.') + 1);
+        if(!extension.equalsIgnoreCase("jpg")) {
+            logger.warning("  - Song album art is not a jpg! Currently this isn't a mandatory change, but will be informed in the future! (" + path + ")");
+        }
+
+        //if it exists, check to make sure it's a buffered image
+        try {
+            BufferedImage image = ImageIO.read(file);
+
+            if(image == null) {
+                logger.warning("  - Song album art is not a valid image! (" + path + ")");
+                return false;
+            }
+
+            if(image.getWidth() != image.getHeight()) {
+                logger.warning("  - Song album art is not a square! (" + path + " - " + image.getWidth() + "x" + image.getHeight() + ")");
+                return false;
+            }
+
+        }
+        catch (IOException e) {
+            logger.warning("  - Song album art is not a valid image! (" + path + ")");
+            return false;
+        }
+
+        return true;
     }
 
     private long getTotalNoteCount(SheetMusic sheetMusic) {

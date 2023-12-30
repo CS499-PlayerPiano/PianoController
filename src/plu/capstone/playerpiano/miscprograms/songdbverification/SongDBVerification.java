@@ -21,18 +21,19 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 public class SongDBVerification implements Runnable {
 
-    public static void main(String[] args) {new SongDBVerification().run();}
+    public static void main(String[] args) {
+        new SongDBVerification(false).run();
+    }
 
     private final Logger logger = new Logger(this);
     private static final Gson PRETTY_GSON = new GsonBuilder().disableHtmlEscaping().serializeNulls().setPrettyPrinting().create();
 
-    private static final File ROOT_DIR = new File("res/songs-db/");
-    private static final File MIDI_DIR = new File(ROOT_DIR,"songs/");
-    private static final File ARTWORK_DIR = new File(ROOT_DIR, "artwork/");
-    private static final boolean ONLY_VALID_KEYS = true;
+    private final File ROOT_DIR;
+    private final File MIDI_DIR;
+    private final File ARTWORK_DIR;
+    private final boolean ONLY_VALID_KEYS = true;
 
     private static final String CHANGE_ME = "CHANGE ME";
-
     private static final String FIELD_NAME = "name";
     private static final String FIELD_ARTISTS = "artists";
     private static final String FIELD_MIDIFILE = "midiFile";
@@ -40,6 +41,17 @@ public class SongDBVerification implements Runnable {
     private static final String FIELD_TAGS = "tags";
     private static final String FIELD_NOTECOUNT = "noteCount";
     private static final String FIELD_SONGLENGTHMS = "songLengthMS";
+
+    public SongDBVerification(boolean isGithubAction) {
+        logger.debug("isGithubAction: " + isGithubAction);
+        ROOT_DIR = new File(isGithubAction ? "" : "res/songs-db/");
+        MIDI_DIR = new File(ROOT_DIR,"songs/");
+        ARTWORK_DIR = new File(ROOT_DIR, "artwork/");
+
+        logger.debug("ROOT_DIR: " + ROOT_DIR.getAbsolutePath());
+        logger.debug("MIDI_DIR: " + MIDI_DIR.getAbsolutePath());
+        logger.debug("ARTWORK_DIR: " + ARTWORK_DIR.getAbsolutePath());
+    }
 
 
     /**

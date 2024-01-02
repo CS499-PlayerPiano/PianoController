@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.midiconverter2;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
+import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.controller.utilities.timings.Timing;
 import plu.capstone.playerpiano.controller.utilities.timings.TimingsReport;
 import plu.capstone.playerpiano.logger.Logger;
@@ -15,7 +16,8 @@ import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
-public class MidiCleaner {
+@AllArgsConstructor
+public class MidiCleaner implements Runnable{
 
     private static final Logger LOGGER = new Logger(MidiCleaner.class);
 
@@ -27,31 +29,40 @@ public class MidiCleaner {
             new Step5InsertingOffNotes(200),
     };
 
-    private static final File MIDI_FILE = new File("res/songs/Testing/02 - B Major - Basic (IV-I-vim7-V).mid");
+    private final File INPUT_FILE;
+    private final File OUTPUT_FILE;
+    private final int VERSION;
 
-    public static void main(String[] args) throws InvalidMidiDataException, IOException {
+    @Override
+    public void run() {
 
-        TimingsReport timingsReport = new TimingsReport();
+        try {
 
-        timingsReport.start("Read midi file");
-        SheetMusic sheetMusic = new MidiSheetMusic(MIDI_FILE);
-        timingsReport.stop();
+            TimingsReport timingsReport = new TimingsReport();
 
-        for(int i = 0; i < steps.length; i++) {
-            timingsReport.start("Step " + (i + 1) + ": " + steps[i].getName());
-            final MidiConversionStep step = steps[i];
-            LOGGER.info("Running step: " + step.getName());
-            step.process(sheetMusic);
+            timingsReport.start("Read midi file");
+            SheetMusic sheetMusic = new MidiSheetMusic(INPUT_FILE);
             timingsReport.stop();
+
+            for (int i = 0; i < steps.length; i++) {
+                timingsReport.start("Step " + (i + 1) + ": " + steps[i].getName());
+                final MidiConversionStep step = steps[i];
+                LOGGER.info("Running step: " + step.getName());
+                step.process(sheetMusic);
+                timingsReport.stop();
+            }
+
+            //Write the file
+
+            timingsReport.start("Write File");
+            SheetMusicReaderWriter.saveSheetMusic(sheetMusic, OUTPUT_FILE, VERSION);
+            timingsReport.stop();
+
+            timingsReport.printReport();
         }
-
-        //Write the file
-
-        timingsReport.start("Write File");
-        SheetMusicReaderWriter.saveSheetMusic(sheetMusic, new File("tmp/02 - B Major - Basic (IV-I-vim7-V).piano"), SheetMusicReaderWriter.LATEST_VERSION);
-        timingsReport.stop();
-
-        timingsReport.printReport();
+        catch (IOException | InvalidMidiDataException e) {
+            e.printStackTrace();
+        }
 
     }
 

@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.Callable;
 import javax.imageio.ImageIO;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
@@ -19,11 +20,7 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
-public class SongDBVerification implements Runnable {
-
-    public static void main(String[] args) {
-        new SongDBVerification(false).run();
-    }
+public class SongDBVerification implements Callable<Integer> {
 
     private final Logger logger = new Logger(this);
     private static final Gson PRETTY_GSON = new GsonBuilder().disableHtmlEscaping().serializeNulls().setPrettyPrinting().create();
@@ -44,7 +41,8 @@ public class SongDBVerification implements Runnable {
 
     public SongDBVerification(boolean isGithubAction) {
         logger.debug("isGithubAction: " + isGithubAction);
-        ROOT_DIR = new File(isGithubAction ? "" : "res/songs-db/");
+
+        ROOT_DIR = isGithubAction ? new File(System.getProperty("user.dir")) : new File("res/songs-db");
         MIDI_DIR = new File(ROOT_DIR,"songs/");
         ARTWORK_DIR = new File(ROOT_DIR, "artwork/");
 
@@ -70,11 +68,13 @@ public class SongDBVerification implements Runnable {
 
 
     @Override
-    public void run() {
+    public Integer call() {
 
         try {
 
-            JsonArray oldSongs = PRETTY_GSON.fromJson(Files.readString(new File("res/songs-db/songs.json").toPath()), JsonArray.class);
+            boolean success = true;
+
+            JsonArray oldSongs = PRETTY_GSON.fromJson(Files.readString(new File(ROOT_DIR, "songs.json").toPath()), JsonArray.class);
 
             List<JsonObject> newSongArray = new ArrayList<>();
 
@@ -83,6 +83,7 @@ public class SongDBVerification implements Runnable {
 
                 if(!isElementAString(song.get(FIELD_NAME))) {
                     logger.warning("Song has no name! Abandoning this config entry.");
+                    success = false;
                     continue;
                 }
 
@@ -97,6 +98,7 @@ public class SongDBVerification implements Runnable {
                 }
                 else {
                     logger.warning("  - Song album art does not exist! (" + song.get(FIELD_ARTWORK).getAsString() + ")");
+                    success = false;
                 }
 
                 //check to see if the midi file exists
@@ -114,11 +116,16 @@ public class SongDBVerification implements Runnable {
                 }
                 else {
                     logger.warning("  - Song midi file does not exist! (" + song.get(FIELD_MIDIFILE).getAsString() + ")");
+                    success = false;
                 }
 
                 newSongArray.add(song);
             }
 
+            if(!success) {
+                logger.error("There were errors! Please fix them before committing!");
+                return 1;
+            }
             //Sort new songs by name alphabetically ignoring case
             newSongArray.sort(Comparator.comparing(o -> o.get(FIELD_NAME).getAsString().toLowerCase()));
 
@@ -129,7 +136,10 @@ public class SongDBVerification implements Runnable {
         }
         catch(Exception e) {
             logger.error(e.getMessage());
+            return 1;
         }
+
+        return 0;
     }
 
     private boolean isAlbumArtValid(String path) {

@@ -11,7 +11,6 @@
     <orderEntry type="library" name="projectlombok.lombok" level="project" />
     <orderEntry type="library" name="google.code.gson" level="project" />
     <orderEntry type="library" name="fazecast.jSerialComm" level="project" />
-    <orderEntry type="library" name="beust.jcommander" level="project" />
     <orderEntry type="library" name="io.javalin.community.openapi.swagger.plugin" level="project" />
     <orderEntry type="library" name="io.javalin.community.openapi.plugin" level="project" />
     <orderEntry type="library" name="io.javalin.community.openapi.annotation.processor" level="project" />
@@ -47,5 +46,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="info.picocli" level="project" />
   </component>
 </module>

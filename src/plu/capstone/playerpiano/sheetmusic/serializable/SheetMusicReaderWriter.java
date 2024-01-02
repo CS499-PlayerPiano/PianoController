@@ -29,20 +29,21 @@ public enum SheetMusicReaderWriter {
     V5(5, new SheetMusicFileParserV5()),
     V6(6, new SheetMusicFileParserV6())
     ;
+    public static final int LATEST_VERSION = 6; //Can't use values().length, and can't use static final in constructor. MUST BE SET MANUALLY
 
     private final int version;
     @Getter
     final SheetMusicFileParser fileParser;
     private static final Logger LOGGER = new Logger(SheetMusicReaderWriter.class);
 
-    public static final int LATEST_VERSION;
+
 
     public short getVersion() {
         return (short) version;
     }
 
     static {
-        LATEST_VERSION = values()[values().length - 1].version;
+        //LATEST_VERSION = values()[values().length - 1].version;
         LOGGER.debug("Latest file version: " + LATEST_VERSION);
     }
 

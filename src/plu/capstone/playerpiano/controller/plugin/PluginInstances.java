@@ -7,6 +7,7 @@ import plu.capstone.playerpiano.controller.plugins.PluginMidiKeyboard.PluginMidi
 import plu.capstone.playerpiano.controller.plugins.PluginPatternDebugGui.PluginPatternDebugGui;
 import plu.capstone.playerpiano.controller.plugins.PluginPianoEmulatorGui.PluginVirtualPianoEmulatorGui;
 import plu.capstone.playerpiano.controller.plugins.PluginSynth.PluginSynth;
+import plu.capstone.playerpiano.controller.plugins.PluginSynthesiaClone.PluginSynthesiaGui;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 
 @AllArgsConstructor
@@ -19,6 +20,7 @@ public enum PluginInstances {
     WEB_SERVER(PluginWebAPI.class),
     MIDI_KEYBOARD(PluginMidiKeyboard.class),
     PATTERN_DEBUG(PluginPatternDebugGui.class),
+    SYNTHESIA_GUI(PluginSynthesiaGui.class),
 
     //TEST_PLUGIN(TestPlugin.class),
     //TEST_PLUGIN_CONFIG(PluginConfigTester.class)

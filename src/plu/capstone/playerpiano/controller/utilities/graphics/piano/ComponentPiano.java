@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
+import lombok.AccessLevel;
+import lombok.Getter;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 
@@ -30,8 +32,11 @@ public class ComponentPiano extends JComponent {
 
     private static final EnumNotes FIRST_NOTE = EnumNotes.A;
     private static final int WHITE_KEY_COUNT = 52;
-    private static final int WHITE_KEY_WIDTH = Math.round(220 * WHITE_KEY_ASPECT);
+    public static final int WHITE_KEY_WIDTH = Math.round(220 * WHITE_KEY_ASPECT);
+    public static final float BLACK_KEY_WIDTH = (WHITE_KEY_WIDTH * 14f / 24);
+
     private static final int WHITE_KEY_HEIGHT = 220;
+
     private List<KeyShape> keyShapes;
     private final Map<Integer, Color> litKeys = new HashMap<>();
 
@@ -68,13 +73,16 @@ public class ComponentPiano extends JComponent {
         keyShapes = null;
     }
 
-    private List<KeyShape> getKeyShapes() {
+    public List<KeyShape> getKeyShapes() {
         if (keyShapes == null) {
             keyShapes = generateKeyShapes();
         }
         return keyShapes;
     }
 
+    public static int getMaxWidth() {
+        return WHITE_KEY_COUNT * WHITE_KEY_WIDTH;
+    }
 
     private List<KeyShape> generateKeyShapes() {
         List<KeyShape> shapes = new ArrayList<>();

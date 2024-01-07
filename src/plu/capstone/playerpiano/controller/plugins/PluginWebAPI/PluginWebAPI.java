@@ -10,6 +10,7 @@ import io.javalin.openapi.plugin.OpenApiPlugin;
 import io.javalin.openapi.plugin.OpenApiPluginConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
+import io.javalin.plugin.bundled.CorsContainer;
 import io.javalin.websocket.WsContext;
 import java.lang.reflect.Type;
 import java.time.Duration;
@@ -17,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Consumer;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
@@ -89,6 +91,14 @@ public class PluginWebAPI extends Plugin {
                     )
 
             );
+
+            // Enable CORS for all origins for debugging.
+            //TODO: remove this for production!
+            config.plugins.enableCors(cors -> {
+                cors.add(it -> {
+                    it.anyHost();
+                });
+            });
 
             SwaggerConfiguration swaggerConfiguration = new SwaggerConfiguration();
             swaggerConfiguration.setUiPath(API_DOCS_SWAGGER_PATH);

@@ -53,6 +53,10 @@ public class Note implements SheetMusicEvent, Cloneable {
     @Setter
     private boolean noteOn;
 
+
+    @Getter
+    private boolean isBlackKey;
+
     /**
      * Creates a new Note object.
      * Use {@link #fromMidiMessage(javax.sound.midi.ShortMessage)} to create a Note from a ShortMessage.
@@ -76,6 +80,13 @@ public class Note implements SheetMusicEvent, Cloneable {
         if(this.velocity > 127) {
             this.velocity = 127;
         }
+
+        this.isBlackKey = isBlackKey(keyNumber);
+    }
+
+    private static boolean isBlackKey(int keyNumber) {
+        int key = keyNumber % 12;
+        return key == 1 || key == 3 || key == 6 || key == 8 || key == 10;
     }
 
     /**

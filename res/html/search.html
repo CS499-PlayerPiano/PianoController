@@ -20,9 +20,29 @@
             padding: 0 20px;
         }
 
+        .emojis-container {
+            position: absolute;
+            top: 20px;
+            right: 50px;
+            font-size: 24px; /* Adjust the font size as needed */
+        }
+
+        .moon {
+            display: inline-block;
+            margin-right: -10px;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .moon:hover,
+        .moon.hovered {
+            transform: scale(1.3);
+            z-index: 2;
+        }
+
         .text {
-            font-size: 20px;
-            margin-bottom: 20px;
+            position: relative;
         }
 
         @media screen and (max-width: 600px) {
@@ -81,6 +101,8 @@
             display: block;
             margin: 0 auto;
             /* Center the image horizontally */
+            border: 2px solid #000;
+            border-radius: 8px; /* Adjust the radius as needed for the desired rounded effect */
         }
 
         .song-info {
@@ -100,14 +122,24 @@
             color: white;
         }
     </style>
+
+
 </head>
 
 <body>
     <div class="container">
         <div class="text">
             <p>Search test</p>
+            <div class="emojis-container">
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+            </div>
         </div>
         <p><input type="text" id="quicksearch" placeholder="Search" /></p>
+
 
         <div class="grid">
             <!-- Song elements will be added here -->
@@ -116,12 +148,25 @@
 
     </div>
 
-    <script src="assets/js/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    <script src="assets/js/jquery-3.7.1.min.js"
         crossorigin="anonymous"></script>
 
     <script src="assets/js/isotope.pkgd.min.js"></script>
 
-    <script src="assets/js/piano.js"></script>
+    <script src="assets/js/piano-modified.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('.moon').on('mouseenter mousemove', function (event) {
+                let currentIndex = $(this).index();
+                let mouseX = event.pageX - $(this).offset().left;
+                $('.moon:lt(' + (currentIndex + 1) + ')').addClass('hovered').text('🌕');
+                $(this).removeClass('hovered').text(mouseX <= $(this).width() / 2 ? '🌗' : '🌕');
+            }).on('mouseleave', function () {
+                $('.moon').removeClass('hovered').text('🌑');
+            });
+        });
+    </script>
 
     <script>
 
@@ -142,6 +187,8 @@
                 <div class="song-info">
                     <p class="song-title">%title%</p>
                     <p class="artist">%artist%</p>
+                    <p class="noteDensity"><span class="emojis" id="emojis"></span></p>
+
                 </div>
             </div>
 `
@@ -149,6 +196,7 @@
             // Add each song to the list, name is the text, midiFile is the value
             for (let i = 0; i < songs.length; i++) {
                 let song = songs[i];
+                song.noteDensity = (song.noteCount/song.songLengthMS)*1000;
 
                 console.log(song);
 
@@ -157,8 +205,39 @@
                 songElement = songElement.replace('%title%', song.name);
                 songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
                 songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
+                songElement = songElement.replace('%noteDensity%', song.noteDensity);
+
 
                 $('.grid').append(songElement);
+
+                // alculate the emojis based on noteDensity ranges
+                var emojis = '';
+                if (song.noteDensity < 2.5) {
+                    emojis = '🌑🌑🌑🌑🌑';
+                } else if (song.noteDensity >= 2.5 && song.noteDensity < 5) {
+                    emojis = '🌗🌑🌑🌑🌑';
+                } else if (song.noteDensity >= 5 && song.noteDensity < 7.5) {
+                    emojis = '🌕🌑🌑🌑🌑';
+                } else if (song.noteDensity >= 7.5 && song.noteDensity < 10) {
+                    emojis = '🌕🌗🌑🌑🌑';
+                } else if (song.noteDensity >= 10 && song.noteDensity < 12.5) {
+                    emojis = '🌕🌕🌑🌑🌑';
+                } else if (song.noteDensity >= 12.5 && song.noteDensity < 15) {
+                    emojis = '🌕🌕🌗🌑🌑';
+                } else if (song.noteDensity >= 15 && song.noteDensity < 17.5) {
+                    emojis = '🌕🌕🌕🌑🌑';
+                } else if (song.noteDensity >= 17.5 && song.noteDensity < 20) {
+                    emojis = '🌕🌕🌕🌗🌑';
+                } else if (song.noteDensity >= 20 && song.noteDensity < 22.5) {
+                    emojis = '🌕🌕🌕🌕🌑';
+                } else if (song.noteDensity >= 22.5 && song.noteDensity < 30) {
+                    emojis = '🌕🌕🌕🌕🌗';
+                } else {
+                    emojis = '🌕🌕🌕🌕🌕';
+                }
+
+
+                $('.emojis').last().text(emojis);
 
             }
 
@@ -166,6 +245,8 @@
             initSearchBarThingy();
 
         });
+
+
 
         function arrayToCommaSeparatedString(array) {
             let string = '';

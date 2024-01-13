@@ -15,16 +15,23 @@
             padding: 0;
         }
 
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            background-color: #111;
+            z-index: 1000;
+        }
+
         .container {
             margin-top: 50px;
-            padding: 0 20px;
+            padding: 0 10px;
         }
 
         .emojis-container {
             position: absolute;
             top: 20px;
-            right: 50px;
-            font-size: 24px; /* Adjust the font size as needed */
+            right: 20px;
+            font-size: 24px;
         }
 
         .moon {
@@ -33,6 +40,7 @@
             transition: transform 0.3s ease;
             position: relative;
             z-index: 1;
+            cursor: pointer;
         }
 
         .moon:hover,
@@ -55,43 +63,41 @@
             }
         }
 
-        /* grid */
-
         .grid {
             border: 1px solid #333;
         }
 
-        /* clear fix */
         .grid:after {
             content: '';
             display: block;
             clear: both;
         }
 
-        /* Song element */
-
         .song-element {
             position: relative;
             float: left;
             width: 150px;
-            /* Adjust width to accommodate image and text */
             height: auto;
-            /* Let height adjust based on content */
             margin: 5px;
             padding: 10px;
             background: #181818;
             color: #262524;
             text-align: center;
-            /* Center align text */
-            /* Ensure the text doesn't overflow the container */
             overflow: hidden;
             white-space: nowrap;
+            transition: transform 0.3s ease;
+            border-radius: 2px;
+            animation: fadeIn 0.5s ease, slideIn 0.5s ease;
+        }
+
+        .song-element:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
 
         .image-container {
             width: 100%;
             height: 150px;
-            /* Adjust height for the image */
             overflow: hidden;
         }
 
@@ -100,36 +106,78 @@
             height: auto;
             display: block;
             margin: 0 auto;
-            /* Center the image horizontally */
             border: 2px solid #000;
-            border-radius: 8px; /* Adjust the radius as needed for the desired rounded effect */
+            border-radius: 8px;
         }
 
         .song-info {
             text-align: center;
             padding-top: 10px;
-            /* Adjust top padding as needed */
         }
 
         .song-title,
         .artist {
             margin: 5px 0;
             font-weight: bold;
-            /* Truncate text with ellipsis */
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             color: white;
         }
+
+        .sticky-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #111;
+            z-index: 1000;
+            padding: 10px;
+        }
+
+        #quicksearch {
+            width: 30%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        #quicksearch:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+
+
     </style>
 
 
 </head>
 
 <body>
-    <div class="container">
+    <div class="sticky-container">
         <div class="text">
-            <p>Search test</p>
+            <p>SEARCH</p>
             <div class="emojis-container">
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
@@ -138,15 +186,19 @@
                 <span class="moon">🌑</span>
             </div>
         </div>
-        <p><input type="text" id="quicksearch" placeholder="Search" /></p>
+        <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
+    </div>
 
 
+
+        <div class="container">
         <div class="grid">
             <!-- Song elements will be added here -->
         </div>
+        </div>
 
 
-    </div>
+
 
     <script src="assets/js/jquery-3.7.1.min.js"
         crossorigin="anonymous"></script>

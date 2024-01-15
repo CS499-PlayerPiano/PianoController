@@ -221,6 +221,14 @@ public abstract class Plugin implements SheetMusicCallback {
         return PlayerPianoController.getInstance().isSheetMusicPlaying();
     }
 
+    public final void queueSheetMusic(SheetMusic music) {
+        PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+    }
+
+    public final void skipSong() {
+        PlayerPianoController.getInstance().getQueueManager().skipSong();
+    }
+
     /**
      * This function is when the plugin is first loaded and the config file is created for the first time.
      * This is called BEFORE {@link #onEnable()}.

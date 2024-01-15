@@ -2,7 +2,9 @@ package plu.capstone.playerpiano.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
@@ -18,10 +20,13 @@ public class PlayerPianoController implements Runnable {
     private static PlayerPianoController INSTANCE;
     private final Logger logger = new Logger(this);
 
-   @Getter
-   private SheetMusic currentSheetMusic;
+    @Getter
+    private SheetMusic currentSheetMusic;
 
     private PluginLoader pluginLoader;
+
+    @Getter
+    private QueueManager queueManager = new QueueManager();
 
     /**
      * Returns the single instance of the PlayerPianoController.
@@ -45,6 +50,12 @@ public class PlayerPianoController implements Runnable {
         for(Plugin plugin : pluginLoader.getPlugins()) {
             plugin.loadPlugin();
         }
+
+        queueManager.start();
+
+
+
+
 
 //        try {
 //            //playSheetMusic(new MidiSheetMusic(new File("res/songs/Testing/night of nights.mid")));

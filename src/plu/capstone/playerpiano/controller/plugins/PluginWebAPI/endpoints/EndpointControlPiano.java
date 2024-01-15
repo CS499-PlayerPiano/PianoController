@@ -25,136 +25,46 @@ public class EndpointControlPiano implements Endpoint {
     @Override
     public void register(PluginWebAPI server, Javalin app) {
         this.server = server;
-        app.post("/api/control/start", this::startSong);
-        app.post("/api/control/stop", this::stopSong);
-        app.post("/api/control/pause", this::pauseSong);
-        app.post("/api/control/resume", this::resumeSong);
-        app.get("/api/control/status", this::getStatus);
-        app.post("/api/control/playNotes", this::playNotes);
+        app.post("/api/control/queue", this::queueSong);
+        app.post("/api/control/skip", this::skipSong);
     }
 
-    @OpenApi(
-            path = "/api/control/playNotes",
-            methods = {HttpMethod.POST},
-            summary = "Send notes to the piano to be played.",
-            description = "Send notes to the piano This endpoint is currently not implemented.",
-            tags = {"Piano Control"},
-            responses = {
-                    @OpenApiResponse(
-                            status = "501",
-                            description = "This endpoint is not implemented yet.",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-            })
-    private void playNotes(Context context) {
-        notImplemented(context);
-    }
+    private void skipSong(Context context) {
+        //cherck session id
+        String sessionUUID = context.sessionAttribute(EndpointsUser.SESSION_UUID);
 
-    @OpenApi(
-            path = "/api/control/status",
-            summary = "Return the current status of the piano.",
-            description = "Returns the current status of the piano. This endpoint is currently not implemented.",
-            tags = {"Piano Control"},
-            responses = {
-                    @OpenApiResponse(
-                            status = "501",
-                            description = "This endpoint is not implemented yet.",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-            })
-    private void getStatus(Context context) {
-        notImplemented(context);
-    }
+        if(sessionUUID == null) {
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("No session found! Piano.js must be loaded first!");
+            return;
+        }
 
-    @OpenApi(
-            path = "/api/control/resume",
-            methods = {HttpMethod.POST},
-            summary = "Pause the current song.",
-            description = "Pause the current song. This endpoint is currently not implemented.",
-            tags = {"Piano Control"},
-            responses = {
-                    @OpenApiResponse(
-                            status = "501",
-                            description = "This endpoint is not implemented yet.",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-            })
-    private void resumeSong(Context context) {
-        notImplemented(context);
-    }
+        //TODO: Check if the session ID is the one who queued the song.
+        boolean oneWhoQueued = true;
 
-    @OpenApi(
-            path = "/api/control/pause",
-            methods = {HttpMethod.POST},
-            summary = "Resume the current song.",
-            description = "Resume the current song. This endpoint is currently not implemented.",
-            tags = {"Piano Control"},
-            responses = {
-                    @OpenApiResponse(
-                            status = "501",
-                            description = "This endpoint is not implemented yet.",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-            })
-    private void pauseSong(Context context) {
-        notImplemented(context);
-    }
+        if(!oneWhoQueued) {
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("You are not the one who queued the song!");
+            return;
+        }
 
-    @OpenApi(
-            path = "/api/control/stop",
-            methods = {HttpMethod.POST},
-            summary = "Stop the current song.",
-            description = "Stop the current playing song.",
-            tags = {"Piano Control"},
-            responses = {
-                    @OpenApiResponse(
-                            status = "200",
-                            description = "The song was successfully stopped",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-                    @OpenApiResponse(
-                            status = "500",
-                            description = "Internal Server Error",
-                            content = @OpenApiContent(type = "text/plain")
-                    )
-            })
-    private void stopSong(Context context) {
-        server.stopSheetMusic();
+        server.skipSong();
         context.status(HttpStatus.OK);
-        context.result("");
+        context.result("Success!");
     }
 
-    @OpenApi(
-            path = "/api/control/start",
-            methods = {HttpMethod.POST},
-            summary = "Start a song.",
-            description = "Start playing a song.",
-            tags = {"Piano Control"},
-            requestBody = @OpenApiRequestBody(
-                    required = true,
-                    description = "Json data of the song we should play",
-                    content = {
-                            @OpenApiContent(from = SongEntryInput.class)
-                    }
-            ),
-            responses = {
-                    @OpenApiResponse(
-                            status = "200",
-                            description = "The song was successfully started",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-                    @OpenApiResponse(
-                            status = "404",
-                            description = "The song was not found",
-                            content = @OpenApiContent(type = "text/plain")
-                    ),
-                    @OpenApiResponse(
-                            status = "500",
-                            description = "Internal Server Error",
-                            content = @OpenApiContent(type = "text/plain")
-                    )
-            })
-    private void startSong(Context context) {
+    private void queueSong(Context context) {
+
+        //check session id
+        String sessionUUID = context.sessionAttribute(EndpointsUser.SESSION_UUID);
+
+        if(sessionUUID == null) {
+            context.status(HttpStatus.UNAUTHORIZED);
+            context.result("No session found! Piano.js must be loaded first!");
+            return;
+        }
+
+
         JsonObject body = context.bodyAsClass(JsonObject.class);
         String midiFile = body.get("midiFile").getAsString();
 
@@ -168,12 +78,10 @@ public class EndpointControlPiano implements Endpoint {
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            server.playSheetMusic(sm);
+            server.queueSheetMusic(sm);
 
             context.status(HttpStatus.OK);
-            context.result("");
-
-
+            context.result("Success!");
 
         }
         catch (InvalidMidiDataException | IOException e) {
@@ -182,14 +90,5 @@ public class EndpointControlPiano implements Endpoint {
             e.printStackTrace();
         }
     }
-
-
-    class SongEntryInput {
-
-        @OpenApiDescription("The midi file of the song to play")
-        @OpenApiExample("Coconut_Mall.mid")
-        public String getMidiFile() {
-            return null;
-        }
-    }
+    
 }

@@ -7,7 +7,7 @@ import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 
 public class EndpointsUser implements Endpoint {
 
-    private static final String SESSION_CREATE_KEY = "piano-uuid";
+    public static final String SESSION_UUID = "piano-uuid";
 
     @Override
     public void register(PluginWebAPI server, Javalin app) {
@@ -18,11 +18,11 @@ public class EndpointsUser implements Endpoint {
 
     private void getOrCreateSession(Context context) {
 
-        if(context.sessionAttribute(SESSION_CREATE_KEY) == null) {
-            context.sessionAttribute(SESSION_CREATE_KEY, java.util.UUID.randomUUID().toString());
+        if(context.sessionAttribute(SESSION_UUID) == null) {
+            context.sessionAttribute(SESSION_UUID, java.util.UUID.randomUUID().toString());
         }
 
-        String sessionKey = context.sessionAttribute(SESSION_CREATE_KEY);
+        String sessionKey = context.sessionAttribute(SESSION_UUID);
 
         JsonObject response = new JsonObject();
         response.addProperty("session", sessionKey);

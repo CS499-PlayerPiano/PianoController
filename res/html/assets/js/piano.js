@@ -132,16 +132,28 @@ class Piano {
     }
 
     // Send a POST request to the server
-    #sendPostRequest(loc, data = null) {
+    #sendPostRequest(loc, data = null, responseCallback = null) {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", "/api/" + loc, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
+
+        xhr.onload = () => {
+
+            if (responseCallback != null) {
+                let tmp = {
+                    "status": xhr.status,
+                    "response": JSON.parse(xhr.response)
+                };
+                responseCallback(tmp);
+            }
+        };
 
         if (data == null) {
             xhr.send();
         } else {
             xhr.send(JSON.stringify(data));
         }
+
     }
 
     // Send a control request to the server
@@ -164,16 +176,30 @@ class Piano {
     }
 
     // Get the list of songs from the server
-    playSong(song) {
+    queueSong(song) {
         let tmp = {
             midiFile: song.midiFile
         }
-        this.#sendControlRequest("start", tmp);
+        this.#sendControlRequest("queue", tmp, (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Song queued:', song);
+            }
+            else {
+                console.error('[Piano - API] Error queueing song:', intResp);
+            }
+        });
     }
 
-    // Get the list of songs from the server
-    stopSong() {
-        this.#sendControlRequest("stop");
+
+    skipSong() {
+        this.#sendControlRequest("skip", null, (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Song skipped');
+            }
+            else {
+                console.error('[Piano - API] Error skipping song:', intResp);
+            }
+        });
     }
 
     // Callback setter for song started event

@@ -2,9 +2,13 @@ package plu.capstone.playerpiano.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.swagger.util.Json;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PacketIds;
@@ -17,9 +21,11 @@ import plu.capstone.playerpiano.sheetmusic.events.Note;
 public class QueueManager {
 
     private Logger logger = new Logger(this);
-    private Queue<SheetMusic> songQueue = new LinkedList<>();
+    //    private Queue<SheetMusic> songQueue = new LinkedList<>();
+    private final Queue<QueuedSongWithMetadata> songQueue = new LinkedList<>();
+
     @Getter
-    private SheetMusic currentSheetMusic;
+    private QueuedSongWithMetadata currentSheetMusic;
 
     private final PlayerPianoController controller;
     public QueueManager(PlayerPianoController playerPianoController) {
@@ -39,16 +45,16 @@ public class QueueManager {
             }
 
             while(true) {
-                if (currentSheetMusic != null) {
+                if (currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
                     synchronized (currentSheetMusic) {
-                        if (currentSheetMusic.isPlaying()) {
+                        if (currentSheetMusic.sheetMusic.isPlaying()) {
                             continue;
                         }
                     }
                 }
                 //If we are here, we are not playing a song.
 
-                SheetMusic nextSong = null;
+                QueuedSongWithMetadata nextSong = null;
 
                 synchronized (songQueue) {
 
@@ -59,7 +65,7 @@ public class QueueManager {
                     nextSong = songQueue.poll();
                 }
                 //Sanity check
-                if (nextSong == null) {
+                if (nextSong == null || nextSong.sheetMusic == null) {
                     logger.warning("Song queue returned null!");
                     continue;
                 }
@@ -76,23 +82,39 @@ public class QueueManager {
         JsonArray queueArray = new JsonArray();
 
         synchronized (songQueue) {
-            for (SheetMusic song : songQueue) {
-                //TODO: Sheet music, who queued it etc.
-                queueArray.add(Integer.toHexString(song.hashCode()));
+            for (QueuedSongWithMetadata song : songQueue) {
+                JsonObject tmpMetadata = new JsonObject();
+                tmpMetadata.addProperty("name", song.songDBEntry.get("name").getAsString());
+                tmpMetadata.add("artists", song.songDBEntry.get("artists").getAsJsonArray());
+                queueArray.add(tmpMetadata);
             }
         }
 
         JsonObject obj = new JsonObject();
         obj.add("queue", queueArray);
 
-        String nowPlaying = "";
-        if (currentSheetMusic != null) {
+        JsonObject nowPlaying = new JsonObject();
+        if (currentSheetMusic != null && currentSheetMusic.songDBEntry != null) {
             synchronized (currentSheetMusic) {
-                nowPlaying = Integer.toHexString(currentSheetMusic.hashCode());
+                if(currentSheetMusic.songDBEntry.has("name")) {
+                    nowPlaying.addProperty("name", currentSheetMusic.songDBEntry.get("name").getAsString());
+                }
+                else {
+                    nowPlaying.addProperty("name", "Failed check in QueueManager! This is a bug!");
+                }
+
+                if(currentSheetMusic.songDBEntry.has("artists")) {
+                    nowPlaying.add("artists", currentSheetMusic.songDBEntry.get("artists").getAsJsonArray());
+                }
+                else {
+                    JsonArray tmp = new JsonArray();
+                    tmp.add("Failed check in QueueManager! This is a bug!");
+                    nowPlaying.add("artists", tmp);
+                }
             }
         }
 
-        obj.addProperty("nowPlaying", nowPlaying);
+        obj.add("nowPlaying", nowPlaying);
 
         return obj;
     }
@@ -105,7 +127,7 @@ public class QueueManager {
      * Stops any currently playing music, and plays the given sheet music.
      * @param music The sheet music to play.
      */
-    private void playSheetMusic(SheetMusic music) {
+    private void playSheetMusic(QueuedSongWithMetadata music) {
 
         //Stop the current sheet music if we are playing one
         this.stopSheetMusic();
@@ -116,7 +138,7 @@ public class QueueManager {
         synchronized (currentSheetMusic) {
             for (Plugin plugin : controller.getPluginLoader().getPlugins()) {
                 if (plugin.isEnabled()) {
-                    currentSheetMusic.addCallback(plugin);
+                    currentSheetMusic.sheetMusic.addCallback(plugin);
                 }
             }
 
@@ -124,7 +146,7 @@ public class QueueManager {
             // TODO: This should be properly handled by the plugin system & locking!!
             // TODO: It seems to work, but this change will most likely break things!
             new Thread(() -> {
-                currentSheetMusic.play();
+                currentSheetMusic.sheetMusic.play();
             }, "Sheet music playing thread").start();
 
         }
@@ -135,9 +157,9 @@ public class QueueManager {
      * Stops the current sheet music.
      */
     public void stopSheetMusic() {
-        if(currentSheetMusic != null) {
+        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
             synchronized (currentSheetMusic) {
-                currentSheetMusic.stop();
+                currentSheetMusic.sheetMusic.stop();
             }
         }
     }
@@ -147,7 +169,24 @@ public class QueueManager {
      * @param song The song to queue.
      * @return The position of the song in the queue. -1 if the song is already in the queue. -2 if the song is currently playing.
      */
+    @Deprecated
     public int queueSong(SheetMusic song) {
+        JsonObject title = new JsonObject();
+        title.addProperty("name", "Queued through Deprecated method!");
+        JsonArray artist = new JsonArray();
+        artist.add("Queued through Deprecated method!");
+        title.add("artists", artist);
+        QueuedSongWithMetadata tmp = new QueuedSongWithMetadata(song, title, "Queued through Deprecated method!");
+
+        return queueSong(tmp);
+    }
+
+    /**
+     * Queues a song to be played.
+     * @param song The song to queue.
+     * @return The position of the song in the queue. -1 if the song is already in the queue. -2 if the song is currently playing.
+     */
+    public int queueSong(QueuedSongWithMetadata song) {
         synchronized (songQueue) {
 
             if(currentSheetMusic != null && currentSheetMusic.equals(song)) {
@@ -182,7 +221,7 @@ public class QueueManager {
                 return 0;
             }
 
-            for(SheetMusic s : songQueue) {
+            for(QueuedSongWithMetadata s : songQueue) {
                 if(s.equals(song)) {
                     return position;
                 }
@@ -196,29 +235,42 @@ public class QueueManager {
      * Skips the current song.
      */
     public void skipSong() {
-        logger.info("Skipping song");
-        synchronized (currentSheetMusic) {
-            if(currentSheetMusic != null) {
-                logger.info("Skipping song 2");
-                currentSheetMusic.stop();
+        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
+            synchronized (currentSheetMusic) {
+                currentSheetMusic.sheetMusic.stop();
             }
         }
-
-        logger.info("Skipping song 3");
     }
 
     /**
      * @return true if the sheet music is currently playing.
      */
     public boolean isSheetMusicPlaying() {
-        if(currentSheetMusic != null) {
-            return currentSheetMusic.isPlaying();
+        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
+            synchronized (currentSheetMusic) {
+                return currentSheetMusic.sheetMusic.isPlaying();
+            }
         }
         return false;
     }
 
 
+    @AllArgsConstructor
+    public static class QueuedSongWithMetadata {
+        private final SheetMusic sheetMusic;
+        private final JsonObject songDBEntry;
+        private final String whoQueued;
 
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof QueuedSongWithMetadata && ((QueuedSongWithMetadata) obj).sheetMusic.equals(sheetMusic);
+        }
+
+        @Override
+        public int hashCode() {
+            return sheetMusic.hashCode();
+        }
+    }
 
 
     //////////////////////////////////////

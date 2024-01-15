@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
+import plu.capstone.playerpiano.controller.QueueManager.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
@@ -203,7 +204,17 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param music The sheet music to play.
      * @return the position in the queue.
      */
+    @Deprecated
     public final int playSheetMusic(SheetMusic music) {
+        return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+    }
+
+    /**
+     * Play a given sheet music.
+     * @param music The sheet music to play.
+     * @return the position in the queue.
+     */
+    public final int playSheetMusic(QueuedSongWithMetadata music) {
         return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
     }
 

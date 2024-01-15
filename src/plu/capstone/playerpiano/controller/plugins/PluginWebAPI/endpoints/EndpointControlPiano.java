@@ -1,5 +1,9 @@
 package plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -14,15 +18,20 @@ import io.javalin.openapi.OpenApiResponse;
 import io.swagger.util.Json;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.controller.PlayerPianoController;
+import plu.capstone.playerpiano.controller.QueueManager.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
 public class EndpointControlPiano implements Endpoint {
 
+    private Logger logger = new Logger(this);
     private PluginWebAPI server;
+    private JsonArray songDB;
 
     @Override
     public void register(PluginWebAPI server, Javalin app) {
@@ -30,6 +39,15 @@ public class EndpointControlPiano implements Endpoint {
         app.post("/api/control/queue", this::queueSong);
         app.post("/api/control/skip", this::skipSong);
         app.get("/api/control/getQueue", this::getQueue);
+
+        File songDBFile = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
+
+        try {
+            songDB = new Gson().fromJson(Files.readString(songDBFile.toPath()), JsonArray.class);
+        } catch (IOException e) {
+            logger.error("Error loading song database!");
+        }
+
     }
 
     private void getQueue(Context context) {
@@ -84,10 +102,26 @@ public class EndpointControlPiano implements Endpoint {
             return;
         }
 
+        //Try and find the song in the database
+        JsonObject song = null;
+        for(JsonElement obj : songDB) {
+            if(obj.getAsJsonObject().get("midiFile").getAsString().equals(midiFile)) {
+                song = obj.getAsJsonObject();
+                break;
+            }
+        }
+
+        if(song == null) {
+            context.status(HttpStatus.INTERNAL_SERVER_ERROR);
+            context.result("Failed to find song in database, yet it exists in the file system!");
+            return;
+        }
+
+
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            int position = server.playSheetMusic(sm);
+            int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
 
             JsonObject obj = new JsonObject();
             obj.addProperty("position", position);

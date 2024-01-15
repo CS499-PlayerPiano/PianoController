@@ -125,7 +125,6 @@ public class SheetMusic {
         SheetMusic that = (SheetMusic) o;
 
         if (songLengthMS != that.songLengthMS) return false;
-        if (isPlaying != that.isPlaying) return false;
 
         return eventMap.equals(that.eventMap);
     }

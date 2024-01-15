@@ -23,6 +23,7 @@ class Piano {
 
         // Connect to the server
         this.#connect();
+        this.#getOrCreatePersistentSession();
     }
 
     // Connect to the server, reconnect when the connection is closed
@@ -55,6 +56,17 @@ class Piano {
         this.#websocket.onmessage = (event) => {
             this.#parseWebsocketMessage(event);
         };
+    }
+
+    #getOrCreatePersistentSession() {
+        this.#sendGetRequest("users/getSession", (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Persistent Session created:', intResp.response.session);
+            }
+            else {
+                console.error('[Piano - API] Error creating session:', intResp);
+            }
+        });
     }
 
     // Called when a message is received from the server

@@ -12,6 +12,7 @@ import io.javalin.openapi.plugin.swagger.SwaggerConfiguration;
 import io.javalin.openapi.plugin.swagger.SwaggerPlugin;
 import io.javalin.plugin.bundled.CorsContainer;
 import io.javalin.websocket.WsContext;
+import java.io.File;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.util.HashSet;
@@ -19,11 +20,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import org.eclipse.jetty.server.session.DefaultSessionCache;
+import org.eclipse.jetty.server.session.FileSessionDataStore;
+import org.eclipse.jetty.server.session.SessionCache;
+import org.eclipse.jetty.server.session.SessionHandler;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointGetSongData;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.endpoints.EndpointsUser;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
@@ -41,7 +47,8 @@ public class PluginWebAPI extends Plugin {
 
     private final Set<Endpoint> ENDPOINTS = Set.of(
             new EndpointGetSongData(),
-            new EndpointControlPiano()
+            new EndpointControlPiano(),
+            new EndpointsUser()
     );
 
     String API_DOCS_JSON = "/api/openapi.json";
@@ -76,6 +83,8 @@ public class PluginWebAPI extends Plugin {
                 //staticFiles.skipFileFunction = req -> false;    // you can use this to skip certain files in the dir, based on the HttpServletRequest
                 //staticFiles.mimeTypes.add(mimeType, ext);       // you can add custom mimetypes for extensions
             });
+
+            config.jetty.sessionHandler(() -> fileSessionHandler());
 
             config.plugins.register(new OpenApiPlugin(
                             new OpenApiPluginConfiguration()
@@ -149,6 +158,25 @@ public class PluginWebAPI extends Plugin {
 
 
 
+    }
+
+    public static SessionHandler fileSessionHandler() {
+        SessionHandler sessionHandler = new SessionHandler();
+        SessionCache sessionCache = new DefaultSessionCache(sessionHandler);
+        sessionCache.setSessionDataStore(fileSessionDataStore());
+        sessionHandler.setSessionCache(sessionCache);
+        sessionHandler.setHttpOnly(true);
+        // make additional changes to your SessionHandler here
+        return sessionHandler;
+    }
+
+    private static FileSessionDataStore fileSessionDataStore() {
+        FileSessionDataStore fileSessionDataStore = new FileSessionDataStore();
+        File baseDir = new File("tmp/");
+        File storeDir = new File(baseDir, "javalin-session-store");
+        storeDir.mkdir();
+        fileSessionDataStore.setStoreDir(storeDir);
+        return fileSessionDataStore;
     }
 
     public void sendWSPacket(String packedId) {

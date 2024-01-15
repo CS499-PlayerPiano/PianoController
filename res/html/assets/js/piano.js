@@ -6,6 +6,7 @@ class Piano {
     #onSongFinishedCallback;
     #onTimestampCallback;
     #onNotesPlayedCallback;
+    #onQueueUpdatedCallback;
 
     // Declare public fields & initialize public / private fields
     constructor() {
@@ -15,6 +16,7 @@ class Piano {
         this.#onSongFinishedCallback = null;
         this.#onTimestampCallback = null;
         this.#onNotesPlayedCallback = null;
+        this.#onQueueUpdatedCallback = null;
     }
 
     // Called when the page is loaded
@@ -24,6 +26,7 @@ class Piano {
         // Connect to the server
         this.#connect();
         this.#getOrCreatePersistentSession();
+        this.#getInitialQueue();
     }
 
     // Connect to the server, reconnect when the connection is closed
@@ -56,6 +59,20 @@ class Piano {
         this.#websocket.onmessage = (event) => {
             this.#parseWebsocketMessage(event);
         };
+    }
+
+    #getInitialQueue() {
+        this.#sendGetRequest("control/getQueue", (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Initial queue:', intResp.response);
+                if (this.#onQueueUpdatedCallback != null) {
+                    this.#onQueueUpdatedCallback(intResp.response);
+                }
+            }
+            else {
+                console.error('[Piano - API] Error getting initial queue:', intResp);
+            }
+        });
     }
 
     #getOrCreatePersistentSession() {
@@ -99,6 +116,13 @@ class Piano {
         else if (pkt.packetId == "notesPlayed") {
             if (this.#onNotesPlayedCallback != null) {
                 this.#onNotesPlayedCallback(pkt.data);
+            }
+        }
+
+        // Queue updated event
+        else if (pkt.packetId == "queueUpdated") {
+            if (this.#onQueueUpdatedCallback != null) {
+                this.#onQueueUpdatedCallback(pkt.data);
             }
         }
 
@@ -213,6 +237,11 @@ class Piano {
     // Callback setter for timestamp updated event
     onTimestampUpdated(callback) {
         this.#onTimestampCallback = callback;
+    }
+
+    // Callback setter for queue updated event
+    onQueueUpdated(callback) {
+        this.#onQueueUpdatedCallback = callback;
     }
 
 }   

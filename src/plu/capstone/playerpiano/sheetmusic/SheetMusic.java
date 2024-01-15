@@ -134,7 +134,6 @@ public class SheetMusic {
     public int hashCode() {
         int result = eventMap.hashCode();
         result = 31 * result + (int) (songLengthMS ^ (songLengthMS >>> 32));
-        result = 31 * result + (isPlaying ? 1 : 0);
         return result;
     }
 

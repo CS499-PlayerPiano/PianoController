@@ -286,7 +286,16 @@
         let songsDB;
 
         const piano = new Piano(); // Create a new piano instance
+
+        //Define listeners
+        piano.onQueueUpdated(onQueueChanged);
+
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
+
+        function onQueueChanged(queue) {
+            console.log("Queue changed!", queue)
+        }
+
         piano.getSongList((songs) => { // Get the list of songs from the API
             songsDB = songs;
             const html = `
@@ -469,7 +478,6 @@
          */
         function queueSong(song) {
             piano.queueSong(song, (callback) => {
-                console.log(callback)
                 let response = callback.response;
                 if (callback.status == 200) {
                     let position = response.position;

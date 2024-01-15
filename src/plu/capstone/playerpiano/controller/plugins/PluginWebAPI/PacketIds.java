@@ -11,7 +11,7 @@ public enum PacketIds {
     TIMESTAMP("timestamp"),
     NOTES_PLAYED("notesPlayed"),
     SONG_FINISHED("songFinished"),
-    SONG_START("songStart"),
+    SONG_START("songStarted"),
     QUEUE_UPDATED("queueUpdated"),
 
     ;

@@ -1,5 +1,6 @@
 package plu.capstone.playerpiano.controller;
 
+import com.google.gson.JsonObject;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -7,6 +8,8 @@ import java.util.List;
 import java.util.Queue;
 import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PacketIds;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
@@ -75,6 +78,17 @@ public class PlayerPianoController implements Runnable {
 //        }
     }
 
+    //The downside to using plugins...
+    public void sendWSPacket(PacketIds id) {
+        sendWSPacket(id, new JsonObject());
+    }
+    public void sendWSPacket(PacketIds id, JsonObject data) {
+        Plugin plugin = pluginLoader.findPluginByName("PluginWebAPI");
+        if(plugin != null && plugin.isEnabled() && plugin instanceof PluginWebAPI) {
+            PluginWebAPI webAPI = (PluginWebAPI) plugin;
 
+            webAPI.sendWSPacket(id, data);
+        }
+    }
 
 }

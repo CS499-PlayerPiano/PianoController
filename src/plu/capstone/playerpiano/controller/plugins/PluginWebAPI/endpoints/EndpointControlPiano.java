@@ -11,9 +11,11 @@ import io.javalin.openapi.OpenApiDescription;
 import io.javalin.openapi.OpenApiExample;
 import io.javalin.openapi.OpenApiRequestBody;
 import io.javalin.openapi.OpenApiResponse;
+import io.swagger.util.Json;
 import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
+import plu.capstone.playerpiano.controller.PlayerPianoController;
 import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
@@ -27,6 +29,13 @@ public class EndpointControlPiano implements Endpoint {
         this.server = server;
         app.post("/api/control/queue", this::queueSong);
         app.post("/api/control/skip", this::skipSong);
+        app.get("/api/control/getQueue", this::getQueue);
+    }
+
+    private void getQueue(Context context) {
+        JsonObject queue = PlayerPianoController.getInstance().getQueueManager().getQueueAsJson();
+        context.status(HttpStatus.OK);
+        context.result(queue.toString());
     }
 
     private void skipSong(Context context) {

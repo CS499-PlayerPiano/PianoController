@@ -1,10 +1,13 @@
 package plu.capstone.playerpiano.controller;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import lombok.Getter;
 import plu.capstone.playerpiano.controller.plugin.Plugin;
+import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
@@ -62,9 +65,40 @@ public class QueueManager {
                 }
 
                 logger.info("Playing song!");
+
                 playSheetMusic(nextSong);
+                sendCurrentQueueAsWSPacket();
             }
         }, "Queue checker").start();
+    }
+
+    public JsonObject getQueueAsJson() {
+        JsonArray queueArray = new JsonArray();
+
+        synchronized (songQueue) {
+            for (SheetMusic song : songQueue) {
+                //TODO: Sheet music, who queued it etc.
+                queueArray.add(Integer.toHexString(song.hashCode()));
+            }
+        }
+
+        JsonObject obj = new JsonObject();
+        obj.add("queue", queueArray);
+
+        String nowPlaying = "";
+        if (currentSheetMusic != null) {
+            synchronized (currentSheetMusic) {
+                nowPlaying = Integer.toHexString(currentSheetMusic.hashCode());
+            }
+        }
+
+        obj.addProperty("nowPlaying", nowPlaying);
+
+        return obj;
+    }
+
+    private void sendCurrentQueueAsWSPacket() {
+        controller.sendWSPacket(PacketIds.QUEUE_UPDATED, getQueueAsJson());
     }
 
     /**
@@ -126,6 +160,7 @@ public class QueueManager {
 
             logger.info("Queuing song");
             songQueue.add(song);
+            sendCurrentQueueAsWSPacket();
             return songQueue.size() - 1; //0 indexed
         }
     }

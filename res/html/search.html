@@ -283,11 +283,14 @@
         //Global variables
         let $grid;
 
+        let songsDB;
+
         const piano = new Piano(); // Create a new piano instance
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
         piano.getSongList((songs) => { // Get the list of songs from the API
+            songsDB = songs;
             const html = `
-            <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%">
+            <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%">
                 <div class="image-container">
                     <img src="%artwork%" alt="Song Image">
                 </div>
@@ -315,6 +318,7 @@
                 songElement = songElement.replace('%noteDensity%', song.noteDensity);
                 songElement = songElement.replace('%difficulty%', song.difficulty);
                 songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
+                songElement = songElement.replace('%song-index%', i);
 
                 $('.grid').append(songElement);
             }
@@ -328,11 +332,14 @@
                 let artwork = $(this).find('.image-container img').attr('src');
                 let title = $(this).find('.song-title').text();
                 let artist = $(this).find('.artist').text();
+                let songIndex = $(this).attr('data-song-index');
+
                 $('.now-playing').html(`
                 <img src="${artwork}" alt="${title} - ${artist}" style="width: 300px; height: 300px; object-fit: cover;">
                 <h2>${title}</h2>
                 <p>${artist}</p>
                 <button class="back-to-list">Back to Song List</button>
+                <button onClick="queueSongByIndex(${songIndex})"> Queue Song</button>
             `);
                 $('.container').hide();
                 $('.now-playing-container').show();
@@ -352,6 +359,11 @@
                 }
             });
         });
+
+        function queueSongByIndex(index) {
+            let song = songsDB[index];
+            queueSong(song);
+        }
 
         /**
          * Converts a note density to difficulty

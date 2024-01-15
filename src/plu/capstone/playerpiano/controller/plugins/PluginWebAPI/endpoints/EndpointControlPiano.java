@@ -78,10 +78,22 @@ public class EndpointControlPiano implements Endpoint {
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            server.playSheetMusic(sm);
+            int position = server.playSheetMusic(sm);
+
+            JsonObject obj = new JsonObject();
+            obj.addProperty("position", position);
+
+            obj.addProperty("success", position >= 0);
+
+            if(position == -1) {
+                obj.addProperty("error", "Song already exists in queue!");
+            }
+            else if(position == -2) {
+                obj.addProperty("error", "Song is already playing!");
+            }
 
             context.status(HttpStatus.OK);
-            context.result("Success!");
+            context.result(obj.toString());
 
         }
         catch (InvalidMidiDataException | IOException e) {

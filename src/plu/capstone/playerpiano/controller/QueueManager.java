@@ -111,11 +111,49 @@ public class QueueManager {
     /**
      * Queues a song to be played.
      * @param song The song to queue.
+     * @return The position of the song in the queue. -1 if the song is already in the queue. -2 if the song is currently playing.
      */
-    public void queueSong(SheetMusic song) {
+    public int queueSong(SheetMusic song) {
         synchronized (songQueue) {
+
+            if(currentSheetMusic != null && currentSheetMusic.equals(song)) {
+                return -2;
+            }
+
+            if(songQueue.contains(song)) {
+                return -1;
+            }
+
             logger.info("Queuing song");
             songQueue.add(song);
+            return songQueue.size() - 1; //0 indexed
+        }
+    }
+
+    /**
+     * Returns the position of the song in the queue.
+     * @param song The song to get the position of.
+     * @return The position of the song in the queue. -1 if the song is not in the queue. 0 if the song is currently playing.
+     */
+    public int getPositionInQueue(SheetMusic song) {
+        synchronized (songQueue) {
+            int position = 1; //we start at 1 because 0 is the current song in terms of what we return
+
+            if(songQueue.contains(song)) {
+                return -1;
+            }
+
+            if(currentSheetMusic != null && currentSheetMusic.equals(song)) {
+                return 0;
+            }
+
+            for(SheetMusic s : songQueue) {
+                if(s.equals(song)) {
+                    return position;
+                }
+                position++;
+            }
+            return position;
         }
     }
 

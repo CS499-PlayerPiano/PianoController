@@ -157,8 +157,8 @@ class Piano {
     }
 
     // Send a control request to the server
-    #sendControlRequest(loc, data = null) {
-        this.#sendPostRequest("control/" + loc, data);
+    #sendControlRequest(loc, data = null, responseCallback = null) {
+        this.#sendPostRequest("control/" + loc, data, responseCallback);
     }
 
     // Get the list of songs from the server
@@ -176,18 +176,11 @@ class Piano {
     }
 
     // Get the list of songs from the server
-    queueSong(song) {
+    queueSong(song, responseCallback = null) {
         let tmp = {
             midiFile: song.midiFile
         }
-        this.#sendControlRequest("queue", tmp, (intResp) => {
-            if (intResp.status == 200) {
-                console.log('[Piano - API] Song queued:', song);
-            }
-            else {
-                console.error('[Piano - API] Error queueing song:', intResp);
-            }
-        });
+        this.#sendControlRequest("queue", tmp, responseCallback);
     }
 
 

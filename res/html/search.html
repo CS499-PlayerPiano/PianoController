@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Piano Website</title>
+
+    <link rel="stylesheet" href="assets/css/iziToast.min.css">
     <style>
         body {
             background-color: #111;
@@ -238,6 +240,8 @@
 
     <script src="assets/js/isotope.pkgd.min.js"></script>
 
+    <script src="assets/js/iziToast.min.js"></script>
+
     <script src="assets/js/piano.js"></script>
 
     <script> // moon slider thingy for difficulty (TODO)
@@ -446,6 +450,49 @@
                 qsRegex = new RegExp($quicksearch.val(), 'gi');
                 $grid.isotope();
             }));
+        }
+
+        /**
+         * Wrapper to queue a song and make a toast as well
+         */
+        function queueSong(song) {
+            piano.queueSong(song, (callback) => {
+                console.log(callback)
+                let response = callback.response;
+                if (callback.status == 200) {
+                    let position = response.position;
+                    let success = response.success;
+
+                    if (!success) {
+                        iziToast.warning({
+                            title: 'Error',
+                            message: response.error,
+                            position: 'topRight'
+                        });
+                        return;
+                    }
+                    else {
+                        let message = `Song queued at position ${position}`;
+                        if (position == 0) {
+                            message = 'Playing your song now!';
+                        }
+                        iziToast.success({
+                            title: 'Success',
+                            message: message,
+                            position: 'topRight'
+                        });
+                    }
+
+                }
+                else {
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'An unknown error occurred while queueing the song.',
+                        position: 'topRight'
+                    });
+
+                }
+            });
         }
 
         // debounce so filtering doesn't happen every millisecond

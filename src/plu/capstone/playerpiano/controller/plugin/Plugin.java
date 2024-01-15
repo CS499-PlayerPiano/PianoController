@@ -201,9 +201,10 @@ public abstract class Plugin implements SheetMusicCallback {
     /**
      * Play a given sheet music.
      * @param music The sheet music to play.
+     * @return the position in the queue.
      */
-    public final void playSheetMusic(SheetMusic music) {
-        PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+    public final int playSheetMusic(SheetMusic music) {
+        return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
     }
 
     /**

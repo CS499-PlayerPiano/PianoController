@@ -138,7 +138,7 @@ public class PluginWebAPI extends Plugin {
                 System.out.println("[WS] Connected");
                 JsonObject data = new JsonObject();
                 data.addProperty("sessionID", ctx.getSessionId());
-                sendWSPacket("connected", data);
+                sendWSPacket(PacketIds.CONNECTED, data);
             });
             ws.onMessage(ctx -> {
                 System.out.println("[WS] Received message: " + ctx.message());
@@ -179,12 +179,12 @@ public class PluginWebAPI extends Plugin {
         return fileSessionDataStore;
     }
 
-    public void sendWSPacket(String packedId) {
+    public void sendWSPacket(PacketIds packedId) {
         this.sendWSPacket(packedId, new JsonObject());
     }
-    public void sendWSPacket(String packedId, JsonObject data) {
+    public void sendWSPacket(PacketIds packedId, JsonObject data) {
         JsonObject packet = new JsonObject();
-        packet.addProperty("packetId", packedId);
+        packet.addProperty("packetId", packedId.getId());
         packet.add("data", data);
         for(WsContext ctx : wsClients) {
             ctx.send(packet.toString());
@@ -201,7 +201,7 @@ public class PluginWebAPI extends Plugin {
             JsonObject data = new JsonObject();
             data.addProperty("current", current);
             data.addProperty("end", end);
-            sendWSPacket("timestamp", data);
+            sendWSPacket(PacketIds.TIMESTAMP, data);
         }
 
     }
@@ -211,18 +211,18 @@ public class PluginWebAPI extends Plugin {
         JsonObject data = new JsonObject();
         data.addProperty("timestamp", timestamp);
         data.add("notes", GSON.toJsonTree(notes));
-        sendWSPacket("notesPlayed", data);
+        sendWSPacket(PacketIds.NOTES_PLAYED, data);
     }
 
     @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
-        sendWSPacket("songStarted");
+        sendWSPacket(PacketIds.SONG_START);
         lastTimestamp = 0;
     }
 
     @Override
     public void onSongFinished(long timestamp) {
-        sendWSPacket("songFinished");
+        sendWSPacket(PacketIds.SONG_FINISHED);
         lastTimestamp = 0;
     }
 }

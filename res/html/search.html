@@ -154,6 +154,7 @@
             from {
                 opacity: 0;
             }
+
             to {
                 opacity: 1;
             }
@@ -163,6 +164,7 @@
             from {
                 transform: translateY(-50px);
             }
+
             to {
                 transform: translateY(0);
             }
@@ -205,58 +207,61 @@
 </head>
 
 <body>
-<div class="sticky-container">
-    <div class="text">
-        <p>SEARCH</p>
-        <div class="emojis-container">
-            <span class="moon">🌑</span>
-            <span class="moon">🌑</span>
-            <span class="moon">🌑</span>
-            <span class="moon">🌑</span>
-            <span class="moon">🌑</span>
+    <div class="sticky-container">
+        <div class="text">
+            <p>SEARCH</p>
+            <div class="emojis-container">
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+            </div>
+        </div>
+        <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Song elements will be added here -->
         </div>
     </div>
-    <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
-</div>
 
-<div class="container">
-    <div class="grid">
-        <!-- Song elements will be added here -->
+    <div class="now-playing-container" style="display: none;">
+        <div class="now-playing">
+            <button class="back-to-list">Back to Song List</button>
+            <!-- Content for the Now Playing screen goes here -->
+        </div>
     </div>
-</div>
 
-<div class="now-playing-container" style="display: none;">
-    <div class="now-playing">
-        <button class="back-to-list">Back to Song List</button>
-        <!-- Content for the Now Playing screen goes here -->
-    </div>
-</div>
+    <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
 
-<script src="assets/js/jquery-3.7.1.min.js"
-        crossorigin="anonymous"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
 
-<script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/piano.js"></script>
 
-<script src="assets/js/piano.js"></script>
+    <script> // moon slider thingy for difficulty (TODO)
+        $(document).ready(function () {
+            $('.moon').on('mouseenter mousemove', function (event) {
+                let currentIndex = $(this).index();
+                let mouseX = event.pageX - $(this).offset().left;
+                $('.moon:lt(' + (currentIndex + 1) + ')').addClass('hovered').text('🌕');
+                $(this).removeClass('hovered').text(mouseX <= $(this).width() / 2 ? '🌗' : '🌕');
+            }).on('mouseleave', function () {
+                $('.moon').removeClass('hovered').text('🌑');
+            });
+        });
+    </script>
 
-<script> // moon slider thingy for difficulty (TODO)
-$(document).ready(function () {
-    $('.moon').on('mouseenter mousemove', function (event) {
-        let currentIndex = $(this).index();
-        let mouseX = event.pageX - $(this).offset().left;
-        $('.moon:lt(' + (currentIndex + 1) + ')').addClass('hovered').text('🌕');
-        $(this).removeClass('hovered').text(mouseX <= $(this).width() / 2 ? '🌗' : '🌕');
-    }).on('mouseleave', function () {
-        $('.moon').removeClass('hovered').text('🌑');
-    });
-});
-</script>
+    <script>
 
-<script>
-    const piano = new Piano(); // Create a new piano instance
-    piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
-    piano.getSongList((songs) => { // Get the list of songs from the API
-        const html = `
+        //Global variables
+        let $grid;
+
+        const piano = new Piano(); // Create a new piano instance
+        piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
+        piano.getSongList((songs) => { // Get the list of songs from the API
+            const html = `
             <div class="song-element" data-tags="%tags%">
                 <div class="image-container">
                     <img src="%artwork%" alt="Song Image">
@@ -264,141 +269,167 @@ $(document).ready(function () {
                 <div class="song-info">
                     <p class="song-title">%title%</p>
                     <p class="artist">%artist%</p>
-                    <p class="noteDensity"><span class="emojis" id="emojis"></span></p>
+                    <p class="noteDensity"><span class="emojis">%emojis%</span></p>
 
                 </div>
             </div>
 `
-        // Add each song to the list, name is the text, midiFile is the value
-        for (let i = 0; i < songs.length; i++) {
-            let song = songs[i];
-            song.noteDensity = (song.noteCount/song.songLengthMS)*1000;
+            // Add each song to the list, name is the text, midiFile is the value
+            for (let i = 0; i < songs.length; i++) {
+                let song = songs[i];
+                song.noteDensity = (song.noteCount / song.songLengthMS) * 1000;
 
-            console.log(song);
+                console.log(song);
 
-            let songElement = html;
-            songElement = songElement.replace('%artwork%', song.artwork);
-            songElement = songElement.replace('%title%', song.name);
-            songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
-            songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
-            songElement = songElement.replace('%noteDensity%', song.noteDensity);
+                let songElement = html;
+                songElement = songElement.replace('%artwork%', song.artwork);
+                songElement = songElement.replace('%title%', song.name);
+                songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
+                songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
+                songElement = songElement.replace('%noteDensity%', song.noteDensity);
 
-            $('.grid').append(songElement);
+                let emojis = noteDensityToEmojis(song.noteDensity);
+                songElement = songElement.replace('%emojis%', emojis);
 
-            // calculate the emojis based on noteDensity ranges
-            var emojis = '';
-            if (song.noteDensity < 2.5) {
-                emojis = '🌑🌑🌑🌑🌑';
-            } else if (song.noteDensity >= 2.5 && song.noteDensity < 5) {
-                emojis = '🌗🌑🌑🌑🌑';
-            } else if (song.noteDensity >= 5 && song.noteDensity < 7.5) {
-                emojis = '🌕🌑🌑🌑🌑';
-            } else if (song.noteDensity >= 7.5 && song.noteDensity < 10) {
-                emojis = '🌕🌗🌑🌑🌑';
-            } else if (song.noteDensity >= 10 && song.noteDensity < 12.5) {
-                emojis = '🌕🌕🌑🌑🌑';
-            } else if (song.noteDensity >= 12.5 && song.noteDensity < 15) {
-                emojis = '🌕🌕🌗🌑🌑';
-            } else if (song.noteDensity >= 15 && song.noteDensity < 17.5) {
-                emojis = '🌕🌕🌕🌑🌑';
-            } else if (song.noteDensity >= 17.5 && song.noteDensity < 20) {
-                emojis = '🌕🌕🌕🌗🌑';
-            } else if (song.noteDensity >= 20 && song.noteDensity < 22.5) {
-                emojis = '🌕🌕🌕🌕🌑';
-            } else if (song.noteDensity >= 22.5 && song.noteDensity < 30) {
-                emojis = '🌕🌕🌕🌕🌗';
-            } else {
-                emojis = '🌕🌕🌕🌕🌕';
+
+                $('.grid').append(songElement);
             }
-            $('.emojis').last().text(emojis);
-        }
 
-        initSearchBarThingy(); // initialize isotope
+            initSearchBarThingy(); // initialize isotope
 
-        $('.grid').on('click', '.song-element', function (e) {
-            e.stopPropagation();
-            $('.sticky-container').hide(); // hide header
+            $('.grid').on('click', '.song-element', function (e) {
+                e.stopPropagation();
+                $('.sticky-container').hide(); // hide header
 
-            let artwork = $(this).find('.image-container img').attr('src');
-            let title = $(this).find('.song-title').text();
-            let artist = $(this).find('.artist').text();
-            $('.now-playing').html(`
+                let artwork = $(this).find('.image-container img').attr('src');
+                let title = $(this).find('.song-title').text();
+                let artist = $(this).find('.artist').text();
+                $('.now-playing').html(`
                 <img src="${artwork}" alt="${title} - ${artist}" style="width: 300px; height: 300px; object-fit: cover;">
                 <h2>${title}</h2>
                 <p>${artist}</p>
                 <button class="back-to-list">Back to Song List</button>
             `);
-            $('.container').hide();
-            $('.now-playing-container').show();
-        });
+                $('.container').hide();
+                $('.now-playing-container').show();
+            });
 
-        $('.now-playing').on('click', '.back-to-list', function () {
-            $('.sticky-container').show();
-            $('.now-playing-container').hide();
-            $('.container').show();
-        });
-
-        $(document).on('click', function (e) {
-            if (!$('.now-playing-container').is(e.target) && $('.now-playing-container').has(e.target).length === 0) {
+            $('.now-playing').on('click', '.back-to-list', function () {
+                $('.sticky-container').show();
                 $('.now-playing-container').hide();
                 $('.container').show();
-                $('.sticky-container').show();
-            }
-        });
-    });
+            });
 
-    function arrayToCommaSeparatedString(array) {
-        let string = '';
-        for (let i = 0; i < array.length; i++) {
-            string += array[i] + ',';
-        }
-        string = string.substring(0, string.length - 1);
-        return string;
-    }
-
-    function initSearchBarThingy() {
-        let qsRegex; // quick search regex
-        let $grid = $('.grid').isotope({ // init Isotope
-            itemSelector: '.song-element',
-            layoutMode: 'fitRows',
-            filter: function () {
-                let $this = $(this);
-                let searchResult = qsRegex ? $this.text().match(qsRegex) : true;
-
-                let tagResult = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
-
-                return searchResult || tagResult;
-            }
+            $(document).on('click', function (e) {
+                if (!$('.now-playing-container').is(e.target) && $('.now-playing-container').has(e.target).length === 0) {
+                    $('.now-playing-container').hide();
+                    $('.container').show();
+                    $('.sticky-container').show();
+                }
+            });
         });
 
-        // use value of search field to filter
-        let $quicksearch = $('#quicksearch').keyup(debounce(function () {
-            qsRegex = new RegExp($quicksearch.val(), 'gi');
-            $grid.isotope();
-        }));
-    }
-
-    // debounce so filtering doesn't happen every millisecond
-    function debounce(fn, threshold) {
-        let timeout;
-        threshold = threshold || 100;
-        return function debounced() {
-            clearTimeout(timeout);
-            let args = arguments;
-            let _this = this;
-            function delayed() {
-                fn.apply(_this, args);
+        /**
+         * Converts a note density to emojis
+         * @param {number} noteDensity The note density
+         * @returns {string} The emojis
+         */
+        function noteDensityToEmojis(noteDensity) {
+            let emojis = '';
+            if (noteDensity < 2.5) {
+                emojis = '🌑🌑🌑🌑🌑';
+            } else if (noteDensity >= 2.5 && noteDensity < 5) {
+                emojis = '🌗🌑🌑🌑🌑';
+            } else if (noteDensity >= 5 && noteDensity < 7.5) {
+                emojis = '🌕🌑🌑🌑🌑';
+            } else if (noteDensity >= 7.5 && noteDensity < 10) {
+                emojis = '🌕🌗🌑🌑🌑';
+            } else if (noteDensity >= 10 && noteDensity < 12.5) {
+                emojis = '🌕🌕🌑🌑🌑';
+            } else if (noteDensity >= 12.5 && noteDensity < 15) {
+                emojis = '🌕🌕🌗🌑🌑';
+            } else if (noteDensity >= 15 && noteDensity < 17.5) {
+                emojis = '🌕🌕🌕🌑🌑';
+            } else if (noteDensity >= 17.5 && noteDensity < 20) {
+                emojis = '🌕🌕🌕🌗🌑';
+            } else if (noteDensity >= 20 && noteDensity < 22.5) {
+                emojis = '🌕🌕🌕🌕🌑';
+            } else if (noteDensity >= 22.5 && noteDensity < 30) {
+                emojis = '🌕🌕🌕🌕🌗';
+            } else {
+                emojis = '🌕🌕🌕🌕🌕';
             }
-            timeout = setTimeout(delayed, threshold);
-        };
-    }
-
-    $(document).mouseup(function (e) {
-        var container = $(".now-playing-container");
-        if (!container.is(e.target) && container.has(e.target).length === 0) {
-            container.hide();
+            return emojis;
         }
-    });
-</script>
+
+        /**
+         * Converts an array to a comma separated string
+         * @param {Array} array The array
+         * @returns {string} The comma separated string
+         */
+        function arrayToCommaSeparatedString(array) {
+            let string = '';
+            for (let i = 0; i < array.length; i++) {
+                string += array[i] + ',';
+            }
+            string = string.substring(0, string.length - 1);
+            return string;
+        }
+
+
+
+        function initSearchBarThingy() {
+            let qsRegex; // quick search regex
+            $grid = $('.grid').isotope({ // init Isotope
+                itemSelector: '.song-element',
+                layoutMode: 'fitRows',
+                filter: function () {
+                    let $this = $(this);
+
+                    //Search by title, artist, and tags. We don't search by emojis because that's just for show.
+                    let title = $this.find('.song-title').text();
+                    let artist = $this.find('.artist').text();
+
+                    let searchTitle = qsRegex ? title.match(qsRegex) : true;
+                    let searchArtist = qsRegex ? artist.match(qsRegex) : true;
+
+                    //let searchResult = qsRegex ? $this.text().match(qsRegex) : true;
+
+                    let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
+
+                    return searchTitle || searchArtist || searchTags;
+                }
+            });
+
+            // use value of search field to filter
+            let $quicksearch = $('#quicksearch').keyup(debounce(function () {
+                qsRegex = new RegExp($quicksearch.val(), 'gi');
+                $grid.isotope();
+            }));
+        }
+
+        // debounce so filtering doesn't happen every millisecond
+        function debounce(fn, threshold) {
+            let timeout;
+            threshold = threshold || 100;
+            return function debounced() {
+                clearTimeout(timeout);
+                let args = arguments;
+                let _this = this;
+                function delayed() {
+                    fn.apply(_this, args);
+                }
+                timeout = setTimeout(delayed, threshold);
+            };
+        }
+
+        $(document).mouseup(function (e) {
+            var container = $(".now-playing-container");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.hide();
+            }
+        });
+    </script>
 </body>
+
 </html>

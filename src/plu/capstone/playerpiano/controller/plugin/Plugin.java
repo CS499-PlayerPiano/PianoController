@@ -195,7 +195,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param notes The notes to play live.
      */
     public final void playNotes(List<Note> notes) {
-        PlayerPianoController.getInstance().playNotes(notes);
+        PlayerPianoController.getInstance().getQueueManager().playNotes(notes);
     }
 
     /**
@@ -203,14 +203,14 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param music The sheet music to play.
      */
     public final void playSheetMusic(SheetMusic music) {
-        PlayerPianoController.getInstance().playSheetMusic(music);
+        PlayerPianoController.getInstance().getQueueManager().queueSong(music);
     }
 
     /**
      * Stops the current sheet music.
      */
     public final void stopSheetMusic() {
-        PlayerPianoController.getInstance().stopSheetMusic();
+        PlayerPianoController.getInstance().getQueueManager().stopSheetMusic();
     }
 
     /**
@@ -218,11 +218,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @return true if the sheet music is currently playing.
      */
     public final boolean isSheetMusicPlaying() {
-        return PlayerPianoController.getInstance().isSheetMusicPlaying();
-    }
-
-    public final void queueSheetMusic(SheetMusic music) {
-        PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+        return PlayerPianoController.getInstance().getQueueManager().isSheetMusicPlaying();
     }
 
     public final void skipSong() {

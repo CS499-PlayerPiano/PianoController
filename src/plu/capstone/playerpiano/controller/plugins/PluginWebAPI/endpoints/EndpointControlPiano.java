@@ -78,7 +78,7 @@ public class EndpointControlPiano implements Endpoint {
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            server.queueSheetMusic(sm);
+            server.playSheetMusic(sm);
 
             context.status(HttpStatus.OK);
             context.result("Success!");

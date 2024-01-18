@@ -288,6 +288,9 @@
         //Define listeners
         piano.onQueueUpdated(onQueueChanged);
 
+        //If running locally, uncomment this line!
+        //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
+
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
         function onQueueChanged(queue) {

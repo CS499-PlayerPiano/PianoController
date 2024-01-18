@@ -8,6 +8,10 @@ class Piano {
     #onNotesPlayedCallback;
     #onQueueUpdatedCallback;
 
+    #wsURL;
+    #apiURL;
+    #urlsHaveBeenOverridden;
+
     // Declare public fields & initialize public / private fields
     constructor() {
         this.#websocket = null;
@@ -17,6 +21,26 @@ class Piano {
         this.#onTimestampCallback = null;
         this.#onNotesPlayedCallback = null;
         this.#onQueueUpdatedCallback = null;
+
+        // Connectection URLs
+        let host = window.location.host;
+        let protocol = window.location.protocol;
+        let wsProtocol = protocol === 'https:' ? 'wss:' : 'ws:';
+
+        this.#wsURL = wsProtocol + '//' + host + '/ws';
+        this.#apiURL = protocol + '//' + host + '/api/';
+        this.#urlsHaveBeenOverridden = false;
+    }
+
+    /**
+     * Needs to be called before init()!
+     * @param {*} wsURL Websockets URL 
+     * @param {*} apiURL API URL
+     */
+    overrideAPI(wsURL, apiURL) {
+        this.#wsURL = wsURL;
+        this.#apiURL = apiURL;
+        this.#urlsHaveBeenOverridden = true;
     }
 
     // Called when the page is loaded
@@ -31,9 +55,16 @@ class Piano {
 
     // Connect to the server, reconnect when the connection is closed
     #connect() {
-        let protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        let wsUrl = protocol + '//' + window.location.host + '/ws';
-        this.#websocket = new WebSocket(wsUrl);
+
+        this.#websocket = new WebSocket(this.#wsURL);
+
+        console.log('--------------------- Connection Info ---------------------')
+        if (this.#urlsHaveBeenOverridden) {
+            console.log('⚠️ URLs have been overridden from default values! ⚠️')
+        }
+        console.log('API URL: ' + this.#apiURL)
+        console.log('WS URL: ' + this.#wsURL)
+        console.log('-----------------------------------------------------------')
 
         // Log open event
         this.#websocket.onopen = () => {
@@ -139,7 +170,7 @@ class Piano {
     // Send a GET request to the server
     #sendGetRequest(loc, responseCallback = null) {
         let xhr = new XMLHttpRequest();
-        xhr.open("GET", "/api/" + loc, true);
+        xhr.open("GET", this.#apiURL + loc, true);
 
         xhr.onload = () => {
 
@@ -158,7 +189,7 @@ class Piano {
     // Send a POST request to the server
     #sendPostRequest(loc, data = null, responseCallback = null) {
         let xhr = new XMLHttpRequest();
-        xhr.open("POST", "/api/" + loc, true);
+        xhr.open("POST", this.#apiURL + loc, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
 
         xhr.onload = () => {

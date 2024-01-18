@@ -3,6 +3,10 @@
   "comPort": "COM3",
   "baudRate": 115200,
   "printDebugOutputFromArduino": true,
+  "velocityMapping": {
+    "min": 106,
+    "max": 255
+  },
   "noteMapping": {
     "0": 21,
     "1": 22,

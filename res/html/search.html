@@ -289,7 +289,7 @@
         piano.onQueueUpdated(onQueueChanged);
 
         //If running locally, uncomment this line!
-        //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
+        piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
 
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
@@ -349,7 +349,7 @@
                 <h2>${title}</h2>
                 <p>${artist}</p>
                 <button class="back-to-list">Back to Song List</button>
-                <button onClick="queueSongByIndex(${songIndex})"> Queue Song</button>
+                <button class ="back-to-list", onClick="queueSongByIndex(${songIndex})"> Queue Song</button>
             `);
                 $('.container').hide();
                 $('.now-playing-container').show();

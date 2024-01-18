@@ -6,6 +6,7 @@ import com.fazecast.jSerialComm.SerialPortMessageListener;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.controller.plugin.PluginConfig;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
@@ -43,8 +44,17 @@ public class PluginRealPiano extends Plugin {
     @Override
     public void setDefaultConfigValues() {
         config.setString("comPort", "COM10");
-        config.setInteger("baudRate", 19200);
+        config.setInteger("baudRate", 115200);
         config.setBoolean("printDebugOutputFromArduino", true);
+
+        PluginConfig noteMappingConfig = new PluginConfig(this);
+
+        //Note index from 0-88 to midi note
+        for(int i = 0; i < 88; i++) {
+            noteMappingConfig.setInteger(Integer.toString(i), Note.fromPianoKeyIndexToMidiNote(i));
+        }
+
+        config.setNestedConfig("noteMapping", noteMappingConfig);
     }
 
     @Override

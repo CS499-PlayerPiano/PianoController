@@ -248,28 +248,28 @@
 
             function updateMoonState(index, mouseX) {
                 let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
-                $('.moon:lt(' + index + ')').addClass('hovered').text('🌕');
-                $('.moon:eq(' + index + ')').addClass('hovered').text(isHalf ? '🌗' : '🌕');
-                $('.moon:gt(' + index + ')').removeClass('hovered').text('🌑');
+                $('.moon:lt(' + index + ')').addClass('hovered').text('🌕'); //moons to the left of the cursor will be full
+                $('.moon:eq(' + index + ')').addClass('hovered').text(isHalf ? '🌗' : '🌕'); // sets current moon to either full or half depending on the mouse placement
+                $('.moon:gt(' + index + ')').removeClass('hovered').text('🌑'); // moons to the right of the cursor will be empty
             }
 
             $('.moon').on('mouseenter mousemove', function (event) {
-                let currentIndex = $(this).index();
-                let mouseX = event.pageX - $(this).offset().left;
-                updateMoonState(currentIndex, mouseX);
+                let currentIndex = $(this).index(); //which moon is being hovered
+                let mouseX = event.pageX - $(this).offset().left; //gets mouse position
+                updateMoonState(currentIndex, mouseX);//changes current moon based on the mouse position
             }).on('mouseleave', function () {
-                if (selectedDifficulty !== null) {
+                if (selectedDifficulty !== null) { //if they clicked on a moon
                     let selectedIndex = Math.floor((selectedDifficulty - 1) / 2);
                     updateMoonState(selectedIndex, 0);
                 } else {
-                    $('.moon').removeClass('hovered').text('🌑');
+                    $('.moon').removeClass('hovered').text('🌑'); //if no difficulty is selected set all moons to empty
                 }
             });
 
             $('.moon').on('click', function () {
-                let currentIndex = $(this).index();
-                let isHalf = $(this).text() === '🌗';
-                selectedDifficulty = 1 + (currentIndex * 2) + (isHalf ? 0 : 1);
+                let currentIndex = $(this).index(); //gets index of the clicked moon
+                let isHalf = $(this).text() === '🌗'; // checks state of current moon
+                selectedDifficulty = 1 + (currentIndex * 2) + (isHalf ? 0 : 1); //set selected difficulty based on the moon clicked
 
                 $('.moon').removeClass('selected');
                 $(this).addClass('selected');
@@ -284,6 +284,15 @@
             });
         });
     </script>
+
+
+
+
+
+
+
+
+
 
     <script>
 

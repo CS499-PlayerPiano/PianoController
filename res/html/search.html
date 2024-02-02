@@ -31,9 +31,21 @@
 
         .emojis-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 35px;
+            right: 35px;
             font-size: 24px;
+            text-align: center;
+        }
+
+        .difficulty-text {
+            position: absolute;
+            top: 0;
+            left: -67px;
+            width: 100%;
+            font-size: 14px;
+            color: #fff;
+            text-align: right;
+            cursor: default;
         }
 
         .moon {
@@ -53,7 +65,17 @@
 
         .text {
             position: relative;
+            cursor: default;
         }
+
+        .text p {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+            cursor: default;
+        }
+
 
         @media screen and (max-width: 600px) {
             .text {
@@ -210,6 +232,7 @@
     <div class="sticky-container">
         <div class="text">
             <p>SEARCH</p>
+            <p class="difficulty-text">DIFFICULTY</p>
             <div class="emojis-container">
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
@@ -235,11 +258,8 @@
     </div>
 
     <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-
     <script src="assets/js/isotope.pkgd.min.js"></script>
-
     <script src="assets/js/iziToast.min.js"></script>
-
     <script src="assets/js/piano.js"></script>
 
     <script>
@@ -285,22 +305,10 @@
         });
     </script>
 
-
-
-
-
-
-
-
-
-
     <script>
-
         //Global variables
         let $grid;
-
         let songsDB;
-
         const piano = new Piano(); // Create a new piano instance
 
         //Define listeners
@@ -308,7 +316,6 @@
 
         //If running locally, uncomment this line!
         piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
-
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
         function onQueueChanged(queue) {
@@ -460,8 +467,6 @@
             return string;
         }
 
-
-
         function initSearchBarThingy() {
             let qsRegex; // quick search regex
             $grid = $('.grid').isotope({ // init Isotope
@@ -469,22 +474,14 @@
                 layoutMode: 'fitRows',
                 filter: function () {
                     let $this = $(this);
-
-                    //Search by title, artist, and tags. We don't search by emojis because that's just for show.
-                    let title = $this.find('.song-title').text();
+                    let title = $this.find('.song-title').text(); //Search by title, artist, and tags
                     let artist = $this.find('.artist').text();
-
                     let searchTitle = qsRegex ? title.match(qsRegex) : true;
                     let searchArtist = qsRegex ? artist.match(qsRegex) : true;
-
-                    //let searchResult = qsRegex ? $this.text().match(qsRegex) : true;
-
                     let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
-
                     return searchTitle || searchArtist || searchTags;
                 }
             });
-
             // use value of search field to filter
             let $quicksearch = $('#quicksearch').keyup(debounce(function () {
                 qsRegex = new RegExp($quicksearch.val(), 'gi');
@@ -521,7 +518,6 @@
                             position: 'topRight'
                         });
                     }
-
                 }
                 else {
                     iziToast.error({
@@ -529,7 +525,6 @@
                         message: 'An unknown error occurred while queueing the song.',
                         position: 'topRight'
                     });
-
                 }
             });
         }
@@ -557,5 +552,4 @@
         });
     </script>
 </body>
-
 </html>

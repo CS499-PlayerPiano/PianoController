@@ -81,10 +81,6 @@
             .text {
                 font-size: 18px;
             }
-
-            .button {
-                font-size: 14px;
-            }
         }
 
         .grid {
@@ -146,15 +142,6 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             color: white;
-        }
-
-        .sticky-header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: #111;
-            z-index: 1000;
-            padding: 10px;
         }
 
         #quicksearch {
@@ -225,6 +212,37 @@
         .now-playing .back-to-list:hover {
             background-color: #45a049;
         }
+
+        .dropdown-container {
+            position: absolute;
+            top: 35px;
+            left: 70%; /* Adjust this value to move it further to the right */
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #fff;
+            text-align: center;
+            cursor: default;
+        }
+
+        .sort-dropdown {
+            width: 100px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .sort-dropdown:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sort-dropdown.show-options {
+            opacity: 1;
+        }
+
     </style>
 </head>
 
@@ -232,15 +250,27 @@
     <div class="sticky-container">
         <div class="text">
             <p>SEARCH</p>
-            <p class="difficulty-text">DIFFICULTY</p>
+            <p class="difficulty-text">DIFFICULTY</p> <!-- this is breaking stuff! -->
             <div class="emojis-container">
+
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
             </div>
+            <div class="dropdown-container">
+                <select id="sort-dropdown" class="sort-dropdown">
+                    <option value="" selected disabled>Sort by...</option>
+                    <option value="1">Song</option>
+                    <option value="2">Artist</option>
+                    <option value="3">Difficulty</option>
+                    <option value="4">Length</option>
+                </select>
+            </div>
         </div>
+
+
         <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
     </div>
 

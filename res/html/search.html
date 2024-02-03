@@ -135,7 +135,8 @@
         }
 
         .song-title,
-        .artist {
+        .artist,
+        .length{
             margin: 5px 0;
             font-weight: bold;
             overflow: hidden;
@@ -262,7 +263,7 @@
             <div class="dropdown-container">
                 <select id="sort-dropdown" class="sort-dropdown">
                     <option value="" selected disabled>Sort by...</option>
-                    <option value="1">Song</option>
+                    <option value="1">Title</option>
                     <option value="2">Artist</option>
                     <option value="3">Difficulty</option>
                     <option value="4">Length</option>
@@ -362,6 +363,7 @@
                 <div class="song-info">
                     <p class="song-title">%title%</p>
                     <p class="artist">%artist%</p>
+                    <p class="length">%length%</p>
                     <p class="noteDensity"><span class="emojis">%emojis%</span></p>
 
                 </div>
@@ -384,6 +386,7 @@
                 songElement = songElement.replace('%difficulty%', song.difficulty);
                 songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
                 songElement = songElement.replace('%song-index%', i);
+                songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
 
                 $('.grid').append(songElement);
             }
@@ -572,6 +575,13 @@
                 }
                 timeout = setTimeout(delayed, threshold);
             };
+        }
+
+        function formatMS(duration) {
+            let seconds = Math.floor((duration / 1000) % 60);
+            let minutes = Math.floor((duration / (1000 * 60)) % 60);
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+            return minutes + "m " + seconds + "s";
         }
 
         $(document).mouseup(function (e) {

@@ -205,9 +205,10 @@
             padding: 10px 15px;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         .now-playing .back-to-list:hover {
@@ -219,7 +220,7 @@
             top: 35px;
             left: 70%; /* Adjust this value to move it further to the right */
             transform: translateX(-50%);
-            font-size: 14px;
+            font-size: 16px;
             color: #fff;
             text-align: center;
             cursor: default;
@@ -230,7 +231,7 @@
             padding: 8px;
             border: none;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 16px;
             background-color: #333;
             color: #fff;
         }
@@ -244,12 +245,39 @@
             opacity: 1;
         }
 
+        /* Add these styles for the info button */
+        .info-button {
+            position: absolute;
+            top: 35px;
+            left: 30%;
+            display: inline-block;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            padding: 8px;
+            transition: background-color 0.3s ease;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+        }
+
+        .info-button:hover {
+            background-color: #555;
+        }
+
+
     </style>
 </head>
 
 <body>
     <div class="sticky-container">
         <div class="text">
+            <div class="info-container">
+                <div class="info-button">ℹ️</div>
+            </div>
             <p>SEARCH</p>
             <p class="difficulty-text">DIFFICULTY</p> <!-- this is breaking stuff! -->
             <div class="emojis-container">
@@ -268,10 +296,9 @@
                     <option value="3">Difficulty</option>
                     <option value="4">Length</option>
                 </select>
+
             </div>
         </div>
-
-
         <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
     </div>
 

@@ -31,9 +31,21 @@
 
         .emojis-container {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 35px;
+            right: 35px;
             font-size: 24px;
+            text-align: center;
+        }
+
+        .difficulty-text {
+            position: absolute;
+            top: 0;
+            left: -67px;
+            width: 100%;
+            font-size: 14px;
+            color: #fff;
+            text-align: right;
+            cursor: default;
         }
 
         .moon {
@@ -53,15 +65,21 @@
 
         .text {
             position: relative;
+            cursor: default;
         }
+
+        .text p {
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+            cursor: default;
+        }
+
 
         @media screen and (max-width: 600px) {
             .text {
                 font-size: 18px;
-            }
-
-            .button {
-                font-size: 14px;
             }
         }
 
@@ -117,22 +135,14 @@
         }
 
         .song-title,
-        .artist {
+        .artist,
+        .length{
             margin: 5px 0;
             font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             color: white;
-        }
-
-        .sticky-header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background-color: #111;
-            z-index: 1000;
-            padding: 10px;
         }
 
         #quicksearch {
@@ -195,27 +205,98 @@
             padding: 10px 15px;
             border: none;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 14px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
+            font-family: 'Courier New', Courier, monospace;
         }
 
         .now-playing .back-to-list:hover {
             background-color: #45a049;
         }
+
+        .dropdown-container {
+            position: absolute;
+            top: 35px;
+            left: 70%; /* Adjust this value to move it further to the right */
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            cursor: default;
+        }
+
+        .sort-dropdown {
+            width: 100px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #333;
+            color: #fff;
+        }
+
+        .sort-dropdown:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sort-dropdown.show-options {
+            opacity: 1;
+        }
+
+        /* Add these styles for the info button */
+        .info-button {
+            position: absolute;
+            top: 35px;
+            left: 30%;
+            display: inline-block;
+            margin-left: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            border-radius: 50%;
+            background-color: #333;
+            color: #fff;
+            padding: 8px;
+            transition: background-color 0.3s ease;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+        }
+
+        .info-button:hover {
+            background-color: #555;
+        }
+
+
     </style>
 </head>
 
 <body>
     <div class="sticky-container">
         <div class="text">
+            <div class="info-container">
+                <div class="info-button">ℹ️</div>
+            </div>
             <p>SEARCH</p>
+            <p class="difficulty-text">DIFFICULTY</p> <!-- this is breaking stuff! -->
             <div class="emojis-container">
+
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
+            </div>
+            <div class="dropdown-container">
+                <select id="sort-dropdown" class="sort-dropdown">
+                    <option value="" selected disabled>Sort by...</option>
+                    <option value="1">Title</option>
+                    <option value="2">Artist</option>
+                    <option value="3">Difficulty</option>
+                    <option value="4">Length</option>
+                </select>
+
             </div>
         </div>
         <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
@@ -235,11 +316,8 @@
     </div>
 
     <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
-
     <script src="assets/js/isotope.pkgd.min.js"></script>
-
     <script src="assets/js/iziToast.min.js"></script>
-
     <script src="assets/js/piano.js"></script>
 
     <script>
@@ -285,22 +363,10 @@
         });
     </script>
 
-
-
-
-
-
-
-
-
-
     <script>
-
         //Global variables
         let $grid;
-
         let songsDB;
-
         const piano = new Piano(); // Create a new piano instance
 
         //Define listeners
@@ -308,7 +374,6 @@
 
         //If running locally, uncomment this line!
         piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
-
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
         function onQueueChanged(queue) {
@@ -325,6 +390,7 @@
                 <div class="song-info">
                     <p class="song-title">%title%</p>
                     <p class="artist">%artist%</p>
+                    <p class="length">%length%</p>
                     <p class="noteDensity"><span class="emojis">%emojis%</span></p>
 
                 </div>
@@ -347,6 +413,7 @@
                 songElement = songElement.replace('%difficulty%', song.difficulty);
                 songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
                 songElement = songElement.replace('%song-index%', i);
+                songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
 
                 $('.grid').append(songElement);
             }
@@ -460,8 +527,6 @@
             return string;
         }
 
-
-
         function initSearchBarThingy() {
             let qsRegex; // quick search regex
             $grid = $('.grid').isotope({ // init Isotope
@@ -469,22 +534,14 @@
                 layoutMode: 'fitRows',
                 filter: function () {
                     let $this = $(this);
-
-                    //Search by title, artist, and tags. We don't search by emojis because that's just for show.
-                    let title = $this.find('.song-title').text();
+                    let title = $this.find('.song-title').text(); //Search by title, artist, and tags
                     let artist = $this.find('.artist').text();
-
                     let searchTitle = qsRegex ? title.match(qsRegex) : true;
                     let searchArtist = qsRegex ? artist.match(qsRegex) : true;
-
-                    //let searchResult = qsRegex ? $this.text().match(qsRegex) : true;
-
                     let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
-
                     return searchTitle || searchArtist || searchTags;
                 }
             });
-
             // use value of search field to filter
             let $quicksearch = $('#quicksearch').keyup(debounce(function () {
                 qsRegex = new RegExp($quicksearch.val(), 'gi');
@@ -521,7 +578,6 @@
                             position: 'topRight'
                         });
                     }
-
                 }
                 else {
                     iziToast.error({
@@ -529,7 +585,6 @@
                         message: 'An unknown error occurred while queueing the song.',
                         position: 'topRight'
                     });
-
                 }
             });
         }
@@ -549,6 +604,13 @@
             };
         }
 
+        function formatMS(duration) {
+            let seconds = Math.floor((duration / 1000) % 60);
+            let minutes = Math.floor((duration / (1000 * 60)) % 60);
+            seconds = (seconds < 10) ? "0" + seconds : seconds;
+            return minutes + "m " + seconds + "s";
+        }
+
         $(document).mouseup(function (e) {
             var container = $(".now-playing-container");
             if (!container.is(e.target) && container.has(e.target).length === 0) {
@@ -557,5 +619,4 @@
         });
     </script>
 </body>
-
 </html>

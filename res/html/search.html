@@ -218,7 +218,7 @@
         .dropdown-container {
             position: absolute;
             top: 35px;
-            left: 70%; /* Adjust this value to move it further to the right */
+            left: 75%; /* Adjust this value to move it further to the right */
             transform: translateX(-50%);
             font-size: 16px;
             color: #fff;
@@ -268,6 +268,22 @@
             background-color: #555;
         }
 
+        .undo-button {
+            padding: 8px 16px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .undo-button:hover {
+            background-color: #555;
+        }
+
+
 
     </style>
 </head>
@@ -277,11 +293,12 @@
         <div class="text">
             <div class="info-container">
                 <div class="info-button">ℹ️</div>
+
             </div>
             <p>SEARCH</p>
             <p class="difficulty-text">DIFFICULTY</p> <!-- this is breaking stuff! -->
-            <div class="emojis-container">
 
+            <div class="emojis-container"> <!-- dont put anything else in here -->
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
                 <span class="moon">🌑</span>
@@ -296,8 +313,9 @@
                     <option value="3">Difficulty</option>
                     <option value="4">Length</option>
                 </select>
-
+                <button class="undo-button">Reset Filters</button>
             </div>
+
         </div>
         <p><input type="text" id="quicksearch" placeholder="coconut mall, kahoot theme, all star, daft punk..." /></p>
     </div>
@@ -359,6 +377,15 @@
                         return songDifficulty == selectedDifficulty;
                     }
                 });
+            });
+            $('.dropdown-container').on('click', '.undo-button', function () {
+                $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
+                $grid.isotope({ filter: '*' }); // Reset isotope filter
+                selectedDifficulty = null; // Reset selected difficulty
+                $('.moon').removeClass('selected'); // Remove selected moon styling
+                $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
+                $('#quicksearch').val(''); // Clear search field
+                initSearchBarThingy(); // Reinitialize search functionality
             });
         });
     </script>
@@ -466,9 +493,7 @@
          * @returns {number} The difficulty
          */
         function noteDensityToDifficulty(noteDensity) {
-            if (noteDensity < 2.5) {
-                return 0;
-            } else if (noteDensity >= 2.5 && noteDensity < 5) {
+            if (noteDensity < 5) {
                 return 1;
             } else if (noteDensity >= 5 && noteDensity < 7.5) {
                 return 2;

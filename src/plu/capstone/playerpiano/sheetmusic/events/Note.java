@@ -122,6 +122,7 @@ public class Note implements SheetMusicEvent, Cloneable {
      * Converts the midi key number to a piano index.
      * @return the piano index number of this note. 0-87
      */
+    @Deprecated
     public int toPianoKey() {
         return Note.fromMidiNoteToPianoKeyIndex(keyNumber);
     }
@@ -131,6 +132,7 @@ public class Note implements SheetMusicEvent, Cloneable {
      * @param midiKeyNumber The midi key number to convert.
      * @return the midi key number of this note. 0 - 87
      */
+    @Deprecated
     public static int fromMidiNoteToPianoKeyIndex(int midiKeyNumber) {
         return midiKeyNumber - 21;
     }
@@ -140,6 +142,7 @@ public class Note implements SheetMusicEvent, Cloneable {
      * @param keyNumber The piano key index to convert 0-87
      * @return the midi key number of this note.
      */
+    @Deprecated
     public static byte fromPianoKeyIndexToMidiNote(int keyNumber) {
         return (byte) (keyNumber + 21);
     }

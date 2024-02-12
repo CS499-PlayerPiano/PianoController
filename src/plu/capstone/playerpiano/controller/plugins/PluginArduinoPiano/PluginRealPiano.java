@@ -4,8 +4,10 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.controller.plugin.PluginConfig;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
@@ -37,14 +39,39 @@ public class PluginRealPiano extends Plugin {
 
     private SerialPort arduino;
 
+    //NOTE: This is backwards then what is stored in the config file!
+    //Key: Midi Note
+    //Value: Key physically
+    private Map<Integer, Integer> noteMapping = new HashMap<>();
+
+    private int velocityMappingMin = 106;
+    private int velocityMappingMax = 255;
+
     /**
      * Set the default values for the config file before it is loaded.
      */
     @Override
     public void setDefaultConfigValues() {
-        config.setString("comPort", "COM10");
-        config.setInteger("baudRate", 19200);
+        config.setString("comPort", "COM3");
+        config.setInteger("baudRate", 115200);
         config.setBoolean("printDebugOutputFromArduino", true);
+
+        PluginConfig velocityMappingConfig = new PluginConfig(this);
+        velocityMappingConfig.setInteger("min", velocityMappingMin);
+        velocityMappingConfig.setInteger("max", velocityMappingMax);
+        config.setNestedConfig("velocityMapping", velocityMappingConfig);
+
+        PluginConfig noteMappingConfig = new PluginConfig(this);
+
+        //Note index from 0-88 to midi note
+        for(int i = 0; i < 88; i++) {
+            int midiNote = i + 21;
+            noteMappingConfig.setInteger(Integer.toString(i), midiNote);
+        }
+
+        config.setNestedConfig("noteMapping", noteMappingConfig);
+
+
     }
 
     @Override
@@ -88,6 +115,19 @@ public class PluginRealPiano extends Plugin {
 
             }
         });
+
+        //NOTE: This is backwards then what is stored in the config file!
+        //Config: Key -> Midi Note
+        //This: Midi Note -> Key
+        PluginConfig noteMappingConfig = config.getNestedConfig("noteMapping");
+        for(int keyIndex = 0; keyIndex < 88; keyIndex++) {
+            int midiNote = noteMappingConfig.getInteger(Integer.toString(keyIndex));
+            noteMapping.put(midiNote, keyIndex);
+        }
+
+        PluginConfig velocityMappingConfig = config.getNestedConfig("velocityMapping");
+        velocityMappingMin = velocityMappingConfig.getInteger("min");
+        velocityMappingMax = velocityMappingConfig.getInteger("max");
     }
 
 
@@ -117,15 +157,19 @@ public class PluginRealPiano extends Plugin {
         buffer.put((byte) notes.size());
 
         for(Note note : notes) {
-            buffer.put((byte) note.toPianoKey());
+            Integer keyIndex = noteMapping.get(note.getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + note.toPianoKey());
+                continue;
+            }
+            buffer.put((byte) (int)keyIndex);
             buffer.put((byte) (note.isNoteOn() ? 1 : 0));
 
             byte velocity = 0;
 
             if(note.isNoteOn()){
                 // Map the velocity from 0-127 to 106-235
-                //TODO: Make this configurable
-                velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, 106, 255);
+                velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
             }
 
             buffer.put(velocity);

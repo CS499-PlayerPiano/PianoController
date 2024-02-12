@@ -40,8 +40,8 @@ public class PluginRealPiano extends Plugin {
     private SerialPort arduino;
 
     //NOTE: This is backwards then what is stored in the config file!
-    //Config: Key -> Midi Note
-    //This: Midi Note -> Key
+    //Key: Midi Note
+    //Value: Key physically
     private Map<Integer, Integer> noteMapping = new HashMap<>();
 
     private int velocityMappingMin = 106;
@@ -157,8 +157,12 @@ public class PluginRealPiano extends Plugin {
         buffer.put((byte) notes.size());
 
         for(Note note : notes) {
-            int keyIndex = noteMapping.get(note.getKeyNumber());
-            buffer.put((byte) keyIndex);
+            Integer keyIndex = noteMapping.get(note.getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + note.toPianoKey());
+                continue;
+            }
+            buffer.put((byte) (int)keyIndex);
             buffer.put((byte) (note.isNoteOn() ? 1 : 0));
 
             byte velocity = 0;

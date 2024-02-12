@@ -7,7 +7,7 @@
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
 
-const int SHIFT_REGISTER_COUNT = 1;
+const int SHIFT_REGISTER_COUNT = 2;
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
 ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
 
@@ -108,6 +108,21 @@ void processIncomingSerial()
     }
 }
 
+void debugAllPins()
+{
+    for (int i = 0; i < TOTAL_PINS; i++)
+    {
+        setPin(i, 255);
+        delay(100);
+    }
+
+    for (int i = 0; i < TOTAL_PINS; i++)
+    {
+        setPin(i, 0);
+        delay(100);
+    }
+}
+
 void setup()
 {
     Serial.begin(115200); // 115200
@@ -132,4 +147,7 @@ void loop()
 {
     // Serial code that breaks with solinoid
     processIncomingSerial();
+
+    // Debugging Pins
+    //debugAllPins();
 }

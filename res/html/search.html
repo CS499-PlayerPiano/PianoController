@@ -136,7 +136,7 @@
 
         .song-title,
         .artist,
-        .length{
+        .length {
             margin: 5px 0;
             font-weight: bold;
             overflow: hidden;
@@ -218,7 +218,8 @@
         .dropdown-container {
             position: absolute;
             top: 35px;
-            left: 75%; /* Adjust this value to move it further to the right */
+            left: 75%;
+            /* Adjust this value to move it further to the right */
             transform: translateX(-50%);
             font-size: 16px;
             color: #fff;
@@ -282,9 +283,6 @@
         .undo-button:hover {
             background-color: #555;
         }
-
-
-
     </style>
 </head>
 
@@ -400,7 +398,7 @@
         piano.onQueueUpdated(onQueueChanged);
 
         //If running locally, uncomment this line!
-        piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
+        //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
         function onQueueChanged(queue) {
@@ -644,4 +642,5 @@
         });
     </script>
 </body>
+
 </html>

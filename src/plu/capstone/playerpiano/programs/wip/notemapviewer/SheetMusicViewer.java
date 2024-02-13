@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.miscprograms.wip.notemapviewer;
+package plu.capstone.playerpiano.programs.wip.notemapviewer;
 
 import java.awt.Component;
 import java.util.ArrayList;

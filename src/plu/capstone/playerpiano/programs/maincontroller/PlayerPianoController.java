@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.miscprograms.maincontroller;
+package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;

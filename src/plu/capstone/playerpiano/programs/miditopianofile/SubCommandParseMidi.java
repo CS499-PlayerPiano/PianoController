@@ -1,10 +1,9 @@
-package plu.capstone.playerpiano.miscprograms.miditopianofile;
+package plu.capstone.playerpiano.programs.miditopianofile;
 
 import java.io.File;
 import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.MidiCleaner;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
 @Command(name = "parse-midi", description = "Converts a midi file to a player piano file")

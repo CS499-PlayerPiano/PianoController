@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.miscprograms.viewpianofile;
+package plu.capstone.playerpiano.programs.viewpianofile;
 
 import java.io.File;
 import java.util.concurrent.Callable;

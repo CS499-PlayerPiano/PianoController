@@ -1,9 +1,8 @@
-package plu.capstone.playerpiano.miscprograms.songdbverification;
+package plu.capstone.playerpiano.programs.songdbverification;
 
 import java.util.concurrent.Callable;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
-import plu.capstone.playerpiano.miscprograms.songdbverification.SongDBVerification;
 
 @Command(name = "parse-midi", description = "Converts a midi file to a player piano file")
 public class SubCommandSongDBVerification implements Callable<Integer> {

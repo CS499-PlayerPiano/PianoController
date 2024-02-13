@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.miscprograms.miditopianofile;
+package plu.capstone.playerpiano.programs.miditopianofile;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,11 +6,11 @@ import javax.sound.midi.InvalidMidiDataException;
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.utilities.timings.TimingsReport;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step1RemoveNonPianoKeys;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step2RemoveInvalidChannels;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step3OnNoteVelocity0Fix;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step4MaxOnNotesAtATime;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step5InsertingOffNotes;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step1RemoveNonPianoKeys;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step2RemoveInvalidChannels;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step3OnNoteVelocity0Fix;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step4MaxOnNotesAtATime;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step5InsertingOffNotes;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;

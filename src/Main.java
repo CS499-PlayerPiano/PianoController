@@ -1,10 +1,10 @@
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
-import plu.capstone.playerpiano.miscprograms.viewpianofile.SubCommandCreatePianoRollGraphics;
-import plu.capstone.playerpiano.miscprograms.miditopianofile.SubCommandParseMidi;
-import plu.capstone.playerpiano.miscprograms.maincontroller.SubCommandRunServer;
-import plu.capstone.playerpiano.miscprograms.songdbverification.SubCommandSongDBVerification;
+import plu.capstone.playerpiano.programs.viewpianofile.SubCommandCreatePianoRollGraphics;
+import plu.capstone.playerpiano.programs.miditopianofile.SubCommandParseMidi;
+import plu.capstone.playerpiano.programs.maincontroller.SubCommandRunServer;
+import plu.capstone.playerpiano.programs.songdbverification.SubCommandSongDBVerification;
 
 public class Main implements Callable<Integer> {
 

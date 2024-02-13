@@ -3,7 +3,7 @@ package plu.capstone.playerpiano.plugins.impl.PluginMidiKeyboard;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 
 public class PluginMidiKeyboard extends Plugin {
 

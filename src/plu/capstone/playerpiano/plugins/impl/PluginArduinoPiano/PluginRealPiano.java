@@ -7,11 +7,11 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import plu.capstone.playerpiano.plugins.plugin.PluginConfig;
+import plu.capstone.playerpiano.plugins.PluginConfig;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.utilities.MathUtilities;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 

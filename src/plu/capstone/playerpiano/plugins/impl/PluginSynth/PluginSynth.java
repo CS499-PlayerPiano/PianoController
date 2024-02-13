@@ -5,7 +5,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 
 /**
  * This plugin is responsible for playing notes through the computer's speakers.

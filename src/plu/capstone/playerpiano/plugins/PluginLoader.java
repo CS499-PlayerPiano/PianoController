@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.plugin;
+package plu.capstone.playerpiano.plugins;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

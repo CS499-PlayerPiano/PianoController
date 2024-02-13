@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.plugin;
+package plu.capstone.playerpiano.plugins;
 
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano.PluginRealPiano;

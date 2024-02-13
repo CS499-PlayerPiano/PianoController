@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.utilities.graphics.JTextNumericField;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.events.Note;

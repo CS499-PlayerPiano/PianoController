@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.plugin;
+package plu.capstone.playerpiano.plugins;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

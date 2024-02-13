@@ -27,7 +27,7 @@ import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointGetSongData;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointsUser;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 

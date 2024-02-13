@@ -2,7 +2,7 @@ package plu.capstone.playerpiano.plugins.impl.PluginLogger;
 
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.Plugin;
 
 /**
  * Logs all notes played to the console.

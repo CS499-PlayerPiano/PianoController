@@ -6,8 +6,8 @@ import plu.capstone.playerpiano.QueueManager;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.plugins.plugin.Plugin;
-import plu.capstone.playerpiano.plugins.plugin.PluginLoader;
+import plu.capstone.playerpiano.plugins.Plugin;
+import plu.capstone.playerpiano.plugins.PluginLoader;
 
 public class PlayerPianoController implements Runnable {
 

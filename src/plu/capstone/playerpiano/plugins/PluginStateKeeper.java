@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.plugin;
+package plu.capstone.playerpiano.plugins;
 
 import java.util.List;
 import plu.capstone.playerpiano.sheetmusic.events.Note;

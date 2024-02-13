@@ -2,16 +2,13 @@ package plu.capstone.playerpiano.controller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import io.swagger.util.Json;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import plu.capstone.playerpiano.controller.plugin.Plugin;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PacketIds;
+import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;

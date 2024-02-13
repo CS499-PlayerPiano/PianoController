@@ -1,22 +1,12 @@
 package plu.capstone.playerpiano.controller;
 
 import com.google.gson.JsonObject;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
-import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PacketIds;
-import plu.capstone.playerpiano.controller.plugins.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
-import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.controller.plugin.Plugin;
-import plu.capstone.playerpiano.controller.plugin.PluginLoader;
+import plu.capstone.playerpiano.plugins.plugin.Plugin;
+import plu.capstone.playerpiano.plugins.plugin.PluginLoader;
 
 public class PlayerPianoController implements Runnable {
 

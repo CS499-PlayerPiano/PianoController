@@ -60,9 +60,13 @@ public class EndpointControlPiano implements Endpoint {
         //cherck session id
         String sessionUUID = context.sessionAttribute(EndpointsUser.SESSION_UUID);
 
+        JsonObject response = new JsonObject();
+
         if(sessionUUID == null) {
             context.status(HttpStatus.UNAUTHORIZED);
-            context.result("No session found! Piano.js must be loaded first!");
+            response.addProperty("success", false);
+            response.addProperty("error", "No session found! Piano.js must be loaded first!");
+            context.result(response.toString());
             return;
         }
 
@@ -71,23 +75,29 @@ public class EndpointControlPiano implements Endpoint {
 
         if(!oneWhoQueued) {
             context.status(HttpStatus.UNAUTHORIZED);
-            context.result("You are not the one who queued the song!");
+            response.addProperty("success", false);
+            response.addProperty("error", "You are not the one who queued the song!");
+            context.result(response.toString());
             return;
         }
 
         server.skipSong();
         context.status(HttpStatus.OK);
-        context.result("Success!");
+        response.addProperty("success", true);
+        context.result(response.toString());
     }
 
     private void queueSong(Context context) {
 
         //check session id
         String sessionUUID = context.sessionAttribute(EndpointsUser.SESSION_UUID);
+        JsonObject response = new JsonObject();
 
         if(sessionUUID == null) {
             context.status(HttpStatus.UNAUTHORIZED);
-            context.result("No session found! Piano.js must be loaded first!");
+            response.addProperty("success", false);
+            response.addProperty("error", "No session found! Piano.js must be loaded first!");
+            context.result(response.toString());
             return;
         }
 
@@ -98,7 +108,9 @@ public class EndpointControlPiano implements Endpoint {
         File songFile = new File("res" + File.separator + "songs-db" + File.separator + "songs" + File.separator + midiFile);
         if(!songFile.exists()) {
             context.status(HttpStatus.NOT_FOUND);
-            context.result("Song not found");
+            response.addProperty("success", false);
+            response.addProperty("error", "Song not found!");
+            context.result(response.toString());
             return;
         }
 
@@ -113,7 +125,9 @@ public class EndpointControlPiano implements Endpoint {
 
         if(song == null) {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-            context.result("Failed to find song in database, yet it exists in the file system!");
+            response.addProperty("success", false);
+            response.addProperty("error", "Song not found in database!");
+            context.result(response.toString());
             return;
         }
 
@@ -123,20 +137,20 @@ public class EndpointControlPiano implements Endpoint {
 
             int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
 
-            JsonObject obj = new JsonObject();
-            obj.addProperty("position", position);
+            response.addProperty("success", position >= 0);
+            response.addProperty("position", position);
 
-            obj.addProperty("success", position >= 0);
+
 
             if(position == -1) {
-                obj.addProperty("error", "Song already exists in queue!");
+                response.addProperty("error", "Song already exists in queue!");
             }
             else if(position == -2) {
-                obj.addProperty("error", "Song is already playing!");
+                response.addProperty("error", "Song is already playing!");
             }
 
             context.status(HttpStatus.OK);
-            context.result(obj.toString());
+            context.result(response.toString());
 
         }
         catch (InvalidMidiDataException | IOException e) {

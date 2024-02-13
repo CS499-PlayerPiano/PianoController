@@ -20,17 +20,21 @@ public class MidiCleaner implements Runnable{
 
     private static final Logger LOGGER = new Logger(MidiCleaner.class);
 
-    private static final MidiConversionStep[] steps = {
-            new Step1RemoveNonPianoKeys(),
-            new Step2RemoveInvalidChannels(),
-            new Step3OnNoteVelocity0Fix(),
-            new Step4MaxOnNotesAtATime(45),
-            new Step5InsertingOffNotes(200),
-    };
+
 
     private final File INPUT_FILE;
     private final File OUTPUT_FILE;
     private final int VERSION;
+    private final int MAX_NOTES_ON_AT_A_TIME;
+    private final long DUPLICATE_ON_LAG_TIME;
+
+    private final MidiConversionStep[] steps = {
+            new Step1RemoveNonPianoKeys(),
+            new Step2RemoveInvalidChannels(),
+            new Step3OnNoteVelocity0Fix(),
+            new Step4MaxOnNotesAtATime(MAX_NOTES_ON_AT_A_TIME),
+            new Step5InsertingOffNotes(DUPLICATE_ON_LAG_TIME),
+    };
 
     @Override
     public void run() {

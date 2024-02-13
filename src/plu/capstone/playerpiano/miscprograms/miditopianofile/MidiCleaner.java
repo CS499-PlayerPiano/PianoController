@@ -28,16 +28,18 @@ public class MidiCleaner implements Runnable{
     private final int MAX_NOTES_ON_AT_A_TIME;
     private final long DUPLICATE_ON_LAG_TIME;
 
-    private final MidiConversionStep[] steps = {
-            new Step1RemoveNonPianoKeys(),
-            new Step2RemoveInvalidChannels(),
-            new Step3OnNoteVelocity0Fix(),
-            new Step4MaxOnNotesAtATime(MAX_NOTES_ON_AT_A_TIME),
-            new Step5InsertingOffNotes(DUPLICATE_ON_LAG_TIME),
-    };
+
 
     @Override
     public void run() {
+
+        MidiConversionStep[] steps = {
+                new Step1RemoveNonPianoKeys(),
+                new Step2RemoveInvalidChannels(),
+                new Step3OnNoteVelocity0Fix(),
+                new Step4MaxOnNotesAtATime(MAX_NOTES_ON_AT_A_TIME),
+                new Step5InsertingOffNotes(DUPLICATE_ON_LAG_TIME),
+        };
 
         try {
 

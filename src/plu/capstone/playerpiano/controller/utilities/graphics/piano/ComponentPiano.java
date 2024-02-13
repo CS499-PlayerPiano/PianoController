@@ -191,12 +191,19 @@ public class ComponentPiano extends JComponent {
                 ));
                 g.fillRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 4, 4);
 
+                final int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
                 //int moveAmt = (i > 10) ? 6 : 12;
                 g.setColor(Color.RED);
                 g.drawString(Integer.toString(i), bounds.x + 0, bounds.y + bounds.height - 20);
 
                 NoteDetails noteDetails = NoteDetails.from(i);
+                g.setColor(Color.YELLOW.darker());
                 g.drawString(noteDetails.getNoteName(), bounds.x + 0, bounds.y + bounds.height - 40);
+
+                g.setColor(Color.GREEN);
+                g.drawString(Integer.toString(midiNote), bounds.x + 0, bounds.y + bounds.height - 60);
+
+
             }
             else {
                 g.setPaint(new LinearGradientPaint(
@@ -208,11 +215,21 @@ public class ComponentPiano extends JComponent {
 
                 //Draw red text on white keys
                 int moveAmt = (i > 10) ? 6 : 12;
-                g.setColor(Color.RED);
-                g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
+                //g.setColor(Color.RED);
+                //g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
 
+                int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
                 NoteDetails noteDetails = NoteDetails.from(i);
-                g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);
+                //g.setColor(Color.YELLOW.darker());
+               // g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);
+
+                g.setColor(Color.GREEN);
+                g.drawString(Integer.toString(midiNote), bounds.x + moveAmt, bounds.y + bounds.height - 60);
+
+                if(midiNote == 60) {
+                    g.setColor(Color.RED);
+                    g.drawString("***", bounds.x + moveAmt, bounds.y + bounds.height - 80);
+                }
             }
 
             g.setColor(Color.BLACK);

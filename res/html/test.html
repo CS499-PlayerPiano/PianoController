@@ -81,7 +81,7 @@
         </div>
         <div class="buttons">
             <a href="#" onclick='playSelectedSong()' class=" button button-green">Play selected song</a>
-            <a href="#" onclick='piano.stopSong()' class="button button-red">STHAP!</a>
+            <a href="#" onclick='piano.skipSong()' class="button button-red">STHAP!</a>
         </div>
 
         <div class="text">
@@ -127,7 +127,7 @@
             let midiFile = songListElement.options[songListElement.selectedIndex].value;
 
             //Normally you would just pass the entire song object, but for this example I am only passing the midiFile
-            piano.playSong({
+            piano.queueSong({
                 "midiFile": midiFile
             });
         }

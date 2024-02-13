@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import lombok.Getter;
 import lombok.Setter;
-import plu.capstone.playerpiano.controller.utilities.graphics.piano.ComponentPiano;
+import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 
 public class SNote {
 

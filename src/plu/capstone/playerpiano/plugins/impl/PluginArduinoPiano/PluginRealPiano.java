@@ -12,7 +12,7 @@ import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.plugins.plugin.Plugin;
-import plu.capstone.playerpiano.controller.utilities.MathUtilities;
+import plu.capstone.playerpiano.utilities.MathUtilities;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 /**

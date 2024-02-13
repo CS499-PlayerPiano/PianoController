@@ -10,7 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
-import plu.capstone.playerpiano.controller.utilities.graphics.RowNumberTable;
+import plu.capstone.playerpiano.utilities.graphics.RowNumberTable;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 public class SheetMusicViewer {

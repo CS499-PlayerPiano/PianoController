@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.controller.utilities.graphics.piano;
+package plu.capstone.playerpiano.utilities.graphics.piano;
 
 import lombok.Getter;
 

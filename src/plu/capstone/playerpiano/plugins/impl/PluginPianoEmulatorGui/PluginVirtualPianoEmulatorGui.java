@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import plu.capstone.playerpiano.controller.utilities.graphics.piano.ComponentPiano;
+import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.plugins.plugin.PluginStateKeeper;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;

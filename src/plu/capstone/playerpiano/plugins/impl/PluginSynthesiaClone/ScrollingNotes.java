@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.swing.JPanel;
-import plu.capstone.playerpiano.controller.utilities.graphics.piano.ComponentPiano;
-import plu.capstone.playerpiano.controller.utilities.graphics.piano.KeyShape;
+import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
+import plu.capstone.playerpiano.utilities.graphics.piano.KeyShape;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 public class ScrollingNotes extends JPanel {

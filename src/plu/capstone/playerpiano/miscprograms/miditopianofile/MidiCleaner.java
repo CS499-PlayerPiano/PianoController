@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import lombok.AllArgsConstructor;
-import plu.capstone.playerpiano.controller.utilities.timings.TimingsReport;
+import plu.capstone.playerpiano.utilities.timings.TimingsReport;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step1RemoveNonPianoKeys;
 import plu.capstone.playerpiano.miscprograms.miditopianofile.steps.Step2RemoveInvalidChannels;

@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.controller.utilities.graphics.piano;
+package plu.capstone.playerpiano.utilities.graphics.piano;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -19,8 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
-import lombok.AccessLevel;
-import lombok.Getter;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 

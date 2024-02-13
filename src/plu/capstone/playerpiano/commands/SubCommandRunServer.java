@@ -1,8 +1,7 @@
 package plu.capstone.playerpiano.commands;
 
 import picocli.CommandLine.Command;
-import picocli.CommandLine.IExitCodeGenerator;
-import plu.capstone.playerpiano.controller.PlayerPianoController;
+import plu.capstone.playerpiano.PlayerPianoController;
 
 @Command(name = "run-server", description = "Runs the piano controller software")
 public class SubCommandRunServer implements Runnable {

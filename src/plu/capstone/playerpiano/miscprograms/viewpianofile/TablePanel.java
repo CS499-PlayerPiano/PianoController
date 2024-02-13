@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
-import plu.capstone.playerpiano.controller.utilities.graphics.RowNumberTable;
+import plu.capstone.playerpiano.utilities.graphics.RowNumberTable;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReaderForGraphics.NameAndByte;
 
 public class TablePanel {

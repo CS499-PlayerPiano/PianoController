@@ -21,9 +21,6 @@ public enum PluginInstances {
     MIDI_KEYBOARD(PluginMidiKeyboard.class),
     PATTERN_DEBUG(PluginPatternDebugGui.class),
     SYNTHESIA_GUI(PluginSynthesiaGui.class),
-
-    //TEST_PLUGIN(TestPlugin.class),
-    //TEST_PLUGIN_CONFIG(PluginConfigTester.class)
     ;
 
     private final Class<? extends Plugin> pluginClass;

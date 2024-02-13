@@ -53,7 +53,7 @@ public class EndpointControlPiano implements Endpoint {
     private void getQueue(Context context) {
         JsonObject queue = PlayerPianoController.getInstance().getQueueManager().getQueueAsJson();
         context.status(HttpStatus.OK);
-        context.result(queue.toString());
+        context.json(queue);
     }
 
     private void skipSong(Context context) {
@@ -77,14 +77,14 @@ public class EndpointControlPiano implements Endpoint {
             context.status(HttpStatus.UNAUTHORIZED);
             response.addProperty("success", false);
             response.addProperty("error", "You are not the one who queued the song!");
-            context.result(response.toString());
+            context.json(response);
             return;
         }
 
         server.skipSong();
         context.status(HttpStatus.OK);
         response.addProperty("success", true);
-        context.result(response.toString());
+        context.json(response);
     }
 
     private void queueSong(Context context) {
@@ -110,7 +110,7 @@ public class EndpointControlPiano implements Endpoint {
             context.status(HttpStatus.NOT_FOUND);
             response.addProperty("success", false);
             response.addProperty("error", "Song not found!");
-            context.result(response.toString());
+            context.json(response);
             return;
         }
 
@@ -127,7 +127,7 @@ public class EndpointControlPiano implements Endpoint {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR);
             response.addProperty("success", false);
             response.addProperty("error", "Song not found in database!");
-            context.result(response.toString());
+            context.json(response);
             return;
         }
 
@@ -150,12 +150,14 @@ public class EndpointControlPiano implements Endpoint {
             }
 
             context.status(HttpStatus.OK);
-            context.result(response.toString());
+            context.json(response);
 
         }
         catch (InvalidMidiDataException | IOException e) {
             context.status(HttpStatus.INTERNAL_SERVER_ERROR);
-            context.result("Error loading song: " + e.getMessage());
+            response.addProperty("success", false);
+            response.addProperty("error", "Error loading song: " + e.getMessage());
+            context.json(response);
             e.printStackTrace();
         }
     }

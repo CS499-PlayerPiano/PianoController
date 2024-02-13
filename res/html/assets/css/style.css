@@ -317,6 +317,17 @@ footer {
 .music-icons i.material-symbols-outlined {
     margin-right: 40px;
     padding: 20px;
+    cursor: pointer;
+}
+
+.music-icons i.material-symbols-outlined:hover {
+    background-color: #333;
+    border-radius: 50%;
+}
+
+.disableMusicIcon {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 footer img {

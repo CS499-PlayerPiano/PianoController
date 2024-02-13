@@ -62,12 +62,11 @@
             <p> Kairiki Bear </p>
         </div>
         <div class="music-icons">
-            <i class="material-symbols-outlined">arrow_back</i>
-            <i class="material-symbols-outlined">pause</i>
-            <i class="material-symbols-outlined">play_arrow</i>
-            <i class="material-symbols-outlined">arrow_forward</i>
+            <i id="npbPlayPause" class="material-symbols-outlined disableMusicIcon">pause</i>
+            <!-- <i class="material-symbols-outlined">play_arrow</i> -->
+            <i id="npbSkipForward" class="material-symbols-outlined">arrow_forward</i>
             <!-- <i class="material-symbols-outlined">repeat</i> -->
-            <i class="material-symbols-outlined">queue_music</i>
+            <i id="npbQueue" class="material-symbols-outlined disableMusicIcon">queue_music</i>
 
         </div>
     </footer>
@@ -139,7 +138,7 @@
         piano.onQueueUpdated(onQueueChanged);
 
         //If running locally, uncomment this line!
-        piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
+        //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
         piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
 
         function onQueueChanged(queue) {

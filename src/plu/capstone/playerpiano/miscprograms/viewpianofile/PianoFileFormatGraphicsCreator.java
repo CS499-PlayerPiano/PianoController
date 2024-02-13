@@ -1,7 +1,6 @@
 package plu.capstone.playerpiano.miscprograms.viewpianofile;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -9,38 +8,74 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import javax.imageio.ImageIO;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReaderForGraphics;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReaderForGraphics.NameAndByte;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicFileParser;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
-public class PianoFileFormatGraphicsCreator {
+@AllArgsConstructor
+public class PianoFileFormatGraphicsCreator implements Runnable {
 
-    private Queue<BufferedPianoFileReaderForGraphics.NameAndByte> nameAndBytes;
+    private final File inputFile;
+    private final File outputFile;
 
-    public PianoFileFormatGraphicsCreator(BufferedPianoFileReaderForGraphics reader) {
-        this.nameAndBytes = reader.getNameAndBytes();
+    @Override
+    public void run() {
+
+        sanityCheckFiles();
+
+        Queue<BufferedPianoFileReaderForGraphics.NameAndByte> nameAndBytes;
+
+        try {
+            BufferedPianoFileReaderForGraphics reader = new BufferedPianoFileReaderForGraphics(inputFile);
+
+            short v = reader.readShort(SheetMusicFileParser.VERSION);
+            SheetMusicReaderWriter.getByVersion(v).readSheetMusic(reader);
+            reader.close();
+
+            nameAndBytes = reader.getNameAndBytes();
+            show(nameAndBytes);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public static void main(String[] args) throws Exception {
-        BufferedPianoFileReaderForGraphics reader = new BufferedPianoFileReaderForGraphics(new File("tmp/v6.piano"));
+    private void sanityCheckFiles() {
+        if(!inputFile.exists()) {
+            throw new IllegalArgumentException("Input file does not exist");
+        }
 
-        reader.readShort(SheetMusicFileParser.VERSION);
-        SheetMusicReaderWriter.V6.getFileParser().readSheetMusic(reader);
-        reader.close();
+        if(!inputFile.isFile()) {
+            throw new IllegalArgumentException("Input file is not a file");
+        }
 
-        PianoFileFormatGraphicsCreator creator = new PianoFileFormatGraphicsCreator(reader);
-        creator.show();
+        if(!inputFile.canRead()) {
+            throw new IllegalArgumentException("Input file cannot be read");
+        }
+
+        //check file extension
+        if(!inputFile.getName().endsWith(".piano")) {
+            throw new IllegalArgumentException("Input file must have a .piano extension");
+        }
+
+        if(outputFile.exists()) {
+            throw new IllegalArgumentException("Output file already exists");
+        }
+
+        //check file extension
+        if(!outputFile.getName().endsWith(".png")) {
+            throw new IllegalArgumentException("Output file must have a .png extension");
+        }
     }
 
-    private JPanel picturePanel;
 
-    public void show() {
+
+    private void show(Queue<BufferedPianoFileReaderForGraphics.NameAndByte> nameAndBytes) {
 
         JFrame frame = new JFrame("Piano File Format Graphics");
 
@@ -58,7 +93,7 @@ public class PianoFileFormatGraphicsCreator {
             }
         }
 
-        picturePanel = new JPanel(new BorderLayout());
+        JPanel picturePanel = new JPanel(new BorderLayout());
         picturePanel.add( new TablePanel(arrayFromQueue).get());
         picturePanel.add(new KeyPanel(deduplicatedList), BorderLayout.EAST);
 
@@ -66,7 +101,7 @@ public class PianoFileFormatGraphicsCreator {
 
         JButton screenshotButton = new JButton("Screenshot");
         screenshotButton.addActionListener(e -> {
-            screenshot();
+            screenshot(picturePanel);
         });
 
         controlsPanel.add(screenshotButton);
@@ -77,7 +112,7 @@ public class PianoFileFormatGraphicsCreator {
         frame.setVisible(true);
     }
 
-    private void screenshot() {
+    private void screenshot(JPanel picturePanel) {
 
         BufferedImage image = new BufferedImage(picturePanel.getWidth(), picturePanel.getHeight(), BufferedImage.TYPE_INT_RGB);
         picturePanel.paint(image.getGraphics());

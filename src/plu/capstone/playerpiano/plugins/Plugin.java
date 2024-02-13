@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
-import plu.capstone.playerpiano.QueueManager.QueuedSongWithMetadata;
+import plu.capstone.playerpiano.programs.maincontroller.QueueManager.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;

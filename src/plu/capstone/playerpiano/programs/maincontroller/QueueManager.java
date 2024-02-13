@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano;
+package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

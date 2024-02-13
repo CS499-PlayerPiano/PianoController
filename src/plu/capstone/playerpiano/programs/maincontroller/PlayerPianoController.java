@@ -2,7 +2,6 @@ package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import plu.capstone.playerpiano.QueueManager;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;

@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
-import plu.capstone.playerpiano.PlayerPianoController;
+import plu.capstone.playerpiano.miscprograms.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.QueueManager.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;

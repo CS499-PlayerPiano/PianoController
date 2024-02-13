@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Queue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import plu.capstone.playerpiano.miscprograms.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.plugins.plugin.Plugin;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.logger.Logger;

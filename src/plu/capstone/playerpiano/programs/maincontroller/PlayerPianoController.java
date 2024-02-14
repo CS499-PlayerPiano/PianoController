@@ -1,12 +1,16 @@
 package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonObject;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.plugins.PluginLoader;
+import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 
 public class PlayerPianoController implements Runnable {
 
@@ -50,11 +54,7 @@ public class PlayerPianoController implements Runnable {
 
 
 //        try {
-//            playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Coconut_Mall.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Rockefeller_Street.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Levan_Polkka.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Bad_Piggies_Theme.mid")));
-//            //playSheetMusic(new MidiSheetMusic(new File("res/songs-db/songs/Dance_Monkey.mid")));
+//            queueManager.queueSong(new MidiSheetMusic(new File("tmp/songs/TO BE ADDED/LyricWulf - Through the Fire and Flames.mid")));
 //        } catch (InvalidMidiDataException e) {
 //            throw new RuntimeException(e);
 //        } catch (IOException e) {

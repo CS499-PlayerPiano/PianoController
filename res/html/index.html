@@ -56,10 +56,10 @@
     </div>
 
     <footer>
-        <img src="https://piano.ericshome.xyz/api/album-art/Kairiki-Bear.jpg">
+        <img id="npArtwork" src="https://piano.ericshome.xyz/api/album-art/null">
         <div>
-            <p> Venom </p>
-            <p> Kairiki Bear </p>
+            <p id="npTitle">Nothing Playing</p>
+            <p id="npArtist"></p>
         </div>
         <div class="music-icons">
             <i id="npbPlayPause" class="material-symbols-outlined">pause</i>
@@ -137,6 +137,7 @@
         //Define listeners
         piano.onQueueUpdated(onQueueChanged);
         piano.onSongPausedUnpaused(onPausedUnpaused);
+        piano.onConnected(onConnectedEvent);
 
         //If running locally, uncomment this line!
         //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
@@ -144,6 +145,34 @@
 
         function onQueueChanged(queue) {
             console.log("Queue changed!", queue)
+
+            setNowPlayingInfo(queue.nowPlaying);
+        }
+
+        function onConnectedEvent(data) {
+            console.log("Connected event!", data)
+            let currentSong = data.currentSong;
+            setNowPlayingInfo(currentSong);
+        }
+
+        function setNowPlayingInfo(currentSong) {
+
+            let currentUrl = location.href;
+            let name = "Nothing Playing";
+            let artist = "";
+            let artwork = "null.png";
+
+            if (currentSong != undefined && currentSong != null) {
+                name = currentSong.name;
+                artist = currentSong.artists.join(', ');
+                artwork = currentSong.artwork;
+            }
+
+            artwork = currentUrl + "api/album-art/" + artwork;
+
+            $('#npArtwork').attr('src', artwork);
+            $('#npTitle').text(name);
+            $('#npArtist').text(artist);
         }
 
         function onPausedUnpaused(data) {
@@ -155,7 +184,7 @@
                 $('#npbPlayPause').text('pause');
             }
 
-            console.log("Paused/Unpaused!", data)
+            console.log("Paused/Unpaused event!", data)
         }
 
         //Handle play pause clicking

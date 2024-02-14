@@ -28,6 +28,7 @@ import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointCont
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointGetSongData;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointsUser;
 import plu.capstone.playerpiano.plugins.Plugin;
+import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
@@ -136,6 +137,7 @@ public class PluginWebAPI extends Plugin {
                 System.out.println("[WS] Connected");
                 JsonObject data = new JsonObject();
                 data.addProperty("sessionID", ctx.getSessionId());
+                data.add("currentSong", PlayerPianoController.getInstance().getQueueManager().getCurrentPlayingSong());
                 sendWSPacket(PacketIds.CONNECTED, data);
 
 
@@ -217,10 +219,7 @@ public class PluginWebAPI extends Plugin {
 
     @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
-
-
-
-        sendWSPacket(PacketIds.SONG_START);
+        sendWSPacket(PacketIds.SONG_START, PlayerPianoController.getInstance().getQueueManager().getCurrentPlayingSong());
         lastTimestamp = 0;
     }
 

@@ -87,12 +87,7 @@ public class QueueManager {
         JsonObject obj = new JsonObject();
         obj.add("queue", queueArray);
 
-        JsonObject nowPlaying = new JsonObject();
-        nowPlaying.addProperty("name", "");
-        nowPlaying.add("artists", new JsonArray());
-        nowPlaying.addProperty("artwork", "");
-        nowPlaying.addProperty("lengthMS", 0);
-        nowPlaying.addProperty("queuedBy", "SYSTEM");
+        JsonObject nowPlaying = null;
 
         if (currentSheetMusic != null && currentSheetMusic.songDBEntry != null) {
             synchronized (currentSheetMusic) {
@@ -260,6 +255,15 @@ public class QueueManager {
             }
         }
         return false;
+    }
+
+    public JsonObject getCurrentPlayingSong() {
+        if(currentSheetMusic != null && currentSheetMusic.songDBEntry != null) {
+            synchronized (currentSheetMusic) {
+                return currentSheetMusic.toJson();
+            }
+        }
+        return null;
     }
 
 

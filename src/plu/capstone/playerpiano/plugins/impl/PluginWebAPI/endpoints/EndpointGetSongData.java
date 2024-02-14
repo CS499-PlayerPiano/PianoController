@@ -52,9 +52,10 @@ public class EndpointGetSongData implements Endpoint {
 
         for(Song song : songs) {
             //TODO: Replace this with the actual number of times the song has been played
-            int constantPlayCount = song.getName().hashCode() % 1000;
-            constantPlayCount = Math.abs(constantPlayCount);
-            song.setTimesPlayed(constantPlayCount);
+//            int constantPlayCount = song.getName().hashCode() % 1000;
+//            constantPlayCount = Math.abs(constantPlayCount);
+//            song.setTimesPlayed(constantPlayCount);
+            song.setTimesPlayed(-1);
 
 
             //Set the album art to a URL that will return the album art

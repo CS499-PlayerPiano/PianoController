@@ -160,7 +160,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
     const html = `
     <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%">
         <div class="image-container">
-            <img src="%artwork%" alt="Song Image">
+            <img loading="lazy" src="%artwork%" alt="Song Image">
         </div>
         <div class="song-info">
             <p class="song-title">%title%</p>

@@ -220,9 +220,9 @@ public abstract class Plugin implements SheetMusicCallback {
     /**
      * Stops the current sheet music.
      */
-    public final void stopSheetMusic() {
-        PlayerPianoController.getInstance().getQueueManager().stopSheetMusic();
-    }
+//    public final void stopSheetMusic() {
+//        PlayerPianoController.getInstance().getQueueManager().stopSheetMusic();
+//    }
 
     /**
      * Returns true if the sheet music is currently playing.

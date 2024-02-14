@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.programs.maincontroller.QueueManager.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
@@ -30,6 +31,7 @@ public class EndpointControlPiano implements Endpoint {
         app.post("/api/control/queue", this::queueSong);
         app.post("/api/control/skip", this::skipSong);
         app.get("/api/control/getQueue", this::getQueue);
+        app.post("/api/control/pause", this::pauseUnpause);
 
         File songDBFile = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
 
@@ -39,6 +41,18 @@ public class EndpointControlPiano implements Endpoint {
             logger.error("Error loading song database!");
         }
 
+    }
+
+    private void pauseUnpause(Context context) {
+        boolean success = PlayerPianoController.getInstance().getQueueManager().pauseUnpauseSong();
+        JsonObject response = new JsonObject();
+        response.addProperty("success", success);
+        context.status(HttpStatus.OK);
+        context.json(response);
+
+        JsonObject isPaused = new JsonObject();
+        isPaused.addProperty("isPaused", PlayerPianoController.getInstance().getQueueManager().isPaused());
+        server.sendWSPacket(PacketIds.SONG_PAUSED, isPaused);
     }
 
     private void getQueue(Context context) {

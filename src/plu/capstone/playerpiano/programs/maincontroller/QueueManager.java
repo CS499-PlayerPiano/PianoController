@@ -2,12 +2,12 @@ package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import io.swagger.util.Json;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.logger.Logger;
@@ -22,7 +22,6 @@ public class QueueManager {
     //    private Queue<SheetMusic> songQueue = new LinkedList<>();
     private final Queue<QueuedSongWithMetadata> songQueue = new LinkedList<>();
 
-    @Getter
     private QueuedSongWithMetadata currentSheetMusic;
 
     private final PlayerPianoController controller;
@@ -45,7 +44,7 @@ public class QueueManager {
             while(true) {
                 if (currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
                     synchronized (currentSheetMusic) {
-                        if (currentSheetMusic.sheetMusic.isPlaying()) {
+                        if (currentSheetMusic.sheetMusic.isSheetMusicStillScrolling()) {
                             continue;
                         }
                     }
@@ -81,10 +80,7 @@ public class QueueManager {
 
         synchronized (songQueue) {
             for (QueuedSongWithMetadata song : songQueue) {
-                JsonObject tmpMetadata = new JsonObject();
-                tmpMetadata.addProperty("name", song.songDBEntry.get("name").getAsString());
-                tmpMetadata.add("artists", song.songDBEntry.get("artists").getAsJsonArray());
-                queueArray.add(tmpMetadata);
+                queueArray.add(song.toJson());
             }
         }
 
@@ -92,23 +88,15 @@ public class QueueManager {
         obj.add("queue", queueArray);
 
         JsonObject nowPlaying = new JsonObject();
+        nowPlaying.addProperty("name", "");
+        nowPlaying.add("artists", new JsonArray());
+        nowPlaying.addProperty("artwork", "");
+        nowPlaying.addProperty("lengthMS", 0);
+        nowPlaying.addProperty("queuedBy", "SYSTEM");
+
         if (currentSheetMusic != null && currentSheetMusic.songDBEntry != null) {
             synchronized (currentSheetMusic) {
-                if(currentSheetMusic.songDBEntry.has("name")) {
-                    nowPlaying.addProperty("name", currentSheetMusic.songDBEntry.get("name").getAsString());
-                }
-                else {
-                    nowPlaying.addProperty("name", "Failed check in QueueManager! This is a bug!");
-                }
-
-                if(currentSheetMusic.songDBEntry.has("artists")) {
-                    nowPlaying.add("artists", currentSheetMusic.songDBEntry.get("artists").getAsJsonArray());
-                }
-                else {
-                    JsonArray tmp = new JsonArray();
-                    tmp.add("Failed check in QueueManager! This is a bug!");
-                    nowPlaying.add("artists", tmp);
-                }
+                nowPlaying = currentSheetMusic.toJson();
             }
         }
 
@@ -128,7 +116,7 @@ public class QueueManager {
     private void playSheetMusic(QueuedSongWithMetadata music) {
 
         //Stop the current sheet music if we are playing one
-        this.stopSheetMusic();
+        this.skipSong();
 
 
         this.currentSheetMusic = music; //needs to be set before we can sync on it
@@ -154,13 +142,16 @@ public class QueueManager {
     /**
      * Stops the current sheet music.
      */
-    public void stopSheetMusic() {
-        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
-            synchronized (currentSheetMusic) {
-                currentSheetMusic.sheetMusic.stop();
-            }
-        }
-    }
+    //TODO: Stop should clear queue.
+    //TODO: Skip should stop current song and play next song in queue.
+    //TODO: Pause should pause current song.
+//    public void stopSheetMusic() {
+//        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
+//            synchronized (currentSheetMusic) {
+//                currentSheetMusic.sheetMusic.stop();
+//            }
+//        }
+//    }
 
     /**
      * Queues a song to be played.
@@ -240,13 +231,32 @@ public class QueueManager {
         }
     }
 
+    public boolean pauseUnpauseSong() {
+        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
+            synchronized (currentSheetMusic) {
+                currentSheetMusic.sheetMusic.setPaused(!currentSheetMusic.sheetMusic.isPaused());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Boolean isPaused() {
+        if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
+            synchronized (currentSheetMusic) {
+                return currentSheetMusic.sheetMusic.isPaused();
+            }
+        }
+        return null;
+    }
+
     /**
      * @return true if the sheet music is currently playing.
      */
     public boolean isSheetMusicPlaying() {
         if(currentSheetMusic != null && currentSheetMusic.sheetMusic != null) {
             synchronized (currentSheetMusic) {
-                return currentSheetMusic.sheetMusic.isPlaying();
+                return currentSheetMusic.sheetMusic.isSheetMusicStillScrolling();
             }
         }
         return false;
@@ -256,6 +266,7 @@ public class QueueManager {
     @AllArgsConstructor
     public static class QueuedSongWithMetadata {
         private final SheetMusic sheetMusic;
+
         private final JsonObject songDBEntry;
         private final String whoQueued;
 
@@ -267,6 +278,18 @@ public class QueueManager {
         @Override
         public int hashCode() {
             return sheetMusic.hashCode();
+        }
+
+        public JsonObject toJson() {
+            JsonObject obj = new JsonObject();
+
+            obj.addProperty("name", songDBEntry.get("name").getAsString());
+            obj.add("artists", songDBEntry.get("artists").getAsJsonArray());
+            obj.addProperty("artwork", songDBEntry.get("artwork").getAsString());
+            obj.addProperty("lengthMS", sheetMusic.getSongLengthMS());
+            obj.addProperty("queuedBy", whoQueued);
+
+            return obj;
         }
     }
 

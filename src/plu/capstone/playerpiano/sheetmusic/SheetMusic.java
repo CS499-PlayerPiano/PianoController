@@ -25,8 +25,12 @@ public class SheetMusic {
     protected long songLengthMS = 0;
 
     @Getter
-    private boolean isPlaying = false;
+    private boolean isSheetMusicStillScrolling = false;
     private List<SheetMusicCallback> callbacks = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private boolean isPaused = false;
 
     /**
      * Put an event into the event map at the given time.
@@ -53,8 +57,8 @@ public class SheetMusic {
      * Starts playing this SheetMusic object.
      */
     public void play() {
-        if(isPlaying) {throw new IllegalStateException("Already playing");}
-        this.isPlaying = true;
+        if(isSheetMusicStillScrolling) {throw new IllegalStateException("Already playing");}
+        this.isSheetMusicStillScrolling = true;
 
         for(SheetMusicCallback callback : callbacks) {
             callback.onTimestampEvent(0, songLengthMS);
@@ -64,8 +68,17 @@ public class SheetMusic {
         final long startTime = System.nanoTime();
         long prevTime = startTime - 1_000_000;
 
-        while(isPlaying) {
+        while(isSheetMusicStillScrolling) {
             long time = (System.nanoTime() - startTime) / 1_000_000;
+
+            if(isPaused) {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                continue;
+            }
 
             if(time > songLengthMS) {
                 stop();
@@ -114,7 +127,8 @@ public class SheetMusic {
      * Stops playing this SheetMusic object.
      */
     public void stop() {
-        this.isPlaying = false;
+        this.isPaused = false;
+        this.isSheetMusicStillScrolling = false;
     }
 
     @Override

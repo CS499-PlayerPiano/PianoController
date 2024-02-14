@@ -137,6 +137,9 @@ public class PluginWebAPI extends Plugin {
                 JsonObject data = new JsonObject();
                 data.addProperty("sessionID", ctx.getSessionId());
                 sendWSPacket(PacketIds.CONNECTED, data);
+
+
+
             });
             ws.onMessage(ctx -> {
                 System.out.println("[WS] Received message: " + ctx.message());
@@ -214,6 +217,9 @@ public class PluginWebAPI extends Plugin {
 
     @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
+
+
+
         sendWSPacket(PacketIds.SONG_START);
         lastTimestamp = 0;
     }

@@ -116,11 +116,6 @@ public class SheetMusic {
 
         }
 
-        for(SheetMusicCallback callback : callbacks) {
-            callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
-            callback.onSongFinished(prevTime);
-        }
-
     }
 
     /**
@@ -129,6 +124,11 @@ public class SheetMusic {
     public void stop() {
         this.isPaused = false;
         this.isSheetMusicStillScrolling = false;
+
+        for(SheetMusicCallback callback : callbacks) {
+            callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
+            callback.onSongFinished(songLengthMS);
+        }
     }
 
     @Override

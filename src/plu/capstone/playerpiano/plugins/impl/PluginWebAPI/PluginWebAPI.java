@@ -138,6 +138,7 @@ public class PluginWebAPI extends Plugin {
                 JsonObject data = new JsonObject();
                 data.addProperty("sessionID", ctx.getSessionId());
                 data.add("currentSong", PlayerPianoController.getInstance().getQueueManager().getCurrentPlayingSong());
+                data.addProperty("isPaused", PlayerPianoController.getInstance().getQueueManager().isPaused());
                 sendWSPacket(PacketIds.CONNECTED, data);
 
 

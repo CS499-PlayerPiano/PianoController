@@ -72,6 +72,8 @@ function onConnectedEvent(data) {
     console.log("Connected event!", data)
     let currentSong = data.currentSong;
     setNowPlayingInfo(currentSong);
+
+    setUIIsPaused(data.isPaused);
 }
 
 function setNowPlayingInfo(currentSong) {
@@ -97,13 +99,24 @@ function setNowPlayingInfo(currentSong) {
 function onPausedUnpaused(data) {
     let isPaused = data.isPaused;
 
+    setUIIsPaused(isPaused);
+
+    console.log("Paused/Unpaused event!", data)
+}
+
+function setUIIsPaused(isPaused) {
+
+    //Does this look better then just returning?
+    //NULL means no song is playing
+    if (isPaused == undefined || isPaused == null) {
+        isPaused = true;
+    }
+
     if (isPaused) {
         $('#npbPlayPause').text('play_arrow');
     } else {
         $('#npbPlayPause').text('pause');
     }
-
-    console.log("Paused/Unpaused event!", data)
 }
 
 //Handle play pause clicking

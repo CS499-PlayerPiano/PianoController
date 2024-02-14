@@ -304,18 +304,52 @@ footer {
     background-color: #282831;
     display: flex;
     align-items: center;
-
     position: fixed;
-    Width: 100%;
+    width: 100%;
     bottom: 0;
 }
 
+.music-controls {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* Ensure the controls span the entire footer */
+    justify-content: space-between;
+    /* Align controls at the ends */
+}
+
+.progress-container {
+    flex-grow: 1;
+    /* Allow progress bar to expand to fill available space */
+    margin-right: 10px;
+    /* Adjust as needed */
+    height: 10px;
+    /* Set the height of the progress container */
+    background-color: #555;
+    /* Background color for the progress container */
+    border-radius: 5px;
+    /* Add rounded corners */
+}
+
+#progressBar {
+    width: 0%;
+    /* Initially, the progress bar has no width */
+    height: 100%;
+    /* Height equal to the container */
+    background-color: hotpink;
+    /* Bright pink color for debugging */
+    border-radius: 5px;
+    /* Add rounded corners */
+}
+
 .music-icons {
-    margin: auto;
+    margin-right: 20px;
+    /* Adjust as needed */
 }
 
 .music-icons i.material-symbols-outlined {
-    margin-right: 40px;
+    margin-right: 20px;
+    /* Adjust as needed */
     padding: 20px;
     cursor: pointer;
 }

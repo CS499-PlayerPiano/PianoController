@@ -57,7 +57,7 @@ const piano = new Piano(); // Create a new piano instance
 piano.onQueueUpdated(onQueueChanged);
 piano.onSongPausedUnpaused(onPausedUnpaused);
 piano.onConnected(onConnectedEvent);
-
+piano.onSongFinished(onSongFinishedEvent);
 //If running locally, uncomment this line!
 //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
 piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
@@ -74,6 +74,11 @@ function onConnectedEvent(data) {
     setNowPlayingInfo(currentSong);
 
     setUIIsPaused(data.isPaused);
+}
+
+function onSongFinishedEvent(data) {
+    console.log("Song finished event!", data)
+    setNowPlayingInfo(null);
 }
 
 function setNowPlayingInfo(currentSong) {

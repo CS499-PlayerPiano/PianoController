@@ -29,6 +29,8 @@ public class QueueManager {
         controller = playerPianoController;
     }
 
+    private boolean didSendEmptyQueue = false;
+
     public void start() {
         new Thread(() -> {
             // Loop for queueing songs
@@ -56,6 +58,10 @@ public class QueueManager {
                 synchronized (songQueue) {
 
                     if (songQueue.isEmpty()) {
+                        if(!didSendEmptyQueue) {
+                            sendCurrentQueueAsWSPacket();
+                            didSendEmptyQueue = true;
+                        }
                         continue;
                     }
                     logger.info("polling next song");
@@ -71,6 +77,7 @@ public class QueueManager {
 
                 playSheetMusic(nextSong);
                 sendCurrentQueueAsWSPacket();
+                didSendEmptyQueue = false;
             }
         }, "Queue checker").start();
     }

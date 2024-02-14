@@ -58,6 +58,7 @@ piano.onQueueUpdated(onQueueChanged);
 piano.onSongPausedUnpaused(onPausedUnpaused);
 piano.onConnected(onConnectedEvent);
 piano.onSongFinished(onSongFinishedEvent);
+piano.onTimestampUpdated(onTimestampUpdatedEvent);
 //If running locally, uncomment this line!
 //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
 piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
@@ -79,6 +80,19 @@ function onConnectedEvent(data) {
 function onSongFinishedEvent(data) {
     console.log("Song finished event!", data)
     setNowPlayingInfo(null);
+}
+
+function onTimestampUpdatedEvent(data) {
+    console.log("Timestamp updated event!", data);
+    let currentMS = data.current;
+    let endMS = data.end;
+    let percentage = (currentMS / endMS) * 100;
+    setProgressBarUI(percentage);
+}
+
+// 0-100
+function setProgressBarUI(percentage) {
+    document.getElementById('progressBar').style.width = percentage + '%';
 }
 
 function setNowPlayingInfo(currentSong) {

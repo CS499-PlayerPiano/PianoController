@@ -7,283 +7,7 @@
     <title>Piano Website</title>
 
     <link rel="stylesheet" href="assets/css/iziToast.min.css">
-    <style>
-        body {
-            background-color: #111;
-            color: #fff;
-            font-family: 'Courier New', Courier, monospace;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-        }
-
-        .sticky-container {
-            position: sticky;
-            top: 0;
-            background-color: #111;
-            z-index: 1000;
-        }
-
-        .container {
-            margin-top: 50px;
-            padding: 0 10px;
-        }
-
-        .emojis-container {
-            position: absolute;
-            top: 35px;
-            right: 35px;
-            font-size: 24px;
-            text-align: center;
-        }
-
-        .difficulty-text {
-            position: absolute;
-            top: 0;
-            left: -67px;
-            width: 100%;
-            font-size: 14px;
-            color: #fff;
-            text-align: right;
-            cursor: default;
-        }
-
-        .moon {
-            display: inline-block;
-            margin-right: -10px;
-            transition: transform 0.3s ease;
-            position: relative;
-            z-index: 1;
-            cursor: pointer;
-        }
-
-        .moon:hover,
-        .moon.hovered {
-            transform: scale(1.3);
-            z-index: 2;
-        }
-
-        .text {
-            position: relative;
-            cursor: default;
-        }
-
-        .text p {
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 16px;
-            color: #fff;
-            cursor: default;
-        }
-
-
-        @media screen and (max-width: 600px) {
-            .text {
-                font-size: 18px;
-            }
-        }
-
-        .grid {
-            border: 1px solid #333;
-        }
-
-        .grid:after {
-            content: '';
-            display: block;
-            clear: both;
-        }
-
-        .song-element {
-            position: relative;
-            float: left;
-            width: 150px;
-            height: auto;
-            margin: 5px;
-            padding: 10px;
-            background: #181818;
-            color: #262524;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        .song-element:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .image-container {
-            width: 100%;
-            height: 150px;
-            overflow: hidden;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-            border: 2px solid #000;
-            border-radius: 8px;
-        }
-
-        .song-info {
-            text-align: center;
-            padding-top: 10px;
-        }
-
-        .song-title,
-        .artist,
-        .length {
-            margin: 5px 0;
-            font-weight: bold;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: white;
-        }
-
-        #quicksearch {
-            width: 30%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
-        }
-
-        #quicksearch:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .now-playing-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .now-playing {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 5px;
-        }
-
-        .now-playing .back-to-list {
-            background-color: #4CAF50;
-            color: #fff;
-            padding: 10px 15px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-            font-family: 'Courier New', Courier, monospace;
-        }
-
-        .now-playing .back-to-list:hover {
-            background-color: #45a049;
-        }
-
-        .dropdown-container {
-            position: absolute;
-            top: 35px;
-            left: 75%;
-            /* Adjust this value to move it further to the right */
-            transform: translateX(-50%);
-            font-size: 16px;
-            color: #fff;
-            text-align: center;
-            cursor: default;
-        }
-
-        .sort-dropdown {
-            width: 100px;
-            padding: 8px;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            background-color: #333;
-            color: #fff;
-        }
-
-        .sort-dropdown:focus {
-            outline: none;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .sort-dropdown.show-options {
-            opacity: 1;
-        }
-
-        /* Add these styles for the info button */
-        .info-button {
-            position: absolute;
-            top: 35px;
-            left: 30%;
-            display: inline-block;
-            margin-left: 10px;
-            cursor: pointer;
-            font-size: 20px;
-            border-radius: 50%;
-            background-color: #333;
-            color: #fff;
-            padding: 8px;
-            transition: background-color 0.3s ease;
-            width: 25px;
-            height: 25px;
-            line-height: 25px;
-        }
-
-        .info-button:hover {
-            background-color: #555;
-        }
-
-        .undo-button {
-            padding: 8px 16px;
-            background-color: #333;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .undo-button:hover {
-            background-color: #555;
-        }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
@@ -330,6 +54,22 @@
             <!-- Content for the Now Playing screen goes here -->
         </div>
     </div>
+
+    <footer>
+        <img src="https://piano.ericshome.xyz/api/album-art/Kairiki-Bear.jpg">
+        <div>
+            <p> Venom </p>
+            <p> Kairiki Bear </p>
+        </div>
+        <div class="music-icons">
+            <i id="npbPlayPause" class="material-symbols-outlined disableMusicIcon">pause</i>
+            <!-- <i class="material-symbols-outlined">play_arrow</i> -->
+            <i id="npbSkipForward" class="material-symbols-outlined">arrow_forward</i>
+            <!-- <i class="material-symbols-outlined">repeat</i> -->
+            <i id="npbQueue" class="material-symbols-outlined disableMusicIcon">queue_music</i>
+
+        </div>
+    </footer>
 
     <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="assets/js/isotope.pkgd.min.js"></script>

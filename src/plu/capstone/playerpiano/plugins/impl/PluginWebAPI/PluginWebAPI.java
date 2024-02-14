@@ -221,6 +221,10 @@ public class PluginWebAPI extends Plugin {
     @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         sendWSPacket(PacketIds.SONG_START, PlayerPianoController.getInstance().getQueueManager().getCurrentPlayingSong());
+
+        JsonObject pausedData = new JsonObject();
+        pausedData.addProperty("isPaused", false);
+        sendWSPacket(PacketIds.SONG_PAUSED, pausedData);
         lastTimestamp = 0;
     }
 
@@ -228,5 +232,9 @@ public class PluginWebAPI extends Plugin {
     public void onSongFinished(long timestamp) {
         sendWSPacket(PacketIds.SONG_FINISHED);
         lastTimestamp = 0;
+
+        JsonObject pausedData = new JsonObject();
+        pausedData.addProperty("isPaused", true);
+        sendWSPacket(PacketIds.SONG_PAUSED, pausedData);
     }
 }

@@ -14,7 +14,7 @@ $(document).ready(function () {
         updateMoonState(currentIndex, mouseX);//changes current moon based on the mouse position
     }).on('mouseleave', function () {
         if (selectedDifficulty !== null) { //if they clicked on a moon
-            let selectedIndex = Math.floor((selectedDifficulty - 1) / 2);
+            let selectedIndex = Math.floor((selectedDifficulty) / 2);
             updateMoonState(selectedIndex, 0);
         } else {
             $('.moon').removeClass('hovered').text('🌑'); //if no difficulty is selected set all moons to empty

@@ -10,8 +10,8 @@ public enum PacketIds {
     CONNECTED("connected"),
     TIMESTAMP("timestamp"),
     NOTES_PLAYED("notesPlayed"),
-    @Deprecated SONG_FINISHED("songFinished"),
-    @Deprecated SONG_START("songStarted"),
+    SONG_FINISHED("songFinished"),
+    SONG_START("songStarted"),
     QUEUE_UPDATED("queueUpdated"),
     SONG_PAUSED("songPaused"),
 

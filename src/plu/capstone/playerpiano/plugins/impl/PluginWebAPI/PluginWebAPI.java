@@ -23,6 +23,7 @@ import org.eclipse.jetty.server.session.FileSessionDataStore;
 import org.eclipse.jetty.server.session.SessionCache;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.jetbrains.annotations.NotNull;
+import plu.capstone.playerpiano.plugins.PluginConfig;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointGetSongData;
@@ -34,7 +35,9 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 public class PluginWebAPI extends Plugin {
 
-    private static final int PORT = 8898;
+    private int PORT;
+    private int TIMESTAMP_INTERVAL;
+
     private Javalin app;
 
     private Set<WsContext> wsClients = new HashSet<>();
@@ -52,8 +55,18 @@ public class PluginWebAPI extends Plugin {
 
     String API_DOCS_JSON = "/api/openapi.json";
     String API_DOCS_SWAGGER_PATH = "/docs";
+
+    @Override
+    public void setDefaultConfigValues() {
+        config.setInteger("port", 8898);
+        config.setInteger("timestampInterval", 500);
+    }
+
     @Override
     protected void onEnable() {
+
+        PORT = config.getInteger("port");
+        TIMESTAMP_INTERVAL = config.getInteger("timestampInterval");
 
         Gson gson = new GsonBuilder().create();
         JsonMapper gsonMapper = new JsonMapper() {
@@ -164,6 +177,8 @@ public class PluginWebAPI extends Plugin {
 
     }
 
+
+
     public static SessionHandler fileSessionHandler() {
         SessionHandler sessionHandler = new SessionHandler();
         SessionCache sessionCache = new DefaultSessionCache(sessionHandler);
@@ -200,7 +215,7 @@ public class PluginWebAPI extends Plugin {
     public void onTimestampEvent(long current, long end) {
 
         //only send packet if one second has passed
-        if(current - lastTimestamp > 1000 || lastTimestamp == 0) {
+        if(current - lastTimestamp > TIMESTAMP_INTERVAL || lastTimestamp == 0) {
             lastTimestamp = current;
             JsonObject data = new JsonObject();
             data.addProperty("current", current);

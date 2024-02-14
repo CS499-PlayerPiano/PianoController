@@ -53,13 +53,13 @@ public class PlayerPianoController implements Runnable {
 
 
 
-        try {
-            queueManager.queueSong(new MidiSheetMusic(new File("tmp/piano_test.MID")));
-        } catch (InvalidMidiDataException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+//        try {
+//            queueManager.queueSong(new MidiSheetMusic(new File("tmp/songs/TO BE ADDED/LyricWulf - Through the Fire and Flames.mid")));
+//        } catch (InvalidMidiDataException e) {
+//            throw new RuntimeException(e);
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     //The downside to using plugins...

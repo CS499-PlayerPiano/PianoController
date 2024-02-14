@@ -28,7 +28,6 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-# Custom
-#src/plugins/*
-
-tmp/
+## CUSTOM ##
+tmp/*
+!tmp/.gitkeep

@@ -89,7 +89,7 @@ public enum SheetMusicReaderWriter {
         out.close();
     }
 
-    private static final SheetMusicFileParser getByVersion(short version) {
+    public static final SheetMusicFileParser getByVersion(short version) {
         for(SheetMusicReaderWriter parser : values()) {
             if(parser.getVersion() == version) return parser.fileParser;
         }

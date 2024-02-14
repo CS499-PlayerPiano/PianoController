@@ -7,6 +7,8 @@ class Piano {
     #onTimestampCallback;
     #onNotesPlayedCallback;
     #onQueueUpdatedCallback;
+    #onSongPausedUnpausedCallback;
+    #onConnectedCallback;
 
     #wsURL;
     #apiURL;
@@ -21,6 +23,8 @@ class Piano {
         this.#onTimestampCallback = null;
         this.#onNotesPlayedCallback = null;
         this.#onQueueUpdatedCallback = null;
+        this.#onSongPausedUnpausedCallback = null;
+        this.#onConnectedCallback = null;
 
         // Connectection URLs
         let host = window.location.host;
@@ -157,8 +161,18 @@ class Piano {
             }
         }
 
+        // Song paused/unpaused event
+        else if (pkt.packetId == "songPaused") {
+            if (this.#onSongPausedUnpausedCallback != null) {
+                this.#onSongPausedUnpausedCallback(pkt.data);
+            }
+        }
+
         // Connected event
         else if (pkt.packetId == "connected") {
+            if (this.#onConnectedCallback != null) {
+                this.#onConnectedCallback(pkt.data);
+            }
             console.log('[Piano - WS] Recieved connected packet:');
             console.log('[Piano - WS]   - Session ID: ' + pkt.data.sessionID);
         }
@@ -250,6 +264,17 @@ class Piano {
         });
     }
 
+    pauseUnpauseSong() {
+        this.#sendControlRequest("pause", null, (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Song paused/unpaused');
+            }
+            else {
+                console.error('[Piano - API] Error pausing/unpausing song:', intResp);
+            }
+        });
+    }
+
     // Callback setter for song started event
     onSongStarted(callback) {
         this.#onSongStartedCallback = callback;
@@ -273,6 +298,16 @@ class Piano {
     // Callback setter for queue updated event
     onQueueUpdated(callback) {
         this.#onQueueUpdatedCallback = callback;
+    }
+
+    // Callback setter for song paused/unpaused event
+    onSongPausedUnpaused(callback) {
+        this.#onSongPausedUnpausedCallback = callback;
+    }
+
+    // Callback setter for connected event
+    onConnected(callback) {
+        this.#onConnectedCallback = callback;
     }
 
 }   

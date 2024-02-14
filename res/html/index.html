@@ -192,6 +192,11 @@
             piano.pauseUnpauseSong();
         });
 
+        //Handle skip forward clicking
+        document.getElementById('npbSkipForward').addEventListener('click', function () {
+            piano.skipSong();
+        });
+
         piano.getSongList((songs) => { // Get the list of songs from the API
             songsDB = songs;
             const html = `

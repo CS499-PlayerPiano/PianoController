@@ -1,0 +1,33 @@
+{
+    "name": "Player Piano",
+    "short_name": "Player Piano",
+    "icons": [
+        {
+            "src": "assets/favicon/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/favicon/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "description": "Player Piano Controller",
+    "start_url": ".",
+    "scope": "/",
+    "orientation": "portrait",
+    "lang": "en",
+    "dir": "ltr",
+    "categories": [
+        "music",
+        "piano",
+        "controller",
+        "player piano",
+        "capstone",
+        "cs499"
+    ]
+}

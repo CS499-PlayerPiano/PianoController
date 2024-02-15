@@ -13,84 +13,20 @@ $(document).ready(function () {
         let mouseX = event.pageX - $(this).offset().left; //gets mouse position
         updateMoonState(currentIndex, mouseX);//changes current moon based on the mouse position
     }).on('mouseleave', function () {
-        if (selectedDifficulty !== null) { //if they clicked on a moon
-            switch(selectedDifficulty){
-                case 0:
-                    $('.moon').removeClass('hovered').text('🌑');
-                    break;
-                case 1:
-                    $('.moon').eq(0).addClass('hovered').text('🌗');
-                    $('.moon').eq(1).removeClass('hovered').text('🌑');
-                    $('.moon').eq(2).removeClass('hovered').text('🌑');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 2:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).removeClass('hovered').text('🌑');
-                    $('.moon').eq(2).removeClass('hovered').text('🌑');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 3:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌗');
-                    $('.moon').eq(2).removeClass('hovered').text('🌑');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 4:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).removeClass('hovered').text('🌑');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 5:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌗');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 6:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌕');
-                    $('.moon').eq(3).removeClass('hovered').text('🌑');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 7:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌕');
-                    $('.moon').eq(3).addClass('hovered').text('🌗');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 8:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌕');
-                    $('.moon').eq(3).addClass('hovered').text('🌕');
-                    $('.moon').eq(4).removeClass('hovered').text('🌑');
-                    break;
-                case 9:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌕');
-                    $('.moon').eq(3).addClass('hovered').text('🌕');
-                    $('.moon').eq(4).addClass('hovered').text('🌗');
-                    break;
-                case 10:
-                    $('.moon').eq(0).addClass('hovered').text('🌕');
-                    $('.moon').eq(1).addClass('hovered').text('🌕');
-                    $('.moon').eq(2).addClass('hovered').text('🌕');
-                    $('.moon').eq(3).addClass('hovered').text('🌕');
-                    $('.moon').eq(4).addClass('hovered').text('🌕');
-                    break;
+        if (selectedDifficulty !== null) {
+            let fullMoons = Math.floor(selectedDifficulty / 2); // Calculate the number of full moons
+            let isHalf = selectedDifficulty % 2 === 1; // Check if the last moon is half
+            for (let i = 0; i < $('.moon').length; i++) {
+                if (i < fullMoons) {
+                    $('.moon').eq(i).addClass('hovered').text('🌕');
+                } else if (i === fullMoons && isHalf) {
+                    $('.moon').eq(i).addClass('hovered').text('🌗');
+                } else {
+                    $('.moon').eq(i).removeClass('hovered').text('🌑');
+                }
             }
         } else {
-            $('.moon').removeClass('hovered').text('🌑'); //if no difficulty is selected set all moons to empty
+            $('.moon').removeClass('hovered').text('🌑'); // Reset all moons to empty if no moon was clicked
         }
     });
 

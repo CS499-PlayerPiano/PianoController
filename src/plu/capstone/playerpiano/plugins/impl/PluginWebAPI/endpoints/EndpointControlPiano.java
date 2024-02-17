@@ -13,7 +13,8 @@ import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
-import plu.capstone.playerpiano.programs.maincontroller.QueueManager.QueuedSongWithMetadata;
+import plu.capstone.playerpiano.programs.maincontroller.QueueError;
+import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
@@ -140,18 +141,14 @@ public class EndpointControlPiano implements Endpoint {
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
-
-            response.addProperty("success", position >= 0);
-            response.addProperty("position", position);
-
-
-
-            if(position == -1) {
-                response.addProperty("error", "Song already exists in queue!");
+            try {
+                int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
+                response.addProperty("success", true);
+                response.addProperty("position", position);
             }
-            else if(position == -2) {
-                response.addProperty("error", "Song is already playing!");
+            catch(QueueError e) {
+                response.addProperty("success", false);
+                response.addProperty("error", e.getMessage());
             }
 
             context.status(HttpStatus.OK);

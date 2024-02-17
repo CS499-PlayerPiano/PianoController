@@ -9,12 +9,13 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
-import plu.capstone.playerpiano.programs.maincontroller.QueueManager.QueuedSongWithMetadata;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
-import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
+import plu.capstone.playerpiano.programs.maincontroller.QueueError;
+import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
+import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
@@ -204,7 +205,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @return the position in the queue.
      */
     @Deprecated
-    public final int playSheetMusic(SheetMusic music) {
+    public final int playSheetMusic(SheetMusic music) throws QueueError {
         return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
     }
 
@@ -213,7 +214,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param music The sheet music to play.
      * @return the position in the queue.
      */
-    public final int playSheetMusic(QueuedSongWithMetadata music) {
+    public final int playSheetMusic(QueuedSongWithMetadata music) throws QueueError {
         return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
     }
 
@@ -233,7 +234,7 @@ public abstract class Plugin implements SheetMusicCallback {
     }
 
     public final void skipSong() {
-        PlayerPianoController.getInstance().getQueueManager().skipSong();
+        PlayerPianoController.getInstance().getQueueManager().stopOrSkipCurrentSong();
     }
 
     /**

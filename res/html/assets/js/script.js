@@ -95,7 +95,11 @@ function onSongStartedEvent(data) {
 function onSongFinishedEvent(data) {
     console.log("Song finished event!", data)
     setNowPlayingInfo(null);
-    setProgressBarUI(0);
+
+    setTimeout(() => {
+        setProgressBarUI(0);
+        console.log("Resetting progress bar (delayed)");
+    }, 50);
 }
 
 function onTimestampUpdatedEvent(data) {

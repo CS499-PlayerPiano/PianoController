@@ -103,7 +103,7 @@ function onSongFinishedEvent(data) {
 }
 
 function onTimestampUpdatedEvent(data) {
-    console.log("Timestamp updated event!", data);
+    // console.log("Timestamp updated event!", data);
     let currentMS = data.current;
     let endMS = data.end;
     let percentage = (currentMS / endMS) * 100;
@@ -355,9 +355,6 @@ function queueSong(song) {
             }
             else {
                 let message = `Song queued at position ${position}`;
-                if (position == 0) {
-                    message = 'Playing your song now!';
-                }
                 iziToast.success({
                     title: 'Success',
                     message: message,

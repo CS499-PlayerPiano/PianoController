@@ -38,6 +38,9 @@ public class QueueManager {
                             playSheetMusic(currentSheetMusic);
                             sendCurrentQueueAsWSPacket();
                         }
+                        else {
+                            currentSheetMusic = null;
+                        }
                     }
                 }
 

@@ -338,7 +338,7 @@ function initSearchBarThingy() {
             if (searchArtist == null) searchArtist = false;
             if (searchTags == null) searchTags = false;
 
-            console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", searchDifficulty)
+            console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "searchDifficulty", searchDifficulty)
 
             //If we search by difficulty, make it a AND statement
             if (searchDifficulty) {

@@ -169,7 +169,7 @@ document.getElementById('npbSkipForward').addEventListener('click', function () 
 piano.getSongList((songs) => { // Get the list of songs from the API
     songsDB = songs;
     const html = `
-    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%">
+    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%">
         <div class="image-container">
             <img loading="lazy" src="%artwork%" alt="Song Image">
         </div>
@@ -200,6 +200,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
         songElement = songElement.replace('%song-index%', i);
         songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
+        songElement = songElement.replace('%lengthMS%', song.songLengthMS);
 
         $('.grid').append(songElement);
     }
@@ -353,7 +354,8 @@ function initSearchBarThingy() {
             difficulty: '[data-difficulty] parseInt',
             name: '.song-title',
             artist: '.artist',
-            tags: '[data-tags]'
+            tags: '[data-tags]',
+            length: '[data-length-ms] parseInt'
         }
     });
     // use value of search field to filter

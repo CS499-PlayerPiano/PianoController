@@ -319,28 +319,44 @@ function initSearchBarThingy() {
             let $this = $(this);
             let title = $this.find('.song-title').text(); //Search by title, artist, and tags
             let artist = $this.find('.artist').text();
+            let tags = $this.attr('data-tags');
 
             let showAnyByDefault = true;
 
-            let difficulty = false;
+            let searchDifficulty = false;
             if (selectedDifficulty !== null) {
-                difficulty = $this.attr('data-difficulty') == selectedDifficulty;
+                searchDifficulty = $this.attr('data-difficulty') == selectedDifficulty;
 
                 showAnyByDefault = false;
             }
 
             let searchTitle = qsRegex ? title.match(qsRegex) : showAnyByDefault;
             let searchArtist = qsRegex ? artist.match(qsRegex) : showAnyByDefault;
-            let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : showAnyByDefault;
+            let searchTags = qsRegex ? tags.match(qsRegex) : showAnyByDefault;
 
             if (searchTitle == null) searchTitle = false;
             if (searchArtist == null) searchArtist = false;
             if (searchTags == null) searchTags = false;
 
-            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
+            console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", searchDifficulty)
 
+            //If we search by difficulty, make it a AND statement
+            if (searchDifficulty) {
 
-            return searchTitle || searchArtist || searchTags || difficulty;
+                //If we are not searching by anything else, just return the difficulty
+                if (qsRegex == null) {
+                    console.log("Returning just difficulty")
+                    return searchDifficulty;
+                }
+
+                console.log("Returning AND statement")
+                //If we are searching by something else, return the AND statement
+                return (searchTitle || searchArtist || searchTags) && searchDifficulty;
+            }
+
+            console.log("Returning OR statement")
+            //Normal OR search without difficulty
+            return searchTitle || searchArtist || searchTags;
         }
     });
     // use value of search field to filter

@@ -1,5 +1,7 @@
+let selectedDifficulty = null;
+
 $(document).ready(function () {
-    let selectedDifficulty = null;
+
 
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
@@ -38,22 +40,17 @@ $(document).ready(function () {
         $('.moon').removeClass('selected');
         $(this).addClass('selected');
 
-        $grid.isotope({
-            filter: function () {
-                let $this = $(this);
-                let songDifficulty = parseInt($this.attr('data-difficulty'));
-                return songDifficulty == selectedDifficulty;
-            }
-        });
+        $grid.isotope(); //reapply isotope filter
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
-        $grid.isotope({ filter: '*' }); // Reset isotope filter
+        // $grid.isotope({ filter: '*' }); // Reset isotope filter
         selectedDifficulty = null; // Reset selected difficulty
         $('.moon').removeClass('selected'); // Remove selected moon styling
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
-        initSearchBarThingy(); // Reinitialize search functionality
+        qsRegex = null; // Reset search regex
+        $grid.isotope(); // Reapply isotope filter
     });
 });
 
@@ -322,15 +319,36 @@ function initSearchBarThingy() {
             let $this = $(this);
             let title = $this.find('.song-title').text(); //Search by title, artist, and tags
             let artist = $this.find('.artist').text();
-            let searchTitle = qsRegex ? title.match(qsRegex) : true;
-            let searchArtist = qsRegex ? artist.match(qsRegex) : true;
-            let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : true;
-            return searchTitle || searchArtist || searchTags;
+
+            let showAnyByDefault = true;
+
+            let difficulty = false;
+            if (selectedDifficulty !== null) {
+                difficulty = $this.attr('data-difficulty') == selectedDifficulty;
+
+                showAnyByDefault = false;
+            }
+
+            let searchTitle = qsRegex ? title.match(qsRegex) : showAnyByDefault;
+            let searchArtist = qsRegex ? artist.match(qsRegex) : showAnyByDefault;
+            let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : showAnyByDefault;
+
+            if (searchTitle == null) searchTitle = false;
+            if (searchArtist == null) searchArtist = false;
+            if (searchTags == null) searchTags = false;
+
+            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
+
+
+            return searchTitle || searchArtist || searchTags || difficulty;
         }
     });
     // use value of search field to filter
     let $quicksearch = $('#quicksearch').keyup(debounce(function () {
         qsRegex = new RegExp($quicksearch.val(), 'gi');
+        if ($quicksearch.val() == '') {
+            qsRegex = null;
+        }
         $grid.isotope();
     }));
 }

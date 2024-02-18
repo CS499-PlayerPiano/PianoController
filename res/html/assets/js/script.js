@@ -51,7 +51,7 @@ $(document).ready(function () {
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex
 
-        $grid.isotope({ sortBy: 'original-order' }); // Reapply isotope filter
+        $grid.isotope({ sortBy: 'original-order', sortAscending: true }); // Reapply isotope filter
     });
 });
 
@@ -316,7 +316,18 @@ function arrayToCommaSeparatedString(array) {
 //Change the sort of the isotope grid depending on the dropdown value
 $('#sort-dropdown').on('change', function () {
     let value = $(this).val();
-    $grid.isotope({ sortBy: value });
+
+    //if the option has data-descending, sort descending
+
+    let ascending = true;
+    //if the option has data-ascending AND it's false, sort descending
+    if ($(this).find(':selected').data('ascending') == false) {
+        ascending = false;
+    }
+
+    console.log("Sorting by", value, "ascending", ascending);
+
+    $grid.isotope({ sortBy: value, sortAscending: ascending });
 });
 
 function initSearchBarThingy() {

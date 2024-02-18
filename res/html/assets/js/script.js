@@ -50,7 +50,8 @@ $(document).ready(function () {
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex
-        $grid.isotope(); // Reapply isotope filter
+
+        $grid.isotope({ sortBy: 'original-order' }); // Reapply isotope filter
     });
 });
 
@@ -310,6 +311,12 @@ function arrayToCommaSeparatedString(array) {
     return string;
 }
 
+//on sort-dropdown change
+$('#sort-dropdown').on('change', function () {
+    let value = $(this).val();
+    $grid.isotope({ sortBy: value });
+});
+
 function initSearchBarThingy() {
     let qsRegex; // quick search regex
     $grid = $('.grid').isotope({ // init Isotope
@@ -341,6 +348,12 @@ function initSearchBarThingy() {
 
 
             return searchTitle || searchArtist || searchTags || difficulty;
+        },
+        getSortData: {
+            difficulty: '[data-difficulty] parseInt',
+            name: '.song-title',
+            artist: '.artist',
+            tags: '[data-tags]'
         }
     });
     // use value of search field to filter

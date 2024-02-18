@@ -313,6 +313,7 @@ function arrayToCommaSeparatedString(array) {
 }
 
 //on sort-dropdown change
+//Change the sort of the isotope grid depending on the dropdown value
 $('#sort-dropdown').on('change', function () {
     let value = $(this).val();
     $grid.isotope({ sortBy: value });

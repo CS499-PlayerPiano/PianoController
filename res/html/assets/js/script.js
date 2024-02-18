@@ -49,6 +49,7 @@ $(document).ready(function () {
         $('.moon').removeClass('selected'); // Remove selected moon styling
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
+        qsRegex = null; // Reset search regex
         $grid.isotope(); // Reapply isotope filter
     });
 });

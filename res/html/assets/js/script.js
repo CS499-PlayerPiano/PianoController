@@ -209,7 +209,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
     $('.grid').on('click', '.song-element', function (e) {
         e.stopPropagation();
-        $('.sticky-container').hide(); // hide header
 
         let artwork = $(this).find('.image-container img').attr('src');
         let title = $(this).find('.song-title').text();
@@ -222,25 +221,37 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         <p>${artist}</p>
         <button class="back-to-list">Back to Song List</button>
         <button class ="back-to-list", onClick="queueSongByIndex(${songIndex})"> Queue Song</button>
-    `);
-        $('.container').hide();
-        $('.now-playing-container').show();
+        `);
+        showQueueContainer();
     });
 
     $('.now-playing').on('click', '.back-to-list', function () {
-        $('.sticky-container').show();
-        $('.now-playing-container').hide();
-        $('.container').show();
+        hideQueueContainer();
     });
 
     $(document).on('click', function (e) {
         if (!$('.now-playing-container').is(e.target) && $('.now-playing-container').has(e.target).length === 0) {
-            $('.now-playing-container').hide();
-            $('.container').show();
-            $('.sticky-container').show();
+            hideQueueContainer();
         }
     });
 });
+
+//Saveing and loading scroll position seems like a bit of a hack
+//Real fix here is most likely some CSS Magic that I am not aware of.
+let savedScrollPosition = 0;
+function showQueueContainer() {
+    savedScrollPosition = $(window).scrollTop(); // save scroll position
+    $('.sticky-container').hide(); // hide header
+    $('.container').hide(); // hide song list
+    $('.now-playing-container').show(); // show queue container
+}
+
+function hideQueueContainer() {
+    $('.sticky-container').show(); // show header
+    $('.container').show(); // show song list
+    $('.now-playing-container').hide(); // hide queue container
+    $(window).scrollTop(savedScrollPosition); // restore scroll position
+}
 
 function queueSongByIndex(index) {
     let song = songsDB[index];

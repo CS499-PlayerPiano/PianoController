@@ -1,5 +1,12 @@
 // Note: When you recompile this, you need to delete: "C:\Users\eric\AppData\Local\Temp\arduino\cores\arduino_avr_uno_f742622285952b9ea3aafa09dbdb4e60" folder for some reason
 
+//SETTINGS:
+//Algorithm: ALG_NAIVE, ALG_BRESENHAM
+//#define ALG_NAIVE 1
+#define ALG_BRESENHAM 1
+
+
+
 #include <Arduino.h>
 #include "ShiftRegisterPWM.h"
 

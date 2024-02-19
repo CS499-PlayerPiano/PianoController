@@ -1,5 +1,12 @@
 // Note: When you recompile this, you need to delete: "C:\Users\eric\AppData\Local\Temp\arduino\cores\arduino_avr_uno_f742622285952b9ea3aafa09dbdb4e60" folder for some reason
 
+//SETTINGS:
+//Algorithm: ALG_NAIVE, ALG_BRESENHAM
+//#define ALG_NAIVE 1
+#define ALG_BRESENHAM 1
+
+
+
 #include <Arduino.h>
 #include "ShiftRegisterPWM.h"
 
@@ -7,7 +14,7 @@
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
 
-const int SHIFT_REGISTER_COUNT = 2;
+const int SHIFT_REGISTER_COUNT = 5;
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
 ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
 
@@ -132,7 +139,7 @@ void setup()
     pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
-    sr.interrupt(ShiftRegisterPWM::UpdateFrequency::Medium);
+    sr.interrupt(ShiftRegisterPWM::UpdateFrequency::Slow);
 
     // Wait for the serial port to connect
     while (!Serial)

@@ -47,6 +47,11 @@
     ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK; \
     ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK
 
+int map2(unsigned x, unsigned in_max, unsigned out_max)
+{
+    return (unsigned) ((x * out_max + (in_max / 2)) / in_max);
+}
+
 class ShiftRegisterPWM
 {
 public:
@@ -96,6 +101,31 @@ public:
      */
     void set(uint8_t pin, uint8_t value)
     {
+#ifdef ALG_BRESENHAM
+      value = map2(value, 255, resolution);
+      int dx = resolution;
+      int dy = (int) value;
+      int D = (int) (2 * dy - dx);
+      uint8_t shiftRegister = pin / 8;
+      for (int t = 0; t < resolution; ++t)
+      {
+          int on = 0;
+
+          if(D > 0)
+          {
+            on = 1;
+            D -= (2 * dx);
+          }
+          else
+          {
+            on = 0;
+          }
+          D += (2 * dy);
+          this->data[t + shiftRegister * resolution] ^= (-on ^ this->data[t + shiftRegister * resolution]) & (1 << (pin % 8));
+      }
+#endif
+#ifdef ALG_NAIVE        
+      
         value = (uint8_t)(value / 255.0 * resolution + .5); // round
         uint8_t shiftRegister = pin / 8;
         for (int t = 0; t < resolution; ++t)
@@ -103,6 +133,8 @@ public:
             // set (pin % 8)th bit to (value > t)
             this->data[t + shiftRegister * resolution] ^= (-(value > t) ^ this->data[t + shiftRegister * resolution]) & (1 << (pin % 8));
         }
+#endif
+        
     };
 
     /**

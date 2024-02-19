@@ -50,7 +50,8 @@ $(document).ready(function () {
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex
-        $grid.isotope(); // Reapply isotope filter
+
+        $grid.isotope({ sortBy: 'original-order', sortAscending: true }); // Reapply isotope filter
     });
 });
 
@@ -168,7 +169,7 @@ document.getElementById('npbSkipForward').addEventListener('click', function () 
 piano.getSongList((songs) => { // Get the list of songs from the API
     songsDB = songs;
     const html = `
-    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%">
+    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%">
         <div class="image-container">
             <img loading="lazy" src="%artwork%" alt="Song Image">
         </div>
@@ -199,6 +200,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
         songElement = songElement.replace('%song-index%', i);
         songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
+        songElement = songElement.replace('%lengthMS%', song.songLengthMS);
 
         $('.grid').append(songElement);
     }
@@ -310,6 +312,24 @@ function arrayToCommaSeparatedString(array) {
     return string;
 }
 
+//on sort-dropdown change
+//Change the sort of the isotope grid depending on the dropdown value
+$('#sort-dropdown').on('change', function () {
+    let value = $(this).val();
+
+    //if the option has data-descending, sort descending
+
+    let ascending = true;
+    //if the option has data-ascending AND it's false, sort descending
+    if ($(this).find(':selected').data('ascending') == false) {
+        ascending = false;
+    }
+
+    console.log("Sorting by", value, "ascending", ascending);
+
+    $grid.isotope({ sortBy: value, sortAscending: ascending });
+});
+
 function initSearchBarThingy() {
     let qsRegex; // quick search regex
     $grid = $('.grid').isotope({ // init Isotope
@@ -357,7 +377,15 @@ function initSearchBarThingy() {
             console.log("Returning OR statement")
             //Normal OR search without difficulty
             return searchTitle || searchArtist || searchTags;
-        }
+        },
+        getSortData: {
+            difficulty: '[data-difficulty] parseInt',
+            name: '.song-title',
+            artist: '.artist',
+            tags: '[data-tags]',
+            length: '[data-length-ms] parseInt'
+        },
+        
     });
     // use value of search field to filter
     let $quicksearch = $('#quicksearch').keyup(debounce(function () {

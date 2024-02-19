@@ -339,28 +339,21 @@ function initSearchBarThingy() {
             let $this = $(this);
             let title = $this.find('.song-title').text(); //Search by title, artist, and tags
             let artist = $this.find('.artist').text();
+            let tags = $this.attr('data-tags');
 
-            let showAnyByDefault = true;
-
-            let difficulty = false;
+            let difficulty = true;
             if (selectedDifficulty !== null) {
                 difficulty = $this.attr('data-difficulty') == selectedDifficulty;
-
-                showAnyByDefault = false;
             }
 
-            let searchTitle = qsRegex ? title.match(qsRegex) : showAnyByDefault;
-            let searchArtist = qsRegex ? artist.match(qsRegex) : showAnyByDefault;
-            let searchTags = qsRegex ? $this.attr('data-tags').match(qsRegex) : showAnyByDefault;
-
-            if (searchTitle == null) searchTitle = false;
-            if (searchArtist == null) searchArtist = false;
-            if (searchTags == null) searchTags = false;
+            let searchTitle = qsRegex ? (title.match(qsRegex) != null) : true;
+            let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
+            let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
 
             //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
 
 
-            return searchTitle || searchArtist || searchTags || difficulty;
+            return (searchTitle || searchArtist || searchTags) && difficulty;
         },
         getSortData: {
             difficulty: '[data-difficulty] parseInt',

@@ -236,7 +236,11 @@ piano.getSongList((songs) => { // Get the list of songs from the API
     });
 });
 
+//Saveing and loading scroll position seems like a bit of a hack
+//Real fix here is most likely some CSS Magic that I am not aware of.
+let savedScrollPosition = 0;
 function showQueueContainer() {
+    savedScrollPosition = $(window).scrollTop(); // save scroll position
     $('.sticky-container').hide(); // hide header
     $('.container').hide(); // hide song list
     $('.now-playing-container').show(); // show queue container
@@ -246,6 +250,7 @@ function hideQueueContainer() {
     $('.sticky-container').show(); // show header
     $('.container').show(); // show song list
     $('.now-playing-container').hide(); // hide queue container
+    $(window).scrollTop(savedScrollPosition); // restore scroll position
 }
 
 function queueSongByIndex(index) {

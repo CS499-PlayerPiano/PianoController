@@ -403,7 +403,7 @@ function queueSong(song) {
                 return;
             }
             else {
-                let message = `Song queued at position ${position}`;
+                let message = `Song queued at position ${position + 1}`;
                 iziToast.success({
                     title: 'Success',
                     message: message,

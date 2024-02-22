@@ -317,11 +317,14 @@ function difficultyToEmojis(difficulty) {
 function arrayToCommaSeparatedString(array) {
     let string = '';
     for (let i = 0; i < array.length; i++) {
-        string += array[i] + ',';
+        string += array[i];
+        if (i < array.length - 1) {
+            string += ', ';
+        }
     }
-    string = string.substring(0, string.length - 1);
     return string;
 }
+
 
 //on sort-dropdown change
 //Change the sort of the isotope grid depending on the dropdown value

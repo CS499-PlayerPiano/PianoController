@@ -50,8 +50,9 @@ $(document).ready(function () {
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex
+        var filterValue = qsRegex ? qsRegex : '*';
 
-        $grid.isotope({ sortBy: 'original-order', sortAscending: true }); // Reapply isotope filter
+        $grid.isotope({ filter: filterValue, sortBy: 'original-order', sortAscending: true });
     });
 });
 

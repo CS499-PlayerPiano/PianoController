@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.utilities.Stopwatch;
 
 /**
  * Base class for any type of sheet music.
@@ -28,9 +29,7 @@ public class SheetMusic {
     private boolean isSheetMusicStillScrolling = false;
     private List<SheetMusicCallback> callbacks = new ArrayList<>();
 
-    @Getter
-    @Setter
-    private boolean isPaused = false;
+    private final Stopwatch stopwatch = new Stopwatch();
 
     /**
      * Put an event into the event map at the given time.
@@ -65,45 +64,27 @@ public class SheetMusic {
             callback.onSongStarted(0, eventMap);
         }
 
-        final long startTime = System.nanoTime();
-        long prevTime = startTime - 1_000_000;
+        stopwatch.start();
 
+        long prevTime = -1_000;
         while(isSheetMusicStillScrolling) {
-            long time = (System.nanoTime() - startTime) / 1_000_000;
 
-            if(isPaused) {
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                continue;
-            }
-
+            long time = stopwatch.getElapsedTimeMS();
             if(time > songLengthMS) {
                 stop();
                 return;
             }
 
-            if(time == prevTime) {
-                try {
-                    Thread.sleep(0, 500_000);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-            else {
-                while(time > prevTime) {
-                    //System.out.println("Time: " + time + " PrevTime: " + prevTime);
-                    ++prevTime;
+            while(time > prevTime) {
+                //System.out.println("Time: " + time + " PrevTime: " + prevTime);
+                ++prevTime;
 
-                    for(SheetMusicCallback callback : callbacks) {
-                        final long newTime = prevTime + callback.getOffset();
-                        List<SheetMusicEvent> msgs = eventMap.getOrDefault(newTime, null);
+                for(SheetMusicCallback callback : callbacks) {
+                    final long newTime = prevTime + callback.getOffset();
+                    List<SheetMusicEvent> msgs = eventMap.getOrDefault(newTime, null);
 
-                        if(msgs != null) {
-                            callback.onEventsPlayed(msgs, newTime);
-                        }
+                    if(msgs != null) {
+                        callback.onEventsPlayed(msgs, newTime);
                     }
                 }
             }
@@ -115,20 +96,33 @@ public class SheetMusic {
             prevTime = time;
 
         }
+    }
 
+    public void setPaused(boolean paused) {
+        if(paused) {
+            stopwatch.stop();
+        } else {
+            stopwatch.start();
+        }
+    }
+
+    public boolean isPaused() {
+        return !stopwatch.isRunning();
     }
 
     /**
      * Stops playing this SheetMusic object.
      */
     public void stop() {
-        this.isPaused = false;
-        this.isSheetMusicStillScrolling = false;
+
+        stopwatch.stop();
 
         for(SheetMusicCallback callback : callbacks) {
             callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
             callback.onSongFinished(songLengthMS);
         }
+
+        this.isSheetMusicStillScrolling = false;
     }
 
     @Override

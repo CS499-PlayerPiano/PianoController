@@ -12,18 +12,20 @@ public class Stopwatch {
 
 
     public void start() {
-        this.startTime = System.nanoTime();
+        if (running) {return;}
+        this.startTime = System.nanoTime() - getElapsedTimeNS();
         this.running = true;
     }
 
 
     public void stop() {
+        if (!running) {return;}
         this.stopTime = System.nanoTime();
         this.running = false;
     }
 
 
-    public long getElapsedTime() {
+    public long getElapsedTimeNS() {
         long elapsed;
         if (running) {
             elapsed = (System.nanoTime() - startTime);
@@ -32,5 +34,9 @@ public class Stopwatch {
             elapsed = (stopTime - startTime);
         }
         return elapsed;
+    }
+
+    public long getElapsedTimeMS() {
+        return getElapsedTimeNS() / 1_000_000;
     }
 }

@@ -102,9 +102,13 @@ void processIncomingSerial()
             }
         }
 
-        // If we start or stop a song for now, we turn off all the lights
-        //  This may change in the future
-        else if (command == 'F' || command == 'S')
+        /*
+            Turn off all the keys
+            S == Start of song
+            F == Finished playing song
+            P == Pause
+        */
+        else if (command == 'F' || command == 'S' || command == 'P')
         {
             // turn all the lights off
             for (int i = 0; i < TOTAL_PINS; i++)

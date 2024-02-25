@@ -104,6 +104,14 @@ public class SheetMusic {
         } else {
             stopwatch.start();
         }
+
+        for(SheetMusicCallback callback : callbacks) {
+            if(paused) {
+                callback.onPause();
+            } else {
+                callback.onUnpause();
+            }
+        }
     }
 
     public boolean isPaused() {

@@ -50,10 +50,6 @@ public class EndpointControlPiano implements Endpoint {
         response.addProperty("success", success);
         context.status(HttpStatus.OK);
         context.json(response);
-
-        JsonObject isPaused = new JsonObject();
-        isPaused.addProperty("isPaused", PlayerPianoController.getInstance().getQueueManager().isPaused());
-        server.sendWSPacket(PacketIds.SONG_PAUSED, isPaused);
     }
 
     private void getQueue(Context context) {

@@ -223,6 +223,21 @@ public class PluginRealPiano extends Plugin {
     }
 
     @Override
+    public void onPause() {
+        if(!arduino.isOpen()) {return;}
+
+        /*
+         * F - Packet to tell the arduino to turn off all notes, we have paused the song
+         */
+
+        byte[] data = {
+                'P'
+        };
+
+        writeBytes(data);
+    }
+
+    @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         if(!arduino.isOpen()) {return;}
 

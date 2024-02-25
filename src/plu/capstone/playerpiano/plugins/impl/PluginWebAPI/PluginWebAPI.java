@@ -226,6 +226,20 @@ public class PluginWebAPI extends Plugin {
     }
 
     @Override
+    public void onPause() {
+        JsonObject isPaused = new JsonObject();
+        isPaused.addProperty("isPaused", true);
+        sendWSPacket(PacketIds.SONG_PAUSED, isPaused);
+    }
+
+    @Override
+    public void onUnpause() {
+        JsonObject isPaused = new JsonObject();
+        isPaused.addProperty("isPaused", false);
+        sendWSPacket(PacketIds.SONG_PAUSED, isPaused);
+    }
+
+    @Override
     public void onNotesPlayed(List<Note> notes, long timestamp) {
         JsonObject data = new JsonObject();
         data.addProperty("timestamp", timestamp);

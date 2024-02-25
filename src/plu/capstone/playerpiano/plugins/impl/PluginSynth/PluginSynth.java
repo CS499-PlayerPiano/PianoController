@@ -36,6 +36,17 @@ public class PluginSynth extends Plugin {
         }
     }
 
+    //Release all notes when a song is paused.
+    @Override
+    public void onPause() {
+        for(int i = 0; i < NUM_CHANNELS; i++) {
+            final Synthesizer synth = midiSynth[i];
+            for(MidiChannel channel : synth.getChannels()) {
+                channel.allNotesOff();
+            }
+        }
+    }
+
     /**
      * Every time a note is played, we need to send it to the synthesizer.
      * Each channel has its own synthesizer so that multiple notes can be played at once.

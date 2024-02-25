@@ -70,6 +70,11 @@ public class PluginVirtualPianoEmulatorGui extends PluginStateKeeper {
     }
 
     @Override
+    public void onPause() {
+        piano.clearLitKeys();
+    }
+
+    @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         piano.clearLitKeys();
     }

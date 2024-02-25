@@ -51,4 +51,14 @@ public interface SheetMusicCallback {
      * @param end The timestamp of the end of the song in milliseconds.
      */
     default void onTimestampEvent(long current, long end) {}
+
+    /**
+     * Called when the song is paused.
+     */
+    default void onPause(){}
+
+    /**
+     * Called when the song is unpaused.
+     */
+    default void onUnpause(){}
 }

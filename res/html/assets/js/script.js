@@ -50,9 +50,7 @@ $(document).ready(function () {
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex
-        var filterValue = qsRegex ? qsRegex : '*';
-
-        $grid.isotope({ filter: filterValue, sortBy: 'original-order', sortAscending: true });
+        $grid.isotope(); // Reapply isotope filter
     });
 });
 
@@ -345,8 +343,9 @@ $('#sort-dropdown').on('change', function () {
     $grid.isotope({ sortBy: value, sortAscending: ascending });
 });
 
+let qsRegex; // quick search regex
 function initSearchBarThingy() {
-    let qsRegex; // quick search regex
+
     $grid = $('.grid').isotope({ // init Isotope
         itemSelector: '.song-element',
         layoutMode: 'fitRows',
@@ -365,7 +364,7 @@ function initSearchBarThingy() {
             let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
             let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
 
-            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
+            console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
 
 
             return (searchTitle || searchArtist || searchTags) && difficulty;
@@ -381,9 +380,11 @@ function initSearchBarThingy() {
     // use value of search field to filter
     let $quicksearch = $('#quicksearch').keyup(debounce(function () {
         qsRegex = new RegExp($quicksearch.val(), 'gi');
+
         if ($quicksearch.val() == '') {
             qsRegex = null;
         }
+        console.log("Filtering by", qsRegex);
         $grid.isotope();
     }));
 }

@@ -228,11 +228,10 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         hideQueueContainer();
     });
 
-    $(document).on('click', function (e) {
-        if (!$('.now-playing-container').is(e.target) && $('.now-playing-container').has(e.target).length === 0) {
-            hideQueueContainer();
-        }
+    $('.now-playing-container').on('click', function () {
+        hideQueueContainer();
     });
+
 });
 
 //Saveing and loading scroll position seems like a bit of a hack
@@ -243,6 +242,7 @@ function showQueueContainer() {
     $('.sticky-container').hide(); // hide header
     $('.container').hide(); // hide song list
     $('.now-playing-container').show(); // show queue container
+    console.log("Saving scroll position", savedScrollPosition);
 }
 
 function hideQueueContainer() {
@@ -250,6 +250,7 @@ function hideQueueContainer() {
     $('.container').show(); // show song list
     $('.now-playing-container').hide(); // hide queue container
     $(window).scrollTop(savedScrollPosition); // restore scroll position
+    console.log("Restoring scroll position", savedScrollPosition);
 }
 
 function queueSongByIndex(index) {

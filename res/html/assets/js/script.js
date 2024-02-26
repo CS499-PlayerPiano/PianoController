@@ -117,7 +117,7 @@ function setNowPlayingInfo(currentSong) {
     let currentUrl = location.href;
     let name = "Nothing Playing";
     let artist = "";
-    let artwork = "null.png";
+    let artwork = "NOTHING_PLAYING.png";
 
     if (currentSong != undefined && currentSong != null) {
         name = currentSong.name;

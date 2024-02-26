@@ -148,44 +148,6 @@ public class QueueManager {
         }
     }
 
-//    /**
-//     * Returns the position of the song in the queue.
-//     * @param song The song to get the position of.
-//     * @return The position of the song in the queue. -1 if the song is not in the queue. 0 if the song is currently playing.
-//     */
-//    public int getPositionInQueue(SheetMusic song) {
-//        synchronized (songQueue) {
-//            int position = 1; //we start at 1 because 0 is the current song in terms of what we return
-//
-//            if(songQueue.contains(song)) {
-//                return -1;
-//            }
-//
-//            if(currentSheetMusic != null && currentSheetMusic.getSheetMusic().equals(song)) {
-//                return 0;
-//            }
-//
-//            for(QueuedSongWithMetadata s : songQueue) {
-//                if(s.getSheetMusic().equals(song)) {
-//                    return position;
-//                }
-//                position++;
-//            }
-//            return position;
-//        }
-//    }
-
-    /**
-     * Skips the current song.
-     */
-//    public void skipSong() {
-//        if(currentSheetMusic != null && currentSheetMusic.getSheetMusic() != null) {
-//            synchronized (currentSheetMusic) {
-//                currentSheetMusic.getSheetMusic().stop();
-//            }
-//        }
-//    }
-
     public boolean pauseUnpauseSong() {
         if(currentSheetMusic != null && currentSheetMusic.getSheetMusic() != null) {
             synchronized (currentSheetMusic) {

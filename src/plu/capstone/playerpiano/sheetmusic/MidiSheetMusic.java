@@ -2,6 +2,8 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -36,6 +38,20 @@ public class MidiSheetMusic extends SheetMusic {
      */
     public MidiSheetMusic(File midiFile) throws InvalidMidiDataException, IOException {
         load(midiFile);
+    }
+
+    private long getMS(MidiEvent event, Sequence sequence, long us_per_quarter) {
+        long tick = event.getTick();
+        long ticks_per_quarter = sequence.getResolution();
+        long us_per_tick = us_per_quarter / ticks_per_quarter;
+        long where = tick * us_per_tick;
+        return  where / 1000;
+    }
+
+    private long interpolateTempo(long tick, long tick1, long tick2, long tempo1, long tempo2) {
+        double ratio = (double) (tick - tick1) / (tick2 - tick1);
+        long interpolatedTempo = (long) (tempo1 + ratio * (tempo2 - tempo1));
+        return interpolatedTempo;
     }
 
     private void load(File midiFile) throws InvalidMidiDataException, IOException {

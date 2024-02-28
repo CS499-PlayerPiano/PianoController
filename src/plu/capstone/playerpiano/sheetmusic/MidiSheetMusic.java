@@ -40,20 +40,6 @@ public class MidiSheetMusic extends SheetMusic {
         load(midiFile);
     }
 
-    private long getMS(MidiEvent event, Sequence sequence, long us_per_quarter) {
-        long tick = event.getTick();
-        long ticks_per_quarter = sequence.getResolution();
-        long us_per_tick = us_per_quarter / ticks_per_quarter;
-        long where = tick * us_per_tick;
-        return  where / 1000;
-    }
-
-    private long interpolateTempo(long tick, long tick1, long tick2, long tempo1, long tempo2) {
-        double ratio = (double) (tick - tick1) / (tick2 - tick1);
-        long interpolatedTempo = (long) (tempo1 + ratio * (tempo2 - tempo1));
-        return interpolatedTempo;
-    }
-
     private void load(File midiFile) throws InvalidMidiDataException, IOException {
 
         if(!midiFile.exists()) {
@@ -65,8 +51,6 @@ public class MidiSheetMusic extends SheetMusic {
 
         // Get the length of the song in milliseconds
         songLengthMS = sequence.getMicrosecondLength() / 1000;
-
-
 
         for(int i = 0; i < sequence.getTracks().length; i++) {
             logger.info("Parsing track " + i);

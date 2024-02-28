@@ -2,6 +2,8 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
@@ -25,7 +27,7 @@ public class MidiSheetMusic extends SheetMusic {
 
     private static final Logger logger = new Logger(MidiSheetMusic.class);
     static {
-        logger.setDebugEnabled(false);
+        logger.setDebugEnabled(true);
     }
 
     /**
@@ -36,6 +38,20 @@ public class MidiSheetMusic extends SheetMusic {
      */
     public MidiSheetMusic(File midiFile) throws InvalidMidiDataException, IOException {
         load(midiFile);
+    }
+
+    private long getMS(MidiEvent event, Sequence sequence, long us_per_quarter) {
+        long tick = event.getTick();
+        long ticks_per_quarter = sequence.getResolution();
+        long us_per_tick = us_per_quarter / ticks_per_quarter;
+        long where = tick * us_per_tick;
+        return  where / 1000;
+    }
+
+    private long interpolateTempo(long tick, long tick1, long tick2, long tempo1, long tempo2) {
+        double ratio = (double) (tick - tick1) / (tick2 - tick1);
+        long interpolatedTempo = (long) (tempo1 + ratio * (tempo2 - tempo1));
+        return interpolatedTempo;
     }
 
     private void load(File midiFile) throws InvalidMidiDataException, IOException {
@@ -49,11 +65,15 @@ public class MidiSheetMusic extends SheetMusic {
         // Get the length of the song in milliseconds
         songLengthMS = sequence.getMicrosecondLength() / 1000;
 
-        //Default tempo is 500,000 microseconds per quarter note, or 120 BPM
-        long us_per_quarter = 500_000;
+        // Map to store tempo changes indexed by track number
+        Map<Integer, Long> tempoChanges = new HashMap<>();
 
         for (int trackNum = 0; trackNum < sequence.getTracks().length; trackNum++) {
             Track track = sequence.getTracks()[trackNum];
+
+            //Default tempo is 500,000 microseconds per quarter note, or 120 BPM
+            long us_per_quarter = 500_000;
+
             for (int i = 0; i < track.size(); i++) {
                 MidiEvent event = track.get(i);
                 MidiMessage message = event.getMessage();
@@ -66,26 +86,53 @@ public class MidiSheetMusic extends SheetMusic {
                         byte[] data = mm.getData();
                         int tempo = ((data[0] & 0xFF) << 16) | ((data[1] & 0xFF) << 8) | (data[2] & 0xFF);
                         us_per_quarter = tempo;
+                        tempoChanges.put(trackNum, us_per_quarter);
 
-                        // Calculate the time in milliseconds of the note
-                        long tick = event.getTick();
-                        long ticks_per_quarter = sequence.getResolution();
-                        long us_per_tick = us_per_quarter / ticks_per_quarter;
-                        long where = tick * us_per_tick;
-                        long whereMS = where / 1000;
+                        long whereMS = getMS(event, sequence, us_per_quarter);
 
-                        logger.debug("Tempo change: " + tempo);
+                        logger.debug("[Track " + trackNum + "] Tempo change: " + tempo);
                         putEvent(whereMS, new TempoChangeEvent(tempo));
+                    }
+                    else if(mm.getType() == MetaMessages.TIME_SIGNATURE) {
+                        byte[] data = mm.getData();
+                        int numerator = data[0];
+                        int denominator = (int) Math.pow(2, data[1]);
+                        int metronome = data[2];
+                        int thirtyseconds = data[3];
+                        logger.debug("[Track " + trackNum + "] Time signature: " + numerator + "/" + denominator + " metronome: " + metronome + " thirtyseconds: " + thirtyseconds);
                     }
                 }
 
                 if (message instanceof ShortMessage) {
                     ShortMessage sm = (ShortMessage) message;
 
-                    // Calculate the time in milliseconds of the event
                     long tick = event.getTick();
                     long ticks_per_quarter = sequence.getResolution();
-                    long us_per_tick = us_per_quarter / ticks_per_quarter;
+
+                    // Find previous and next tempo changes
+                    long previousTempoTick = 0;
+                    long nextTempoTick = Long.MAX_VALUE;
+                    long previousTempo = 500_000; // Default tempo
+                    long nextTempo = 500_000; // Default tempo
+
+                    for (Map.Entry<Integer, Long> entry : tempoChanges.entrySet()) {
+                        if (entry.getKey() <= trackNum) {
+                            if (entry.getKey() > previousTempoTick) {
+                                previousTempoTick = entry.getKey();
+                                previousTempo = entry.getValue();
+                            }
+                        } else {
+                            nextTempoTick = entry.getKey();
+                            nextTempo = entry.getValue();
+                            break;
+                        }
+                    }
+
+                    // Interpolate tempo if necessary
+                    long interpolatedTempo = interpolateTempo(tick, previousTempoTick, nextTempoTick, previousTempo, nextTempo);
+
+                    // Calculate the time in milliseconds of the event using interpolated tempo
+                    long us_per_tick = interpolatedTempo / ticks_per_quarter;
                     long where = tick * us_per_tick;
                     long whereMS = where / 1000;
 
@@ -94,7 +141,7 @@ public class MidiSheetMusic extends SheetMusic {
                         Note note = Note.fromMidiMessage(sm);
 
                         if(note.isNoteOn() && note.getVelocity() == 0) {
-                            logger.warning("Note on with velocity 0 at " + whereMS + "ms");
+                            //logger.warning("Note on with velocity 0 at " + whereMS + "ms");
                         }
                         putEvent(whereMS, note);
                     }
@@ -102,7 +149,7 @@ public class MidiSheetMusic extends SheetMusic {
                     else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
                         if(sm.getData1() == ControlMessages.DAMPER_PEDAL) {
                             boolean on = sm.getData2() >= 64; //0-63 is off, 64-127 is on
-                            logger.debug("Sustain pedal: " + on);
+                            //logger.debug("Sustain pedal: " + on);
                             putEvent(whereMS, new SustainPedalEvent(on));
                         }
                     }
@@ -113,7 +160,7 @@ public class MidiSheetMusic extends SheetMusic {
                         int controller = sm.getData1();
                         int value = sm.getData2();
                         String name = ControlMessages.getControlName(controller);
-                        logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
+                        //logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
                     }
 
                 }

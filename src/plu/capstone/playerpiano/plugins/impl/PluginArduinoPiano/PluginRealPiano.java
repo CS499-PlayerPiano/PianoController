@@ -77,6 +77,8 @@ public class PluginRealPiano extends Plugin {
     @Override
     protected void onEnable() {
 
+        logger.setDebugEnabled(false);
+
         final String COM_PORT = config.getString("comPort");
 
         arduino = SerialPort.getCommPort(COM_PORT);
@@ -177,6 +179,21 @@ public class PluginRealPiano extends Plugin {
 
         writeBytes(buffer.array());
 
+    }
+
+    @Deprecated
+    public void sendRawIndexWithoutMapping(int index, boolean isOn, byte velocity) {
+        if(!arduino.isOpen()) {return;}
+
+        ByteBuffer buffer = ByteBuffer.allocate(5);
+
+        buffer.put((byte) 'N');
+        buffer.put((byte) 1);
+        buffer.put((byte) index);
+        buffer.put((byte) (isOn ? 1 : 0));
+        buffer.put(velocity);
+
+        writeBytes(buffer.array());
     }
 
     /**

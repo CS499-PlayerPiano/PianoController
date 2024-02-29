@@ -18,6 +18,7 @@ public final class Song implements Serializable {
     private String[] artists;
     private String midiFile;
     @Setter private String artwork;
+    private String[] genre;
     private String[] tags;
     private long noteCount;
     private long songLengthMS;
@@ -44,6 +45,10 @@ public final class Song implements Serializable {
     @OpenApiDescription("Search tags for the song")
     //@OpenApiExample("[Nintendo, Mario Kart, Wii]") //TODO: Doesn't work with arrays
     public String[] getTags() {return tags;}
+
+    @OpenApiDescription("Genre tags for the song")
+    //@OpenApiExample("[Nintendo, Mario Kart, Wii]") //TODO: Doesn't work with arrays
+    public String[] getGenres() {return genre;}
 
     @OpenApiDescription("Number of notes in the song")
     @OpenApiExample("1780")

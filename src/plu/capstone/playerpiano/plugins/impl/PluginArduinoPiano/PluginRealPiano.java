@@ -46,6 +46,7 @@ public class PluginRealPiano extends Plugin {
 
     private int velocityMappingMin = 106;
     private int velocityMappingMax = 255;
+    private boolean ignoreVelocity = false;
 
     /**
      * Set the default values for the config file before it is loaded.
@@ -55,6 +56,7 @@ public class PluginRealPiano extends Plugin {
         config.setString("comPort", "COM3");
         config.setInteger("baudRate", 115200);
         config.setBoolean("printDebugOutputFromArduino", true);
+        config.setBoolean("ignoreVelocity", false);
 
         PluginConfig velocityMappingConfig = new PluginConfig(this);
         velocityMappingConfig.setInteger("min", velocityMappingMin);
@@ -130,6 +132,8 @@ public class PluginRealPiano extends Plugin {
         PluginConfig velocityMappingConfig = config.getNestedConfig("velocityMapping");
         velocityMappingMin = velocityMappingConfig.getInteger("min");
         velocityMappingMax = velocityMappingConfig.getInteger("max");
+
+        ignoreVelocity = config.getBoolean("ignoreVelocity");
     }
 
 
@@ -171,7 +175,12 @@ public class PluginRealPiano extends Plugin {
 
             if(note.isNoteOn()){
                 // Map the velocity from 0-127 to 106-235
-                velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
+                if(ignoreVelocity) {
+                    velocity = (byte) 127;
+                }
+                else {
+                    velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
+                }
             }
 
             buffer.put(velocity);

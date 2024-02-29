@@ -35,6 +35,7 @@ public class SongDBVerification implements Callable<Integer> {
     private static final String FIELD_ARTISTS = "artists";
     private static final String FIELD_MIDIFILE = "midiFile";
     private static final String FIELD_ARTWORK = "artwork";
+    private static final String FIELD_GENRE = "genre";
     private static final String FIELD_TAGS = "tags";
     private static final String FIELD_NOTECOUNT = "noteCount";
     private static final String FIELD_SONGLENGTHMS = "songLengthMS";
@@ -242,6 +243,12 @@ public class SongDBVerification implements Callable<Integer> {
         if(!isElementAString(song.get(FIELD_ARTWORK))) {
             logger.warning("  - Song has no artwork field! Creating....");
             song.addProperty("artwork", CHANGE_ME);
+            result = false;
+        }
+
+        if(!isElementAString(song.get(FIELD_GENRE))) {
+            logger.warning("  - Song has no genre field! Creating....");
+            song.addProperty("genre", CHANGE_ME);
             result = false;
         }
 

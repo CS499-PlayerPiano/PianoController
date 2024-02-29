@@ -1,5 +1,6 @@
 package plu.capstone.playerpiano.plugins;
 
+import io.javalin.plugin.PluginManager;
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano.PluginRealPiano;
 import plu.capstone.playerpiano.plugins.impl.PluginLogger.PluginLogger;
@@ -9,6 +10,7 @@ import plu.capstone.playerpiano.plugins.impl.PluginPianoEmulatorGui.PluginVirtua
 import plu.capstone.playerpiano.plugins.impl.PluginSynth.PluginSynth;
 import plu.capstone.playerpiano.plugins.impl.PluginSynthesiaClone.PluginSynthesiaGui;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
 
 @AllArgsConstructor
 public enum PluginInstances {
@@ -33,4 +35,7 @@ public enum PluginInstances {
         return plugins;
     }
 
+    public Class<? extends Plugin> getPluginClass() {
+        return pluginClass;
+    }
 }

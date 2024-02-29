@@ -13,6 +13,8 @@ import plu.capstone.playerpiano.logger.Logger;
  */
 public class PluginLoader {
 
+    private boolean hasLoaded = false;
+
     private final Logger logger = new Logger(this);
 
     @Getter
@@ -23,29 +25,40 @@ public class PluginLoader {
      */
     public void loadFromPluginEnum() {
 
+        if(hasLoaded) {
+            logger.warning("Plugins have already been loaded!");
+            return;
+        }
+
+        hasLoaded = true;
+
         logger.debug("Plugin Classes in Enum: ");
         for(Class clazz : PluginInstances.getAllPlugins()) {
+            loadPlugin(clazz);
+        }
+    }
 
-            Class superClass = clazz.getSuperclass();
+    public Plugin loadPlugin(Class<? extends Plugin> clazz) {
+        Class superClass = clazz.getSuperclass();
 
-            if(superClass != null && superClass == Plugin.class || superClass == PluginStateKeeper.class) {
-                logger.debug("  - " + clazz.getSimpleName());
+        if(superClass != null && superClass == Plugin.class || superClass == PluginStateKeeper.class) {
+            logger.debug("  - " + clazz.getSimpleName());
 
-                try {
-                    Object instance = clazz.getDeclaredConstructor().newInstance();
+            try {
+                Object instance = clazz.getDeclaredConstructor().newInstance();
 
-                    plugins.add((Plugin) instance);
+                plugins.add((Plugin) instance);
+                return (Plugin)instance;
 
-                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                    logger.warning("Failed to initialize empty constructor for: " + clazz.getSimpleName());
-                }
-
-            }
-            else {
-                logger.error("  - " + clazz.getSimpleName() + " is not a plugin!");
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                logger.warning("Failed to initialize empty constructor for: " + clazz.getSimpleName());
             }
 
         }
+        else {
+            logger.error("  - " + clazz.getSimpleName() + " is not a plugin!");
+        }
+        return null;
     }
 
     /**

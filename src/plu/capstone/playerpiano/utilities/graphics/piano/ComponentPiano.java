@@ -40,7 +40,7 @@ public class ComponentPiano extends JComponent {
 
     private Color COLOR_BACKGROUND = Color.BLUE;
     private static final Color COLOR_WHITE_KEY = Color.WHITE;
-//    private static final Color COLOR_WHITE_KEY_LIT = new Color(0xDF3030);
+    //    private static final Color COLOR_WHITE_KEY_LIT = new Color(0xDF3030);
     private static final Color[] COLOR_WHITE_KEY_GRADIENT = {
             new Color(0x60FFFFFF, true),
             new Color(0x00FFFFFF, true),
@@ -49,7 +49,7 @@ public class ComponentPiano extends JComponent {
     };
     private static final float[] WHITE_KEY_GRADIENT_DISTRIBUTIONS = { 0, 0.2f, 0.8f, 1 };
     private static final Color COLOR_BLACK_KEY = Color.BLACK;
-//    private static final Color COLOR_BLACK_KEY_LIT = new Color(0xFF5050);
+    //    private static final Color COLOR_BLACK_KEY_LIT = new Color(0xFF5050);
     private static final Color[] COLOR_BLACK_KEY_GRADIENT = {
             new Color(0xA0000000, true),
             new Color(0x30000000, true),
@@ -189,17 +189,17 @@ public class ComponentPiano extends JComponent {
                 ));
                 g.fillRoundRect(bounds.x, bounds.y, bounds.width, bounds.height, 4, 4);
 
-                final int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
-                //int moveAmt = (i > 10) ? 6 : 12;
+//                final int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
+                int moveAmt = (i > 10) ? 6 : 12;
                 g.setColor(Color.RED);
                 g.drawString(Integer.toString(i), bounds.x + 0, bounds.y + bounds.height - 20);
-
-                NoteDetails noteDetails = NoteDetails.from(i);
-                g.setColor(Color.YELLOW.darker());
-                g.drawString(noteDetails.getNoteName(), bounds.x + 0, bounds.y + bounds.height - 40);
-
-                g.setColor(Color.GREEN);
-                g.drawString(Integer.toString(midiNote), bounds.x + 0, bounds.y + bounds.height - 60);
+//
+//                NoteDetails noteDetails = NoteDetails.from(i);
+//                g.setColor(Color.YELLOW.darker());
+//                g.drawString(noteDetails.getNoteName(), bounds.x + 0, bounds.y + bounds.height - 40);
+//
+//                g.setColor(Color.GREEN);
+//                g.drawString(Integer.toString(midiNote), bounds.x + 0, bounds.y + bounds.height - 60);
 
 
             }
@@ -213,16 +213,16 @@ public class ComponentPiano extends JComponent {
 
                 //Draw red text on white keys
                 int moveAmt = (i > 10) ? 6 : 12;
-                //g.setColor(Color.RED);
-                //g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
+                g.setColor(Color.RED);
+                g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
 
                 int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
-                NoteDetails noteDetails = NoteDetails.from(i);
+                //NoteDetails noteDetails = NoteDetails.from(i);
                 //g.setColor(Color.YELLOW.darker());
-               // g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);
+                // g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);
 
-                g.setColor(Color.GREEN);
-                g.drawString(Integer.toString(midiNote), bounds.x + moveAmt, bounds.y + bounds.height - 60);
+                //g.setColor(Color.GREEN);
+                //g.drawString(Integer.toString(midiNote), bounds.x + moveAmt, bounds.y + bounds.height - 60);
 
                 if(midiNote == 60) {
                     g.setColor(Color.RED);
@@ -257,11 +257,12 @@ public class ComponentPiano extends JComponent {
 
     public void setKeyLit(Note note, Color color) {
         if(note.isValidPianoKey()) {
-            setKeyLit(note.toPianoKey(), note.isNoteOn(), color);
+            setKeyIndexLit(note.toPianoKey(), note.isNoteOn(), color);
         }
     }
 
-    private void setKeyLit(int index, boolean lit, Color color) {
+    @Deprecated
+    public void setKeyIndexLit(int index, boolean lit, Color color) {
         if (index < 0 || index > getKeyShapes().size()) return;
         if (lit) {
             litKeys.put(index, color);

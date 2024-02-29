@@ -57,6 +57,9 @@ public class MidiSheetMusic extends SheetMusic {
 
             tempoInBPM = sequencer.getTempoInBPM();
             ticksPerSecond = ticksPerSecond(sequence, tempoInBPM);
+
+            logger.debug("Tempo: " + tempoInBPM + " BPM");
+            logger.debug("Ticks per second: " + ticksPerSecond);
         }
         catch (Exception e) {
             logger.error("Error getting sequencer: " + e);
@@ -91,21 +94,6 @@ public class MidiSheetMusic extends SheetMusic {
             MidiEvent event = track.get(i);
             MidiMessage message = event.getMessage();
 
-            if (message instanceof MetaMessage) {
-                MetaMessage mm = (MetaMessage) message;
-                if (mm.getType() == MetaMessages.SET_TEMPO) {
-
-                    //Get the tempo from the meta message, so we can calculate the time of each note
-                    byte[] data = mm.getData();
-                    int tempo = ((data[0] & 0xFF) << 16) | ((data[1] & 0xFF) << 8) | (data[2] & 0xFF);
-
-                    long whereMS = toMicroSeconds(ticksPerSecond, event.getTick()) / 1000;
-
-                    logger.debug("Tempo change: " + tempo);
-                    putEvent(whereMS, new TempoChangeEvent(tempo));
-                }
-            }
-
             if (message instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) message;
 
@@ -125,18 +113,8 @@ public class MidiSheetMusic extends SheetMusic {
                 else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
                     if(sm.getData1() == ControlMessages.DAMPER_PEDAL) {
                         boolean on = sm.getData2() >= 64; //0-63 is off, 64-127 is on
-                        //logger.debug("Sustain pedal: " + on);
                         putEvent(whereMS, new SustainPedalEvent(on));
                     }
-                }
-
-                //Test to see if the midi file has any control changes for the pedals.
-                //Most midi songs seem to fake the pedal by just holding the notes for a long time.
-                else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {
-                    int controller = sm.getData1();
-                    int value = sm.getData2();
-                    String name = ControlMessages.getControlName(controller);
-                    logger.debug("Control change: " + ConsoleColors.PURPLE_BRIGHT + name + ConsoleColors.RESET + " value: " + ConsoleColors.PURPLE_BRIGHT + value + ConsoleColors.RESET);
                 }
 
             }

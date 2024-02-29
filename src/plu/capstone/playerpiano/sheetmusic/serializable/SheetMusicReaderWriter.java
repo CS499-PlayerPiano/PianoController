@@ -27,9 +27,10 @@ public enum SheetMusicReaderWriter {
     V3(3, new SheetMusicFileParserV3()),
     V4(4, new SheetMusicFileParserV4()),
     V5(5, new SheetMusicFileParserV5()),
-    V6(6, new SheetMusicFileParserV6())
+    V6(6, new SheetMusicFileParserV6()),
+    V7(7, new SheetMusicFileParserV7()),
     ;
-    public static final int LATEST_VERSION = 6; //Can't use values().length, and can't use static final in constructor. MUST BE SET MANUALLY
+    public static final int LATEST_VERSION = 7; //Can't use values().length, and can't use static final in constructor. MUST BE SET MANUALLY
 
     private final int version;
     @Getter

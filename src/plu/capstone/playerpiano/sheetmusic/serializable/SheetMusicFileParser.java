@@ -28,7 +28,7 @@ public abstract class SheetMusicFileParser {
     public static final WhatIsItFor EVENT_COUNT = new WhatIsItFor("Number of events at this time", 0xFFA500);
     public static final WhatIsItFor EVENT_TYPE = new WhatIsItFor("Event Type", 0xFF69B4);
     public static final WhatIsItFor NOTE_OBJECT = new WhatIsItFor("Note Object", 0xB10DC9);
-    public static final WhatIsItFor TEMPO_CHANGE_OBJECT = new WhatIsItFor("Event Object", 0x40E0D0);
+    @Deprecated static final WhatIsItFor TEMPO_CHANGE_OBJECT = new WhatIsItFor("Tempo Change Object", 0x40E0D0);
     public static final WhatIsItFor SUSTAIN_PEDAL_OBJECT = new WhatIsItFor("Sustain Pedal Object", 0xD2B48C);
 
     @AllArgsConstructor

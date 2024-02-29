@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.sheetmusic.events;
 import lombok.Getter;
 
 @Getter
+@Deprecated
 public class TempoChangeEvent implements SheetMusicEvent {
 
     private final int usPerQuarterNote;

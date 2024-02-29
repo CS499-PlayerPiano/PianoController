@@ -239,4 +239,41 @@ class SheetMusicReaderWriterTest {
         assertEquals(orig.getEventMap(), newSheetMusic.getEventMap());
     }
 
+    @Test
+    public void testV7ReadWrite() throws IOException {
+        SheetMusic orig = new SheetMusic();
+        orig.setSongLengthMS(1000);
+        orig.putEvent(0, new Note(
+                (byte) 68,
+                (byte) 128,
+                true,
+                1
+        ));
+        orig.putEvent(6, new Note(
+                (byte) 68,
+                (byte) 0,
+                false,
+                1
+        ));
+        orig.putEvent(6, new Note(
+                (byte) 79,
+                (byte) 0,
+                false,
+                2
+        ));
+
+        orig.putEvent(28, new SustainPedalEvent(true));
+        orig.putEvent(30, new SustainPedalEvent(false));
+
+        File file = new File("tmp/v7.piano");
+        SheetMusicReaderWriter.saveSheetMusic(orig, file, 7);
+        SheetMusic newSheetMusic = SheetMusicReaderWriter.readSheetMusic(file);
+
+
+        assertEquals(orig, newSheetMusic);
+        assertEquals(orig.getSongLengthMS(), newSheetMusic.getSongLengthMS());
+        assertEquals(orig.getEventMap().size(), newSheetMusic.getEventMap().size());
+        assertEquals(orig.getEventMap(), newSheetMusic.getEventMap());
+    }
+
 }

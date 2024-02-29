@@ -27,7 +27,7 @@ public class MidiSheetMusic extends SheetMusic {
 
     private static final Logger logger = new Logger(MidiSheetMusic.class);
     static {
-        logger.setDebugEnabled(true);
+        logger.setDebugEnabled(false);
     }
 
     /**
@@ -53,7 +53,7 @@ public class MidiSheetMusic extends SheetMusic {
         songLengthMS = sequence.getMicrosecondLength() / 1000;
 
         for(int i = 0; i < sequence.getTracks().length; i++) {
-            logger.info("Parsing track " + i);
+            logger.debug("Parsing track " + i);
             parseTrack(resolution, sequence.getTracks()[i]);
         }
 

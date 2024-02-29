@@ -151,9 +151,9 @@ public class MappingGenerator {
     private static void turnOffAllKeys() {
         for(int i = 0; i < 88; i++) {
             piano.setKeyIndexLit(i, false, null);
-            synchronized (realPiano) {
-                realPiano.sendRawIndexWithoutMapping(i, false, (byte) 0);
-            }
+        }
+        synchronized (realPiano) {
+            realPiano.onSongFinished(0);
         }
         updateUsedKeys();
     }

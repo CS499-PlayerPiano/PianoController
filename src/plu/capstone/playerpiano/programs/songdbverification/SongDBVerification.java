@@ -246,9 +246,9 @@ public class SongDBVerification implements Callable<Integer> {
             result = false;
         }
 
-        if(!isElementAString(song.get(FIELD_GENRE))) {
+        if(!isElementAnArray(song.get(FIELD_GENRE), true)) {
             logger.warning("  - Song has no genre field! Creating....");
-            song.addProperty("genre", CHANGE_ME);
+            song.add("genre", new JsonArray());
             result = false;
         }
 

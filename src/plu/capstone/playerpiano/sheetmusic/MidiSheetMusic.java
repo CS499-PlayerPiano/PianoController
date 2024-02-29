@@ -10,6 +10,7 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
+import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import plu.capstone.playerpiano.logger.ConsoleColors;
@@ -27,7 +28,7 @@ public class MidiSheetMusic extends SheetMusic {
 
     private static final Logger logger = new Logger(MidiSheetMusic.class);
     static {
-        logger.setDebugEnabled(false);
+        logger.setDebugEnabled(true);
     }
 
     /**
@@ -40,6 +41,8 @@ public class MidiSheetMusic extends SheetMusic {
         load(midiFile);
     }
 
+    float tempoInBPM;
+    float ticksPerSecond;
     private void load(File midiFile) throws InvalidMidiDataException, IOException {
 
         if(!midiFile.exists()) {
@@ -47,14 +50,24 @@ public class MidiSheetMusic extends SheetMusic {
         }
 
         Sequence sequence = MidiSystem.getSequence(midiFile);
-        final int resolution = sequence.getResolution();
+
+        try {
+            Sequencer sequencer = MidiSystem.getSequencer();
+            sequencer.setSequence(sequence);
+
+            tempoInBPM = sequencer.getTempoInBPM();
+            ticksPerSecond = ticksPerSecond(sequence, tempoInBPM);
+        }
+        catch (Exception e) {
+            logger.error("Error getting sequencer: " + e);
+        }
 
         // Get the length of the song in milliseconds
         songLengthMS = sequence.getMicrosecondLength() / 1000;
 
         for(int i = 0; i < sequence.getTracks().length; i++) {
             logger.debug("Parsing track " + i);
-            parseTrack(resolution, sequence.getTracks()[i]);
+            parseTrack( sequence.getTracks()[i]);
         }
 
         logger.debug("Finished parsing midi file");
@@ -72,10 +85,7 @@ public class MidiSheetMusic extends SheetMusic {
         logger.debug("Max Notes at one time: " + maxForTime);
     }
 
-    private void parseTrack(int resolution, Track track) {
-
-        //Default tempo is 500,000 microseconds per quarter note, or 120 BPM
-        long us_per_quarter = 500_000;
+    private void parseTrack(Track track) {
 
         for (int i = 0; i < track.size(); i++) {
             MidiEvent event = track.get(i);
@@ -88,14 +98,8 @@ public class MidiSheetMusic extends SheetMusic {
                     //Get the tempo from the meta message, so we can calculate the time of each note
                     byte[] data = mm.getData();
                     int tempo = ((data[0] & 0xFF) << 16) | ((data[1] & 0xFF) << 8) | (data[2] & 0xFF);
-                    us_per_quarter = tempo;
 
-                    // Calculate the time in milliseconds of the note
-                    long tick = event.getTick();
-                    long ticks_per_quarter = resolution;
-                    long us_per_tick = us_per_quarter / ticks_per_quarter;
-                    long where = tick * us_per_tick;
-                    long whereMS = where / 1000;
+                    long whereMS = toMicroSeconds(ticksPerSecond, event.getTick()) / 1000;
 
                     logger.debug("Tempo change: " + tempo);
                     putEvent(whereMS, new TempoChangeEvent(tempo));
@@ -106,11 +110,7 @@ public class MidiSheetMusic extends SheetMusic {
                 ShortMessage sm = (ShortMessage) message;
 
                 // Calculate the time in milliseconds of the event
-                long tick = event.getTick();
-                long ticks_per_quarter = resolution;
-                long us_per_tick = us_per_quarter / ticks_per_quarter;
-                long where = tick * us_per_tick;
-                long whereMS = where / 1000;
+                long whereMS = toMicroSeconds(ticksPerSecond, event.getTick()) / 1000;
 
                 if(sm.getCommand() == ShortMessage.NOTE_ON || sm.getCommand() == ShortMessage.NOTE_OFF) {
 
@@ -142,5 +142,37 @@ public class MidiSheetMusic extends SheetMusic {
             }
         }
     }
+
+    //convert tick's to Microseconds
+    private static long toMicroSeconds(float ticksPerSecond,long tick){return (long)((1E6/ticksPerSecond)*tick);}
+
+    /*
+      get resolution of the track
+
+      ->if format is PPQ[Pulses per quater note] then this value depends on the tempo of the Sequencer
+
+      ->Temp scale is nothing but tempoInBPM() & tempoScale() see Sequencer documentation for more details
+    */
+    private static float ticksPerSecond(Sequence sequence,float tempoScale)
+    {
+        float divisionType=sequence.getDivisionType();
+        int resolution=sequence.getResolution();
+
+        if(divisionType==Sequence.PPQ){return resolution*(tempoScale/60.0f);}
+        else
+        {
+            float framesPerSecond;
+
+            if(divisionType==Sequence.SMPTE_24){framesPerSecond=24;}
+            else if(divisionType==Sequence.SMPTE_25){framesPerSecond=25;}
+            else if(divisionType==Sequence.SMPTE_30){framesPerSecond=30;}
+            else{framesPerSecond=29.97f;}
+
+            return resolution * framesPerSecond;
+        }
+    }
+
+    //Convert time[micro second] to ticks
+    private static long toTicks(float ticksPerSecond,long microSeconds){return (long)((ticksPerSecond/1E6)*microSeconds);}
 
 }

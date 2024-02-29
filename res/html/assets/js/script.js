@@ -168,7 +168,7 @@ document.getElementById('npbSkipForward').addEventListener('click', function () 
 piano.getSongList((songs) => { // Get the list of songs from the API
     songsDB = songs;
     const html = `
-    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%">
+    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%" data-genres="%genres%">
         <div class="image-container">
             <img loading="lazy" src="%artwork%" alt="Song Image">
         </div>
@@ -193,6 +193,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%artwork%', song.artwork);
         songElement = songElement.replace('%title%', song.name);
         songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
+        songElement = songElement.replace('%genres%', arrayToCommaSeparatedString(song.genre));
         songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
         songElement = songElement.replace('%noteDensity%', song.noteDensity);
         songElement = songElement.replace('%difficulty%', song.difficulty);
@@ -355,6 +356,7 @@ function initSearchBarThingy() {
             let title = $this.find('.song-title').text(); //Search by title, artist, and tags
             let artist = $this.find('.artist').text();
             let tags = $this.attr('data-tags');
+            let genres = $this.attr('data-genres');
 
             let difficulty = true;
             if (selectedDifficulty !== null) {
@@ -364,17 +366,19 @@ function initSearchBarThingy() {
             let searchTitle = qsRegex ? (title.match(qsRegex) != null) : true;
             let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
             let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
+            let searchGenres = qsRegex ? (genres.match(qsRegex) != null) : true;
 
-            console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty)
+            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty, "searchGenres", searchGenres)
 
 
-            return (searchTitle || searchArtist || searchTags) && difficulty;
+            return (searchTitle || searchArtist || searchTags || searchGenres) && difficulty;
         },
         getSortData: {
             difficulty: '[data-difficulty] parseInt',
             name: '.song-title',
             artist: '.artist',
             tags: '[data-tags]',
+            genres: '[data-genres]',
             length: '[data-length-ms] parseInt'
         }
     });

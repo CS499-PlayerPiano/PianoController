@@ -1,0 +1,8 @@
+Notes for myself:
+
+For each on note:
+    Move backwards in time based on the velocity.
+    Light notes take more time then heavy note.
+    Once the light notes are biased:
+        Some minimum time between on and the next off, otherwise it turns off before it hits. (See bia?)
+        Minumum time between off and the next on, allowing keys to reset. If keys are to fast it cant hit.

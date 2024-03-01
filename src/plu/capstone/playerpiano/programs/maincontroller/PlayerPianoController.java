@@ -54,10 +54,13 @@ public class PlayerPianoController implements Runnable {
 
 
 //        try {
-//            queueManager.queueSong(new MidiSheetMusic(new File("tmp/songs/TO BE ADDED/LyricWulf - Through the Fire and Flames.mid")));
+//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/full_scale_test.MID")));
+//            queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
 //        } catch (InvalidMidiDataException e) {
 //            throw new RuntimeException(e);
 //        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        } catch (QueueError e) {
 //            throw new RuntimeException(e);
 //        }
     }

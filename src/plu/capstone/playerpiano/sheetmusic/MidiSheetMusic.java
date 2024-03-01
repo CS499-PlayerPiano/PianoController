@@ -121,24 +121,26 @@ public class MidiSheetMusic extends SheetMusic {
         }
     }
 
-    //convert tick's to Microseconds
-    private static long toMicroSeconds(float ticksPerSecond,long tick){return (long)((1E6/ticksPerSecond)*tick);}
+    //convert midi tick's to Microseconds
+    private static long toMicroSeconds(float ticksPerSecond,long tick){
+        return (long) ((1E6 / ticksPerSecond) * tick);
+    }
 
-    /*
-      get resolution of the track
-
-      ->if format is PPQ[Pulses per quater note] then this value depends on the tempo of the Sequencer
-
-      ->Temp scale is nothing but tempoInBPM() & tempoScale() see Sequencer documentation for more details
-    */
+    /**
+     * Get the number of ticks per second
+     * @param sequence The sequence to get the ticks per second from
+     * @param tempoScale The tempo scale of the sequence. You get this from getTempoInBPM() from a Sequencer object
+     * @return The number of ticks per second
+     */
     private static float ticksPerSecond(Sequence sequence,float tempoScale)
     {
         float divisionType=sequence.getDivisionType();
         int resolution=sequence.getResolution();
 
-        if(divisionType==Sequence.PPQ){return resolution*(tempoScale/60.0f);}
-        else
-        {
+        if(divisionType==Sequence.PPQ){
+            return resolution*(tempoScale/60.0f);
+        }
+        else {
             float framesPerSecond;
 
             if(divisionType==Sequence.SMPTE_24){framesPerSecond=24;}
@@ -150,7 +152,9 @@ public class MidiSheetMusic extends SheetMusic {
         }
     }
 
-    //Convert time[micro second] to ticks
-    private static long toTicks(float ticksPerSecond,long microSeconds){return (long)((ticksPerSecond/1E6)*microSeconds);}
+    //Convert ms to midi ticks
+    private static long toTicks(float ticksPerSecond,long microSeconds){
+        return (long) ((ticksPerSecond / 1E6) * microSeconds);
+    }
 
 }

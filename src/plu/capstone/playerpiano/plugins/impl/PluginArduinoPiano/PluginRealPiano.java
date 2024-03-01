@@ -79,7 +79,7 @@ public class PluginRealPiano extends Plugin {
     @Override
     protected void onEnable() {
 
-        logger.setDebugEnabled(false);
+        logger.setDebugEnabled(true);
 
         final String COM_PORT = config.getString("comPort");
 
@@ -176,7 +176,7 @@ public class PluginRealPiano extends Plugin {
             if(note.isNoteOn()){
                 // Map the velocity from 0-127 to 106-235
                 if(ignoreVelocity) {
-                    velocity = (byte) 127;
+                    velocity = (byte) velocityMappingMax;
                 }
                 else {
                     velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
@@ -233,11 +233,7 @@ public class PluginRealPiano extends Plugin {
                 }
             }
 
-            if(b == '\n') {
-                sb.append("NL");
-            } else {
-                sb.append(b & 0xFF);
-            }
+            sb.append(b & 0xFF);
 
             sb.append(ConsoleColors.BLACK_BRIGHT);
 

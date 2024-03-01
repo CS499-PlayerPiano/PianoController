@@ -120,12 +120,16 @@ public class QueueManager {
      */
     @Deprecated
     public int queueSong(SheetMusic song) throws QueueError {
-        JsonObject title = new JsonObject();
-        title.addProperty("name", "Queued through Deprecated method!");
-        JsonArray artist = new JsonArray();
-        artist.add("Queued through Deprecated method!");
-        title.add("artists", artist);
-        QueuedSongWithMetadata tmp = new QueuedSongWithMetadata(song, title, "Queued through Deprecated method!");
+
+        JsonObject obj = new JsonObject();
+        obj.addProperty("name", "Queued through Deprecated method!");
+        obj.add("artists", new JsonArray());
+        obj.addProperty("artwork", "null");
+        obj.addProperty("lengthMS", 0);
+        obj.addProperty("queuedBy", "Queued through Deprecated method!");
+
+
+        QueuedSongWithMetadata tmp = new QueuedSongWithMetadata(song, obj, "Queued through Deprecated method!");
 
         return queueSong(tmp);
     }

@@ -2,10 +2,7 @@ package plu.capstone.playerpiano.sheetmusic;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MetaMessage;
 import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiSystem;
@@ -13,13 +10,10 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
-import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.ControlMessages;
-import plu.capstone.playerpiano.sheetmusic.MidiConstants.MetaMessages;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
-import plu.capstone.playerpiano.sheetmusic.events.TempoChangeEvent;
 
 /**
  * This class is used to parse midi files into SheetMusic
@@ -103,6 +97,7 @@ public class MidiSheetMusic extends SheetMusic {
                 if(sm.getCommand() == ShortMessage.NOTE_ON || sm.getCommand() == ShortMessage.NOTE_OFF) {
 
                     Note note = Note.fromMidiMessage(sm);
+                    if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
 
                     if(note.isNoteOn() && note.getVelocity() == 0) {
                         logger.warning("Note on with velocity 0 at " + whereMS + "ms");

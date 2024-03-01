@@ -163,6 +163,7 @@ public class PluginRealPiano extends Plugin {
         buffer.put((byte) notes.size());
 
         for(Note note : notes) {
+            if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + note.toPianoKey());

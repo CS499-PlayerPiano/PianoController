@@ -22,6 +22,7 @@ public final class Song implements Serializable {
     private String[] tags;
     private long noteCount;
     private long songLengthMS;
+    private boolean favorite;
 
     @Setter
     private long timesPlayed;
@@ -61,4 +62,8 @@ public final class Song implements Serializable {
     @OpenApiDescription("Number of times the song has been played")
     @OpenApiExample("5")
     public long getTimesPlayed() {return timesPlayed;}
+
+    @OpenApiDescription("Whether the song is a developer favorite")
+    @OpenApiExample("true")
+    public boolean isFavorite() {return favorite;}
 }

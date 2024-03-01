@@ -168,7 +168,8 @@ document.getElementById('npbSkipForward').addEventListener('click', function () 
 piano.getSongList((songs) => { // Get the list of songs from the API
     songsDB = songs;
     const html = `
-    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%" data-genres="%genres%">
+    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%" data-genres="%genres%" data-developer-favorite="%developer-favorite%">
+        %starOverlay%
         <div class="image-container">
             <img loading="lazy" src="%artwork%" alt="Song Image">
         </div>
@@ -201,6 +202,9 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%song-index%', i);
         songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
         songElement = songElement.replace('%lengthMS%', song.songLengthMS);
+
+        songElement = songElement.replace('%developer-favorite%', song.favorite);
+        songElement = songElement.replace('%starOverlay%', song.favorite ? '<div class="star-overlay">⭐</div>' : '');
 
         $('.grid').append(songElement);
     }

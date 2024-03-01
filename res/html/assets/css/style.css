@@ -159,6 +159,14 @@ body {
     color: white;
 }
 
+.star-overlay {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 24px;
+}
+
+
 #quicksearch {
     width: 30%;
     padding: 10px;

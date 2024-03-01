@@ -39,6 +39,7 @@ public class SongDBVerification implements Callable<Integer> {
     private static final String FIELD_TAGS = "tags";
     private static final String FIELD_NOTECOUNT = "noteCount";
     private static final String FIELD_SONGLENGTHMS = "songLengthMS";
+    private static final String FIELD_FAVORITE = "favorite";
 
     public SongDBVerification(boolean isGithubAction) {
         logger.debug("isGithubAction: " + isGithubAction);
@@ -220,45 +221,40 @@ public class SongDBVerification implements Callable<Integer> {
         return false;
     }
 
-    private boolean checkAndFixSongFields(JsonObject song) {
-
-        boolean result = true;
-
-
+    private void checkAndFixSongFields(JsonObject song) {
 
         if(!isElementAnArray(song.get(FIELD_ARTISTS), false)) {
             logger.warning("  - Song has no artist list! Creating....");
             JsonArray artists = new JsonArray();
             artists.add(CHANGE_ME);
             song.add("artists", artists);
-            result = false;
         }
 
         if(!isElementAString(song.get(FIELD_MIDIFILE))) {
             logger.warning("  - Song has no midi file field! Creating....");
             song.addProperty("midiFile", CHANGE_ME);
-            result = false;
         }
 
         if(!isElementAString(song.get(FIELD_ARTWORK))) {
             logger.warning("  - Song has no artwork field! Creating....");
             song.addProperty("artwork", CHANGE_ME);
-            result = false;
         }
 
         if(!isElementAnArray(song.get(FIELD_GENRE), true)) {
             logger.warning("  - Song has no genre field! Creating....");
             song.add("genre", new JsonArray());
-            result = false;
         }
 
         if(!isElementAnArray(song.get(FIELD_TAGS), true)) {
             logger.warning("  - Song has no tags field! Creating....");
             song.add("tags", new JsonArray());
-            result = false;
         }
 
-        return result;
+        if(!isElementABoolean(song.get(FIELD_FAVORITE))) {
+            logger.warning("  - Song has no favorite field! Creating....");
+            song.addProperty("favorite", false);
+        }
+
     }
 
     private boolean isElementAString(JsonElement element) {
@@ -267,6 +263,16 @@ public class SongDBVerification implements Callable<Integer> {
         if(element.isJsonNull()) return false;
         if(!element.isJsonPrimitive()) return false;
         if(!element.getAsJsonPrimitive().isString()) return false;
+
+        return true;
+    }
+
+    private boolean isElementABoolean(JsonElement element) {
+
+        if(element == null) return false;
+        if(element.isJsonNull()) return false;
+        if(!element.isJsonPrimitive()) return false;
+        if(!element.getAsJsonPrimitive().isBoolean()) return false;
 
         return true;
     }

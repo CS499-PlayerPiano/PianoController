@@ -168,7 +168,7 @@ document.getElementById('npbSkipForward').addEventListener('click', function () 
 piano.getSongList((songs) => { // Get the list of songs from the API
     songsDB = songs;
     const html = `
-    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%" data-genres="%genres%" data-developer-favorite="%developer-favorite%">
+    <div class="song-element" data-tags="%tags%" data-difficulty="%difficulty%" data-song-index="%song-index%" data-length-ms="%lengthMS%" data-genres="%genres%" data-developer-favorite="%developer-favorite%" data-debug="%debugSong%">
         %starOverlay%
         <div class="image-container">
             <img loading="lazy" src="%artwork%" alt="Song Image">
@@ -190,6 +190,12 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
         console.log(song);
 
+        let isDebugSong = song.tags.includes("debugging");
+        if (isDebugSong) {
+            //remove debug tag
+            song.tags.splice(song.tags.indexOf("debugging"), 1);
+        }
+
         let songElement = html;
         songElement = songElement.replace('%artwork%', song.artwork);
         songElement = songElement.replace('%title%', song.name);
@@ -202,6 +208,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%song-index%', i);
         songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
         songElement = songElement.replace('%lengthMS%', song.songLengthMS);
+        songElement = songElement.replace('%debugSong%', isDebugSong);
 
         songElement = songElement.replace('%developer-favorite%', song.favorite);
         songElement = songElement.replace('%starOverlay%', song.favorite ? '<div class="star-overlay">⭐</div>' : '');
@@ -361,18 +368,22 @@ function initSearchBarThingy() {
             let artist = $this.find('.artist').text();
             let tags = $this.attr('data-tags');
             let genres = $this.attr('data-genres');
+            let isDebugSong = parseBool($this.attr('data-debug'));
 
             let difficulty = true;
             if (selectedDifficulty !== null) {
                 difficulty = $this.attr('data-difficulty') == selectedDifficulty;
             }
 
+            //Else do normal sorting
             let searchTitle = qsRegex ? (title.match(qsRegex) != null) : true;
             let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
             let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
             let searchGenres = qsRegex ? (genres.match(qsRegex) != null) : true;
 
-            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty, "searchGenres", searchGenres)
+
+
+            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty, "searchGenres", searchGenres, "isDebugSong", isDebugSong)
 
 
             return (searchTitle || searchArtist || searchTags || searchGenres) && difficulty;
@@ -383,14 +394,18 @@ function initSearchBarThingy() {
             artist: '.artist',
             tags: '[data-tags]',
             genres: '[data-genres]',
-            length: '[data-length-ms] parseInt'
+            length: '[data-length-ms] parseInt',
         }
     });
     // use value of search field to filter
     let $quicksearch = $('#quicksearch').keyup(debounce(function () {
-        qsRegex = new RegExp($quicksearch.val(), 'gi');
 
-        if ($quicksearch.val() == '') {
+        let searchValue = $quicksearch.val().trim();
+
+        qsRegex = new RegExp(searchValue, 'gi');
+
+
+        if (searchValue == '') {
             qsRegex = null;
         }
         console.log("Filtering by", qsRegex);
@@ -457,9 +472,16 @@ function formatMS(duration) {
     return minutes + "m " + seconds + "s";
 }
 
+//I really dislike javascript sometimes.
+//Boolean("false") is true! Because logic.
+function parseBool(value) {
+    return (String(value).toLowerCase() === 'true');
+}
+
 $(document).mouseup(function (e) {
     var container = $(".now-playing-container");
     if (!container.is(e.target) && container.has(e.target).length === 0) {
         container.hide();
     }
 });
+

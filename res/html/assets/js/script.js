@@ -191,10 +191,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         console.log(song);
 
         let isDebugSong = song.tags.includes("debugging");
-        if (isDebugSong) {
-            //remove debug tag
-            song.tags.splice(song.tags.indexOf("debugging"), 1);
-        }
 
         let songElement = html;
         songElement = songElement.replace('%artwork%', song.artwork);
@@ -356,7 +352,7 @@ $('#sort-dropdown').on('change', function () {
     $grid.isotope({ sortBy: value, sortAscending: ascending });
 });
 
-let qsRegex; // quick search regex
+let qsRegex = null; // quick search regex
 function initSearchBarThingy() {
 
     $grid = $('.grid').isotope({ // init Isotope
@@ -370,6 +366,8 @@ function initSearchBarThingy() {
             let genres = $this.attr('data-genres');
             let isDebugSong = parseBool($this.attr('data-debug'));
 
+            let haveWeSearchedAnything = qsRegex !== null && $quicksearch.val().trim().length > 2; //Must be at least 3 characters to search
+
             let difficulty = true;
             if (selectedDifficulty !== null) {
                 difficulty = $this.attr('data-difficulty') == selectedDifficulty;
@@ -380,6 +378,15 @@ function initSearchBarThingy() {
             let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
             let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
             let searchGenres = qsRegex ? (genres.match(qsRegex) != null) : true;
+
+            if (isDebugSong) {
+                console.log("haveWeSearchedAnything", haveWeSearchedAnything, "searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty, "searchGenres", searchGenres, "isDebugSong", isDebugSong)
+                if (haveWeSearchedAnything) {
+                    return searchTags || searchTitle;
+                }
+                return false;
+            }
+
 
 
 
@@ -484,4 +491,3 @@ $(document).mouseup(function (e) {
         container.hide();
     }
 });
-

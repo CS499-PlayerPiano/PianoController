@@ -44,9 +44,7 @@ $(document).ready(function () {
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
-        // $grid.isotope({ filter: '*' }); // Reset isotope filter
-        selectedDifficulty = null; // Reset selected difficulty
-        $('.moon').removeClass('selected'); // Remove selected moon styling
+        $grid.isotope({ sortBy: 'original-order', sortAscending: true})
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         qsRegex = null; // Reset search regex

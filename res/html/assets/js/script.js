@@ -397,8 +397,16 @@ function initSearchBarThingy() {
         },
         getSortData: {
             difficulty: '[data-difficulty] parseInt',
-            name: '.song-title',
-            artist: '.artist',
+
+            // Name and artist case insensitive
+            name: function (itemElem) {
+                return $(itemElem).find('.song-title').text().toLowerCase();
+            },
+            artist: function (itemElem) {
+                return $(itemElem).find('.artist').text().toLowerCase();
+            },
+
+
             tags: '[data-tags]',
             genres: '[data-genres]',
             length: '[data-length-ms] parseInt',

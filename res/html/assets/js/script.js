@@ -222,11 +222,11 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         let songIndex = $(this).attr('data-song-index');
 
         $('.now-playing').html(`
-        <img src="${artwork}" alt="${title} - ${artist}" style="width: 300px; height: 300px; object-fit: cover;">
+        <img src="${artwork}" alt="${title} - ${artist}" style="width: 300px; height: 300px; object-fit: cover; border-radius: 5px;">
         <h2>${title}</h2>
         <p>${artist}</p>
-        <button class="back-to-list">Back to Song List</button>
         <button class ="back-to-list", onClick="queueSongByIndex(${songIndex})"> Queue Song</button>
+        <button class="back-to-list" style="background-color: #AF504C; color: white;">Back</button>
         `);
         showQueueContainer();
     });

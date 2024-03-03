@@ -47,6 +47,7 @@ $(document).ready(function () {
         $grid.isotope({ sortBy: 'original-order', sortAscending: true})
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
+        selectedDifficulty = null;
         qsRegex = null; // Reset search regex
         $grid.isotope(); // Reapply isotope filter
     });

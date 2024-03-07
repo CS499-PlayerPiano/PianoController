@@ -10,42 +10,63 @@
 #define ShiftRegisterPWM_h
 
 #include <stdlib.h>
-#include <avr/interrupt.h>
+
+//If Arduino Uno, define interupt
+#ifndef ESP32
+  #include <avr/interrupt.h>
+
 
 /**
  * Default pinning configuration
  * Can be changed from the .ino with #define ...
  * See "CustomPins" example sketch.
  */
-#ifndef ShiftRegisterPWM_DATA_PORT
-#define ShiftRegisterPWM_DATA_PORT PORTD
-#endif
-#ifndef ShiftRegisterPWM_DATA_MASK
-#define ShiftRegisterPWM_DATA_MASK 0B00000100
+  #ifndef ShiftRegisterPWM_DATA_PORT
+    #define ShiftRegisterPWM_DATA_PORT PORTD
+  #endif
+  #ifndef ShiftRegisterPWM_DATA_MASK
+    #define ShiftRegisterPWM_DATA_MASK 0B00000100
+  #endif
+  
+  #ifndef ShiftRegisterPWM_CLOCK_PORT
+    #define ShiftRegisterPWM_CLOCK_PORT PORTD
+  #endif
+  #ifndef ShiftRegisterPWM_CLOCK_MASK
+    #define ShiftRegisterPWM_CLOCK_MASK 0B00001000
+  #endif
+  
+  #ifndef ShiftRegisterPWM_LATCH_PORT
+    #define ShiftRegisterPWM_LATCH_PORT PORTD
+  #endif
+  #ifndef ShiftRegisterPWM_LATCH_MASK
+    #define ShiftRegisterPWM_LATCH_MASK 0B00010000
+  #endif
+  
+  #define ShiftRegisterPWM_setDataPin() ShiftRegisterPWM_DATA_PORT |= ShiftRegisterPWM_DATA_MASK;
+  #define ShiftRegisterPWM_clearDataPin() ShiftRegisterPWM_DATA_PORT &= ~ShiftRegisterPWM_DATA_MASK;
+  #define ShiftRegisterPWM_toggleClockPinTwice()                  \
+      ShiftRegisterPWM_CLOCK_PORT ^= ShiftRegisterPWM_CLOCK_MASK; \
+      ShiftRegisterPWM_CLOCK_PORT ^= ShiftRegisterPWM_CLOCK_MASK
+  #define ShiftRegisterPWM_toggleLatchPinTwice()                  \
+      ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK; \
+      ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK
+
+#else
+//If ESP32 is defined
+  #define ShiftRegisterPWM_setDataPin() digitalWrite(DATA_PIN, HIGH);
+  #define ShiftRegisterPWM_clearDataPin() digitalWrite(DATA_PIN, LOW);
+  #define ShiftRegisterPWM_toggleClockPinTwice()                  \
+      digitalWrite(CLOCK_PIN, HIGH); \
+      digitalWrite(CLOCK_PIN, LOW)
+  #define ShiftRegisterPWM_toggleLatchPinTwice()                  \
+      digitalWrite(LATCH_PIN, HIGH); \
+      digitalWrite(LATCH_PIN, LOW)
+
+void IRAM_ATTR Timer0_ISR();
 #endif
 
-#ifndef ShiftRegisterPWM_CLOCK_PORT
-#define ShiftRegisterPWM_CLOCK_PORT PORTD
-#endif
-#ifndef ShiftRegisterPWM_CLOCK_MASK
-#define ShiftRegisterPWM_CLOCK_MASK 0B00001000
-#endif
 
-#ifndef ShiftRegisterPWM_LATCH_PORT
-#define ShiftRegisterPWM_LATCH_PORT PORTD
-#endif
-#ifndef ShiftRegisterPWM_LATCH_MASK
-#define ShiftRegisterPWM_LATCH_MASK 0B00010000
-#endif
 
-#define ShiftRegisterPWM_setDataPin() ShiftRegisterPWM_DATA_PORT |= ShiftRegisterPWM_DATA_MASK;
-#define ShiftRegisterPWM_clearDataPin() ShiftRegisterPWM_DATA_PORT &= ~ShiftRegisterPWM_DATA_MASK;
-#define ShiftRegisterPWM_toggleClockPinTwice()                  \
-    ShiftRegisterPWM_CLOCK_PORT ^= ShiftRegisterPWM_CLOCK_MASK; \
-    ShiftRegisterPWM_CLOCK_PORT ^= ShiftRegisterPWM_CLOCK_MASK
-#define ShiftRegisterPWM_toggleLatchPinTwice()                  \
-    ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK; \
-    ShiftRegisterPWM_LATCH_PORT ^= ShiftRegisterPWM_LATCH_MASK
 
 int map2(unsigned x, unsigned in_max, unsigned out_max)
 {
@@ -181,6 +202,8 @@ public:
      */
     void interrupt(UpdateFrequency updateFrequency) const
     {
+//If its a arduino UNO board
+#ifndef ESP32      
         cli(); // disable interrupts
 
         // reset
@@ -221,6 +244,40 @@ public:
         TIMSK1 |= (1 << OCIE1A); // enable timer compare interrupt
 
         sei(); // allow interrupts
+//ESP32
+#else
+        uint16_t timerCount; 
+        
+        switch (updateFrequency)
+        {
+        case VerySlow:             // exactly 6,400 Hz interrupt frequency
+            timerCount = 2500;
+            break;
+
+        case Slow:                 // exactly 12,800 Hz interrupt frequency
+            timerCount = 1250;
+            break;
+
+        case Fast:                 // aprox. 35,714 Hz interrupt frequency
+            timerCount = 448;
+            break;
+
+        case SuperFast:            // approx. 51,281.5 Hz interrupt frequency
+             timerCount = 312;
+            break;
+
+        case Medium: // exactly 25,600 Hz interrupt frequency
+        default:
+            timerCount = 625;
+            break;
+        }
+
+        hw_timer_t * timer0 = timerBegin(0, 5, true); //Set prescaler to 5
+        timerAttachInterrupt(timer0, &Timer0_ISR, true);
+        timerAlarmWrite(timer0, timerCount, true);
+        timerAlarmEnable(timer0);
+
+#endif
     }
 
     static ShiftRegisterPWM *singleton; // used inside the ISR
@@ -338,14 +395,26 @@ ShiftRegisterPWM *ShiftRegisterPWM::singleton = NULL;
  * That way this library can be used in combination with libraries that rely on Timer 1.
  * See CustomTimerInterrupt example sketch.
  */
-#ifndef ShiftRegisterPWM_CUSTOM_INTERRUPT
-// Timer 1 interrupt service routine (ISR)
-ISR(TIMER1_COMPA_vect)
-{          // function which will be called when an interrupt occurs at timer 1
-    cli(); // disable interrupts (in case update method takes too long)
+
+//Arduino UNO
+#ifndef ESP32
+  #ifndef ShiftRegisterPWM_CUSTOM_INTERRUPT
+  // Timer 1 interrupt service routine (ISR)
+  ISR(TIMER1_COMPA_vect)
+  {          // function which will be called when an interrupt occurs at timer 1
+      cli(); // disable interrupts (in case update method takes too long)
+      ShiftRegisterPWM::singleton->update();
+      sei(); // re-enable
+  };
+  #endif
+
+//ESP32 Boards
+#else
+  void IRAM_ATTR Timer0_ISR()
+  {
     ShiftRegisterPWM::singleton->update();
-    sei(); // re-enable
-};
+  }
 #endif
 
+//END OF FILE
 #endif

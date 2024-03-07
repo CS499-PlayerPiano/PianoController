@@ -1,12 +1,17 @@
 // Note: When you recompile this, you need to delete: "C:\Users\eric\AppData\Local\Temp\arduino\cores\arduino_avr_uno_f742622285952b9ea3aafa09dbdb4e60" folder for some reason
 
-//SETTINGS:
+//----------------SETTINGS------------------------------
 //Algorithm: ALG_NAIVE, ALG_BRESENHAM
 //#define ALG_NAIVE
 #define ALG_BRESENHAM
+
 // Print debugging over serial port
 // #define DEBUG_SERIAL
-#define SHIFT_REGISTER_COUNT 2
+
+//Amount of boards we have hooked up
+#define SHIFT_REGISTER_COUNT 11
+
+//-----------------------------------------------
 
 #include <Arduino.h>
 
@@ -16,7 +21,7 @@
   #define DATA_PIN 26
   #define CLOCK_PIN 14
   #define LATCH_PIN 27
-  #define SERIAL_SPEED 230400
+  #define SERIAL_SPEED 500000
 #else
 //Arduino UNO specific settings
   #define DATA_PIN 2
@@ -194,17 +199,17 @@ void setup()
 
 void loop()
 {
-    // Serial code that breaks with solinoid
+    //Serial code that breaks with solinoid
     processIncomingSerial();
 
-    //long start = micros();
-    //for (int i = 0; i < 1000; ++i) {
-    //  sr.update();
-    //}
-    //long end = micros();
-
-    //Serial.print("Time to update (microseconds): ");
-    //Serial.println((end - start) / 1000);
+//    long start = micros();
+//    for (int i = 0; i < 1000; ++i) {
+//      sr.update();
+//    }
+//    long end = micros();
+//
+//    Serial.print("Time to update (microseconds): ");
+//    Serial.println((end - start) / 1000);
 
     // Debugging Pins
     //debugAllPins();

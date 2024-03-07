@@ -1,7 +1,7 @@
 {
   "enabled": true,
   "comPort": "COM4",
-  "baudRate": 230400,
+  "baudRate": 500000,
   "printDebugOutputFromArduino": true,
   "ignoreVelocity": false,
   "velocityMapping": {

@@ -53,14 +53,14 @@
 
 #else
 //If ESP32 is defined
-  #define ShiftRegisterPWM_setDataPin() digitalWrite(DATA_PIN, HIGH);
-  #define ShiftRegisterPWM_clearDataPin() digitalWrite(DATA_PIN, LOW);
+  #define ShiftRegisterPWM_setDataPin() GPIO.out_w1ts = 1UL << DATA_PIN;
+  #define ShiftRegisterPWM_clearDataPin() GPIO.out_w1tc = 1UL << DATA_PIN;
   #define ShiftRegisterPWM_toggleClockPinTwice()                  \
-      digitalWrite(CLOCK_PIN, HIGH); \
-      digitalWrite(CLOCK_PIN, LOW)
+      GPIO.out_w1ts = 1UL << CLOCK_PIN; \
+      GPIO.out_w1tc = 1UL << CLOCK_PIN
   #define ShiftRegisterPWM_toggleLatchPinTwice()                  \
-      digitalWrite(LATCH_PIN, HIGH); \
-      digitalWrite(LATCH_PIN, LOW)
+      GPIO.out_w1ts = 1UL << LATCH_PIN; \
+      GPIO.out_w1tc = 1UL << LATCH_PIN
 
 void IRAM_ATTR Timer0_ISR();
 #endif

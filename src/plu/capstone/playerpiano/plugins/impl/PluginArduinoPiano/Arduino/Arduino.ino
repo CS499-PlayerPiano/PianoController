@@ -1,25 +1,41 @@
 // Note: When you recompile this, you need to delete: "C:\Users\eric\AppData\Local\Temp\arduino\cores\arduino_avr_uno_f742622285952b9ea3aafa09dbdb4e60" folder for some reason
 
-//SETTINGS:
+//----------------SETTINGS------------------------------
 //Algorithm: ALG_NAIVE, ALG_BRESENHAM
-//#define ALG_NAIVE 1
-#define ALG_BRESENHAM 1
-
-
-
-#include <Arduino.h>
-#include "ShiftRegisterPWM.h"
-
-#define DATA_PIN 2
-#define CLOCK_PIN 3
-#define LATCH_PIN 4
-
-const int SHIFT_REGISTER_COUNT = 11;
-const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
-ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
+//#define ALG_NAIVE
+#define ALG_BRESENHAM
 
 // Print debugging over serial port
 // #define DEBUG_SERIAL
+
+//Amount of boards we have hooked up
+#define SHIFT_REGISTER_COUNT 11
+
+//-----------------------------------------------
+
+#include <Arduino.h>
+
+
+//ESP32 specific settings
+#ifdef ESP32
+  #define DATA_PIN 26
+  #define CLOCK_PIN 14
+  #define LATCH_PIN 27
+  #define SERIAL_SPEED 500000
+#else
+//Arduino UNO specific settings
+  #define DATA_PIN 2
+  #define CLOCK_PIN 3
+  #define LATCH_PIN 4
+  #define SERIAL_SPEED 115200
+#endif
+
+
+#include "ShiftRegisterPWM.h"
+
+const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
+ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
+
 
 void setPin(int pin, int value)
 {
@@ -119,31 +135,58 @@ void processIncomingSerial()
     }
 }
 
+
 void debugAllPins()
 {
     for (int i = 0; i < TOTAL_PINS; i++)
     {
         setPin(i, 255);
+        //sr.update();
         delay(100);
     }
 
     for (int i = 0; i < TOTAL_PINS; i++)
     {
         setPin(i, 0);
+        //sr.update();
         delay(100);
     }
 }
 
+#ifdef ESP32
+
+  TaskHandle_t Task1;
+  
+  void Task1code( void * parameter) {
+    while(true)
+    {
+      sr.update();
+    }
+  }
+
+#endif
+
 void setup()
 {
-    Serial.begin(115200); // 115200
+    Serial.begin(SERIAL_SPEED); // 115200
 
     // Setup the shift register
     pinMode(DATA_PIN, OUTPUT);  // sr data pin
     pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
+#ifdef ESP32
+    xTaskCreatePinnedToCore(
+      Task1code, /* Function to implement the task */
+      "Task1", /* Name of the task */
+      10000,  /* Stack size in words */
+      NULL,  /* Task input parameter */
+      0,  /* Priority of the task */
+      &Task1,  /* Task handle. */
+      0); /* Core where the task should run */
+#else
     sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
+#endif
 
     // Wait for the serial port to connect
     while (!Serial)
@@ -156,8 +199,17 @@ void setup()
 
 void loop()
 {
-    // Serial code that breaks with solinoid
+    //Serial code that breaks with solinoid
     processIncomingSerial();
+
+//    long start = micros();
+//    for (int i = 0; i < 1000; ++i) {
+//      sr.update();
+//    }
+//    long end = micros();
+//
+//    Serial.print("Time to update (microseconds): ");
+//    Serial.println((end - start) / 1000);
 
     // Debugging Pins
     //debugAllPins();

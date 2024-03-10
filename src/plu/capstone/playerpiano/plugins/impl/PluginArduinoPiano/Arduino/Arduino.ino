@@ -200,7 +200,7 @@ void setup()
 void loop()
 {
     //Serial code that breaks with solinoid
-    //processIncomingSerial();
+    processIncomingSerial();
 
 //    long start = micros();
 //    for (int i = 0; i < 1000; ++i) {
@@ -212,5 +212,5 @@ void loop()
 //    Serial.println((end - start) / 1000);
 
     // Debugging Pins
-    debugAllPins();
+    //debugAllPins();
 }

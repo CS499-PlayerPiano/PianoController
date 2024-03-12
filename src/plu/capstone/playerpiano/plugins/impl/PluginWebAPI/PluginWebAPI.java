@@ -27,6 +27,7 @@ import plu.capstone.playerpiano.plugins.PluginConfig;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.Endpoint;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointGetSongData;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointStaticRedirects;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints.EndpointsUser;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
@@ -50,7 +51,8 @@ public class PluginWebAPI extends Plugin {
     private final Set<Endpoint> ENDPOINTS = Set.of(
             new EndpointGetSongData(),
             new EndpointControlPiano(),
-            new EndpointsUser()
+            new EndpointsUser(),
+            new EndpointStaticRedirects()
     );
 
     String API_DOCS_JSON = "/api/openapi.json";

@@ -19,9 +19,6 @@ public class Step1RemoveNonPianoKeys implements MidiConversionStep {
             listOfEvents.removeIf(event -> {
                 if(event instanceof Note) {
                     Note note = (Note) event;
-                    if(!note.isValidPianoKey()) {
-                        System.out.println("Removing note: " + note);
-                    }
                     return !note.isValidPianoKey();
                 }
                 return false;

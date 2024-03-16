@@ -4,13 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import lombok.AllArgsConstructor;
+import plu.capstone.playerpiano.programs.miditopianofile.steps.Step4OffsetNoteTimes;
 import plu.capstone.playerpiano.utilities.timings.TimingsReport;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.programs.miditopianofile.steps.Step1RemoveNonPianoKeys;
 import plu.capstone.playerpiano.programs.miditopianofile.steps.Step2RemoveInvalidChannels;
 import plu.capstone.playerpiano.programs.miditopianofile.steps.Step3OnNoteVelocity0Fix;
-import plu.capstone.playerpiano.programs.miditopianofile.steps.Step4MaxOnNotesAtATime;
-import plu.capstone.playerpiano.programs.miditopianofile.steps.Step5InsertingOffNotes;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
@@ -25,8 +24,8 @@ public class MidiCleaner implements Runnable{
     private final File INPUT_FILE;
     private final File OUTPUT_FILE;
     private final int VERSION;
-    private final int MAX_NOTES_ON_AT_A_TIME;
-    private final long DUPLICATE_ON_LAG_TIME;
+//    private final int MAX_NOTES_ON_AT_A_TIME;
+//    private final long DUPLICATE_ON_LAG_TIME;
 
 
 
@@ -37,8 +36,7 @@ public class MidiCleaner implements Runnable{
                 new Step1RemoveNonPianoKeys(),
                 new Step2RemoveInvalidChannels(),
                 new Step3OnNoteVelocity0Fix(),
-                new Step4MaxOnNotesAtATime(MAX_NOTES_ON_AT_A_TIME),
-                new Step5InsertingOffNotes(DUPLICATE_ON_LAG_TIME),
+                new Step4OffsetNoteTimes()
         };
 
         try {

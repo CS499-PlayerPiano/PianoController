@@ -1,5 +1,5 @@
 {
-  "enabled": true,
+  "enabled": false,
   "comPort": "COM3",
   "baudRate": 115200,
   "printDebugOutputFromArduino": true,

@@ -154,6 +154,14 @@ public class SheetMusic {
         return eventMap.equals(that.eventMap);
     }
 
+    @Override
+    public String toString() {
+        return "SheetMusic{" +
+                "eventMapLen=" + eventMap.size() +
+                ", songLengthMS=" + songLengthMS +
+                '}';
+
+    }
 
     @Override
     public int hashCode() {

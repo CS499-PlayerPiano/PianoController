@@ -39,6 +39,8 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
     private void processNoteList(List<TimeAndNote> timeAndNote) {
 
+        final int shiftForwardAmount = calcShiftForwardAmount();
+
         //Step 1: Bias ons bu the time they take to hit
         for(TimeAndNote tn : timeAndNote) {
             if(tn.event instanceof Note) {
@@ -133,12 +135,19 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
     }
 
+    //TODO: Implement per note shift forward amount with a for loop
+    private int calcShiftForwardAmount() {
+        return 100;
+    }
+
     //How long does it take to retract in MS
+    //TODO: Implement this function based on note index and velocity
     private long timeToRelease(SheetMusicEvent event) {
         return 100;
     }
 
     //How long does it take to hit in MS
+    //TODO: Implement this function based on note index and velocity
     private long timeToHit(SheetMusicEvent event) {
        return 100;
     }

@@ -18,11 +18,11 @@ public class SubCommandParseMidi implements Callable<Integer> {
     @Option(names = {"-v", "--version"}, description = "The version of the output file", required = false, defaultValue = "" + SheetMusicReaderWriter.LATEST_VERSION)
     private int version;
 
-    @Option(names = {"-m", "--max-notes-on-at-a-time"}, description = "The maximum number of notes that can be on at a time", required = false, defaultValue = "45")
-    private int maxNotesOnAtATime;
-
-    @Option(names = {"-d", "--duplicate-on-lag-time"}, description = "The amount of time before a duplicated on note, to insert an off note", required = false, defaultValue = "200")
-    private long duplicateOnLagTime;
+//    @Option(names = {"-m", "--max-notes-on-at-a-time"}, description = "The maximum number of notes that can be on at a time", required = false, defaultValue = "45")
+//    private int maxNotesOnAtATime;
+//
+//    @Option(names = {"-d", "--duplicate-on-lag-time"}, description = "The amount of time before a duplicated on note, to insert an off note", required = false, defaultValue = "200")
+//    private long duplicateOnLagTime;
 
     @Override
     public Integer call() throws Exception {
@@ -50,7 +50,7 @@ public class SubCommandParseMidi implements Callable<Integer> {
             return 1;
         }
 
-        new MidiCleaner(input, output, version, maxNotesOnAtATime, duplicateOnLagTime).run();
+        new MidiCleaner(input, output, version).run();
         return 0;
     }
 }

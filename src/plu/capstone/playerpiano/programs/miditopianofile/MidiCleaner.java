@@ -24,10 +24,6 @@ public class MidiCleaner implements Runnable{
     private final File INPUT_FILE;
     private final File OUTPUT_FILE;
     private final int VERSION;
-//    private final int MAX_NOTES_ON_AT_A_TIME;
-//    private final long DUPLICATE_ON_LAG_TIME;
-
-
 
     @Override
     public void run() {

@@ -50,27 +50,23 @@ public class PlayerPianoController implements Runnable {
 
         queueManager = new QueueManager(this);
         queueManager.start();
-
-
-
-
-
-        try {
-
-            Thread.sleep(5000);
-            System.out.println("Queueing song");
-
-            queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/12th_Street_Rag.mid"))));
-            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid"))));
-            //queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid")));
-            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid"))));
-           // queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid")));
-            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/TEST_full_scale.mid"))));
-            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/full_scale_test.MID")));
-            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        
+//        try {
+//
+//            Thread.sleep(5000);
+//            System.out.println("Queueing song");
+//
+//            queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/12th_Street_Rag.mid"))));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid"))));
+//            //queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid")));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid"))));
+//           // queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid")));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/TEST_full_scale.mid"))));
+//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/full_scale_test.MID")));
+//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     //The downside to using plugins...

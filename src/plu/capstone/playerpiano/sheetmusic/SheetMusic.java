@@ -45,15 +45,6 @@ public class SheetMusic {
     }
 
     /**
-     * Overwrites the event map with a new one.
-     * Used for song transformations, don't use this method normally!
-     * @param eventMap
-     */
-    public void overwriteEventMap(Map<Long, List<SheetMusicEvent>> eventMap) {
-        this.eventMap = eventMap;
-    }
-
-    /**
      * Adds a callback to this SheetMusic object.
      * @param callback The callback to add.
      */
@@ -154,14 +145,6 @@ public class SheetMusic {
         return eventMap.equals(that.eventMap);
     }
 
-    @Override
-    public String toString() {
-        return "SheetMusic{" +
-                "eventMapLen=" + eventMap.size() +
-                ", songLengthMS=" + songLengthMS +
-                '}';
-
-    }
 
     @Override
     public int hashCode() {

@@ -35,7 +35,7 @@ public class QueueManager {
                         if(!songQueue.isEmpty()) {
                             stopOrSkipCurrentSong();
                             currentSheetMusic = songQueue.poll();
-                            playSheetMusic();
+                            playSheetMusic(currentSheetMusic);
                             sendCurrentQueueAsWSPacket();
                         }
                         else {
@@ -85,8 +85,9 @@ public class QueueManager {
 
     /**
      * Stops any currently playing music, and plays the given sheet music.
+     * @param music The sheet music to play.
      */
-    private void playSheetMusic() {
+    private void playSheetMusic(QueuedSongWithMetadata music) {
 
         synchronized (currentSheetMusic) {
             for (Plugin plugin : controller.getPluginLoader().getPlugins()) {

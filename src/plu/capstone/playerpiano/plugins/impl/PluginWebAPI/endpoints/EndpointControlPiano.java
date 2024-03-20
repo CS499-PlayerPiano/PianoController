@@ -17,7 +17,6 @@ import plu.capstone.playerpiano.programs.maincontroller.QueueError;
 import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 

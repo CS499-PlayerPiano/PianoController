@@ -1,5 +1,5 @@
 /* fallback */
-/* @font-face {
+@font-face {
     font-family: 'Material Symbols Outlined';
     font-style: normal;
     font-weight: 100 700;
@@ -20,7 +20,7 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-} */
+}
 
 body {
     background-color: #111;
@@ -388,8 +388,7 @@ footer img {
     border-radius: 10px;
 }
 
-#npTitle,
-#npArtist {
+#npTitle, #npArtist {
     padding-left: 10px;
     padding-right: 10px;
 }

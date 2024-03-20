@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Website</title>
+    <meta name="description" content="Controller for the player piano">
+    <meta name="author" content="Camden Hunt & Eric Golde">
+    <meta name="keywords" content="cs499, player piano, PLU">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <link rel="stylesheet" href="assets/css/iziToast.min.css">
+    <link rel="stylesheet" href="assets/css/mobilestyle.css">
+</head>
+
+<body>
+<div class="sticky-container">
+    <p><input type="text" id="quicksearch" placeholder="Search..." /></p>
+    <div class="text">
+        <button id="sort-button" class="sort-button">Sort</button>
+    </div>
+</div>
+
+
+<div class="container">
+        <div class="grid">
+            <!-- Song elements will be added here -->
+        </div>
+    </div>
+
+    <div class="now-playing-container" style="display: none;">
+        <div class="now-playing">
+            <button class="back-to-list">Back to Song List</button>
+            <!-- Content for the Now Playing screen goes here -->
+        </div>
+    </div>
+
+    <footer>
+        <img loading="lazy" id="npArtwork" src="https://piano.ericshome.xyz/api/album-art/null">
+        <div>
+            <p id="npTitle">Nothing Playing</p>
+            <p id="npArtist"></p>
+        </div>
+        <div class="music-controls">
+            <div class="progress-container">
+                <div id="progressBar"></div>
+            </div>
+            <div class="music-icons">
+                <i id="npbPlayPause" class="material-symbols-outlined">pause</i>
+                <i id="npbSkipForward" class="material-symbols-outlined">arrow_forward</i>
+                <i id="npbQueue" class="material-symbols-outlined disableMusicIcon">queue_music</i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/iziToast.min.js"></script>
+    <script src="assets/js/piano.js"></script>
+    <script src="assets/js/mobilescript.js"></script>
+</body>
+</html>

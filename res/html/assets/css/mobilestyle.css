@@ -1,0 +1,379 @@
+/* fallback */
+
+
+    @font-face {
+        font-family: 'Material Symbols Outlined';
+        font-weight: 100 700;
+        src: url("fonts/google-icons.woff2") format('woff2');
+    }
+
+    .material-symbols-outlined {
+        font-family: 'Material Symbols Outlined';
+        font-style: normal;
+        font-size: 24px;
+        line-height: 1;
+        display: inline-block;
+        white-space: nowrap;
+        direction: ltr;
+        -webkit-font-feature-settings: 'liga';
+        -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+        background-color: #111;
+        color: #fff;
+        font-family: 'Courier New', Courier, monospace;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+.sticky-container {
+    position: sticky;
+    height: 70px;
+    top: 0;
+    background-color: #111;
+    z-index: 1000;
+    display: flex; /* Use flexbox */
+    align-items: center; /* Center vertically */
+}
+
+.sticky-container p,
+.sticky-container .text {
+    margin: 0; /* Reset margin */
+}
+
+.sticky-container p {
+    flex: 1; /* Take remaining space */
+}
+
+.sticky-container .text {
+    margin-left: 10px; /* Add some space between the elements */
+}
+
+#quicksearch {
+    font-family: 'Courier New', Courier, monospace;
+    width: 30%;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 150px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+#quicksearch:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sort-dropdown {
+    width: 100px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+}
+
+.sort-dropdown:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.sort-dropdown.show-options {
+    opacity: 1;
+}
+
+.sort-button {
+    padding: 5px 10px;
+    background-color: #333;
+    height: 50px;
+    width: 100px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 24px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+
+    .container {
+        margin-bottom: 100px;
+    }
+
+    .search-test {
+        visibility: hidden;
+    }
+
+    .emojis-container {
+        position: absolute;
+        top: 35px;
+        right: 35px;
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .moon {
+        display: inline-block;
+        margin-right: -10px;
+        transition: transform 0.3s ease;
+        position: relative;
+        cursor: pointer;
+    }
+
+    .moon:hover,
+    .moon.hovered {
+        transform: scale(1.3);
+    }
+
+    .text {
+        position: relative;
+        cursor: default;
+    }
+
+    .text p {
+        margin-bottom: 5px;
+        font-weight: bold;
+        font-size: 16px;
+        color: #fff;
+        cursor: default;
+    }
+
+
+    .grid {
+        border: 1px solid #333;
+    }
+
+    .grid:after {
+        content: '';
+        display: block;
+        clear: both;
+    }
+
+.song-element {
+    position: relative;
+    display: flex;
+    align-items: center; /* Center vertically */
+    height: 70px; /* Set container height */
+    width: 100%; /* fill the width of the container */
+    margin: 5px 0px;
+    padding: 0 10px; /* Adjust padding */
+    background: #181818;
+    color: #262524;
+    overflow: hidden;
+    border-radius: 2px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+
+
+.image-container {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px; /* Add margin to create space between image and text */
+    overflow: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: 100%; /* Adjust height */
+    object-fit: cover; /* Ensure the image covers the container */
+    border-radius: 8px;
+}
+
+.song-info {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    align-items: center; /* Align vertically */
+}
+
+.info-text {
+    flex: 1; /* Take remaining space */
+    display: flex;
+    flex-direction: column;
+    width: 60%
+}
+
+.song-title,
+.artist,
+.length {
+    font-size: 12px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: white;
+    text-align: left; /* Align text to the left */
+    text-overflow: ellipsis;
+    max-width: 90%;
+}
+
+.song-title {
+    font-weight: bold;
+}
+
+.gold-text{
+    font-size: 12px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left; /* Align text to the left */
+    text-overflow: ellipsis;
+    max-width: 90%;
+    color: gold;
+}
+
+.noteDensity {
+    font-size: 12px;
+    margin-left: auto; /* Push emojis to the right */
+    margin-right: 10px; /* Ensure 10px distance from the right side */
+}
+
+
+
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes slideIn {
+        from {
+            transform: translateY(-50px);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .now-playing-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .now-playing {
+        background-color: #333;
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    .now-playing .back-to-list {
+        background-color: #4CAF50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    .now-playing .back-to-list:hover {
+        background-color: #45a049;
+    }
+
+    .undo-button {
+        padding: 8px 16px;
+        background-color: #333;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    footer {
+        color: #fff;
+        background-color: #282831;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+    }
+
+    .music-controls {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        padding-left: 10px;
+    }
+
+    .progress-container {
+        flex-grow: 1;
+        margin-right: 10px;
+        height: 10px;
+        background-color: #555;
+        border-radius: 5px;
+    }
+
+    #progressBar {
+        width: 0%;
+        height: 100%;
+        background-color: hotpink;
+        border-radius: 5px;
+    }
+
+    .music-icons {
+        margin-right: 20px;
+        /* Adjust as needed */
+    }
+
+    .music-icons i.material-symbols-outlined {
+        margin-right: 20px;
+        /* Adjust as needed */
+        padding: 20px;
+        cursor: pointer;
+    }
+
+    .music-icons i.material-symbols-outlined:hover {
+        background-color: #333;
+        border-radius: 50%;
+    }
+
+    .disableMusicIcon {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+
+    footer img {
+        margin-right: 10px;
+        margin-left: 10px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        height: 50px;
+        width: 50px;
+        border-radius: 10px;
+    }
+
+    #npTitle, #npArtist {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    #debugSongs {}

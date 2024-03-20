@@ -11,7 +11,7 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
 @AllArgsConstructor
-public class Step4MaxOnNotesAtATime implements MidiConversionStep {
+public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
 
     private final int MAX_NOTES_ON;
 

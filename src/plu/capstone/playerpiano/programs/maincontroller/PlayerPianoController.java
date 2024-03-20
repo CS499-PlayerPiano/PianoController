@@ -10,7 +10,9 @@ import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.plugins.PluginLoader;
+import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
+import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
 
 public class PlayerPianoController implements Runnable {
 
@@ -48,19 +50,21 @@ public class PlayerPianoController implements Runnable {
 
         queueManager = new QueueManager(this);
         queueManager.start();
-
-
-
-
-
+        
 //        try {
+//
+//            Thread.sleep(5000);
+//            System.out.println("Queueing song");
+//
+//            queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/12th_Street_Rag.mid"))));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid"))));
+//            //queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid")));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid"))));
+//           // queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid")));
+//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/TEST_full_scale.mid"))));
 //            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/full_scale_test.MID")));
-//            queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
-//        } catch (InvalidMidiDataException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        } catch (QueueError e) {
+//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
+//        } catch (Exception e) {
 //            throw new RuntimeException(e);
 //        }
     }

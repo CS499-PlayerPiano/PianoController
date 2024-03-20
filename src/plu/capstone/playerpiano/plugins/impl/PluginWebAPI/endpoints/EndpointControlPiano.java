@@ -17,6 +17,7 @@ import plu.capstone.playerpiano.programs.maincontroller.QueueError;
 import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
@@ -136,6 +137,9 @@ public class EndpointControlPiano implements Endpoint {
 
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
+
+            // Apply changes to the sheet music, make it more playable.
+            sm = MidiCleanerSM.applyChanges(sm);
 
             try {
                 int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));

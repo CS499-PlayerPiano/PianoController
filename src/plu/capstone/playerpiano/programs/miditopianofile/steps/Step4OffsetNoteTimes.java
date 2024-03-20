@@ -1,6 +1,9 @@
 package plu.capstone.playerpiano.programs.miditopianofile.steps;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +15,8 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
 public class Step4OffsetNoteTimes implements MidiConversionStep {
+
+    private static final boolean PRINT_DEBUG_FILES = false;
 
     // The custom ID for the sustain pedal. This is because the sustain pedal is not a note,
     // and we need to be able to temporarily store it in the same data structure as the notes.
@@ -25,22 +30,59 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     @Override
     public void process(SheetMusic sheetMusic) {
 
+        System.out.println("-------Processing sheet music-------");
+
         //Convert sheet music to new format
         Map<Integer, List<TimeAndNote>> newSheetMusic = fromSheetMusicToNewFormat(sheetMusic);
 
         for(int keyNumber : newSheetMusic.keySet()) {
-            processNoteList(newSheetMusic.get(keyNumber));
+            processNoteList(newSheetMusic.get(keyNumber), keyNumber);
         }
 
         //Just overwrite the event map, not any other variables in the sheet music.
         sheetMusic.overwriteEventMap(fromNewFormatToSheetMusic(newSheetMusic).getEventMap());
     }
 
+    private void printTimeAndNote(List<TimeAndNote> timeAndNote, int midiKeyNumber, String fileName) {
 
-    private void processNoteList(List<TimeAndNote> timeAndNote) {
+        if(!PRINT_DEBUG_FILES){return;}
+
+        final int indexNumber = Note.fromMidiNoteToPianoKeyIndex(midiKeyNumber);
+        final boolean shouldPrint = (indexNumber == 43);
+
+        if(!shouldPrint){return;}
+
+        try {
+            FileWriter writer = new FileWriter("tmp/" + fileName + ".txt", false);
+
+            for(TimeAndNote tn : timeAndNote) {
+                if(tn.event instanceof Note) {
+                    Note n = (Note) tn.event;
+                    writer.write(tn.time + " | " + n.isNoteOn() + " | " + n.getVelocity() + "\n");
+                }
+            }
+
+            writer.flush();
+            writer.close();
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void processNoteList(List<TimeAndNote> timeAndNote, final int midiKeyNumber) {
+
 
         final int shiftForwardAmount = calcShiftForwardAmount();
 
+        //Step 0: Shift all notes forward due to beginign note being cut off
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-0");
+        for(TimeAndNote tn : timeAndNote) {
+            tn.time += shiftForwardAmount;
+        }
+
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-1");
         //Step 1: Bias ons bu the time they take to hit
         for(TimeAndNote tn : timeAndNote) {
             if(tn.event instanceof Note) {
@@ -51,17 +93,12 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                 }
             }
         }
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-2");
 
-        //Step 2: Remove out of order events
-        for(int i = 0; i < timeAndNote.size(); i++) {
-            if(i > 0) {
-                if(timeAndNote.get(i).time < timeAndNote.get(i-1).time) {
-                    timeAndNote.remove(i);
-                    i--;
-                }
-            }
-        }
+        //Step 2: Resort notes
+        timeAndNote.sort(Comparator.comparingLong(a -> a.time));
 
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-3");
         //Step 3: Remove any two offs in a row
         for(int i = 0; i < timeAndNote.size(); i++) {
             if(i > 0) {
@@ -76,6 +113,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             }
         }
 
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-4");
         //Step 4: Ensure a minimum time between off note and subsequent on note
         for(int i = 0; i < timeAndNote.size(); i++) {
             if(i > 0) {
@@ -101,6 +139,8 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             }
         }
 
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-5");
+
         //Step 5: Insert Off between two consecutive ons
         for(int i = 0; i < timeAndNote.size(); i++) {
             if(i > 0) {
@@ -119,6 +159,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                             final long newTime = current.time - timeToRelease(previousNote);
                             final Note newOffNote = currentNote.clone();
                             newOffNote.setNoteOn(false);
+                            newOffNote.setVelocity(0);
                             timeAndNote.add(i, new TimeAndNote(newTime, newOffNote));
                             i++;
                         }
@@ -133,11 +174,13 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             }
         }
 
+        printTimeAndNote(timeAndNote, midiKeyNumber, "tn-finished");
+
     }
 
     //TODO: Implement per note shift forward amount with a for loop
     private int calcShiftForwardAmount() {
-        return 100;
+        return 300;
     }
 
     //How long does it take to retract in MS
@@ -210,6 +253,11 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                 newSheetMusic.get(keyNumber).add(new TimeAndNote(timestamp, event));
 
             }
+        }
+
+        //Sort the inner lists by time
+        for(int keyNumber : newSheetMusic.keySet()) {
+            newSheetMusic.get(keyNumber).sort(Comparator.comparingLong(a -> a.time));
         }
 
         return newSheetMusic;

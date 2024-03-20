@@ -138,9 +138,6 @@ public class EndpointControlPiano implements Endpoint {
         try {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
-            // Apply changes to the sheet music, make it more playable.
-            sm = MidiCleanerSM.applyChanges(sm);
-
             try {
                 int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
                 response.addProperty("success", true);

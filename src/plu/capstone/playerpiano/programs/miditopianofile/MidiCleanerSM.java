@@ -12,22 +12,20 @@ public class MidiCleanerSM {
 
     private static final Logger LOGGER = new Logger(MidiCleanerSM.class);
 
+    private static final MidiConversionStep[] steps = {
+            new Step1RemoveNonPianoKeys(),
+            new Step2RemoveInvalidChannels(),
+            new Step3OnNoteVelocity0Fix(),
+            new Step4OffsetNoteTimes()
+    };
+
     public static final SheetMusic applyChanges(SheetMusic sheetMusic) {
-
-        MidiConversionStep[] steps = {
-                new Step1RemoveNonPianoKeys(),
-                new Step2RemoveInvalidChannels(),
-                new Step3OnNoteVelocity0Fix(),
-                new Step4OffsetNoteTimes()
-        };
-
 
         TimingsReport timingsReport = new TimingsReport();
 
         for (int i = 0; i < steps.length; i++) {
             timingsReport.start("Step " + (i + 1) + ": " + steps[i].getName());
             final MidiConversionStep step = steps[i];
-            LOGGER.info("Running step: " + step.getName());
             step.process(sheetMusic);
             timingsReport.stop();
         }

@@ -3,15 +3,21 @@ package plu.capstone.playerpiano.programs.maincontroller;
 import com.google.gson.JsonObject;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
-@AllArgsConstructor
 @Getter
 public class QueuedSongWithMetadata {
     private final SheetMusic sheetMusic;
 
     private final JsonObject songDBEntry;
     private final String whoQueued;
+
+    public QueuedSongWithMetadata(SheetMusic sheetMusic, JsonObject songDBEntry, String whoQueued) {
+        this.sheetMusic = MidiCleanerSM.applyChanges(sheetMusic); //Apply changes to the sheet music before queuing it.
+        this.songDBEntry = songDBEntry;
+        this.whoQueued = whoQueued;
+    }
 
     @Override
     public boolean equals(Object obj) {

@@ -12,7 +12,7 @@ import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileReader;
 import plu.capstone.playerpiano.sheetmusic.io.BufferedPianoFileWriter;
 
 /*
-Version 6:
+Version 7:
         - int SongLengthMS
         - int number of timeslots
         - for each timeslot:

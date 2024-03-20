@@ -1,18 +1,12 @@
 package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonObject;
-import java.io.File;
-import java.io.IOException;
-import javax.sound.midi.InvalidMidiDataException;
 import lombok.Getter;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.plugins.PluginLoader;
-import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
-import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
-import plu.capstone.playerpiano.sheetmusic.serializable.SheetMusicReaderWriter;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
+import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 
 public class PlayerPianoController implements Runnable {
 

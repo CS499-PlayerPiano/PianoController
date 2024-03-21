@@ -336,15 +336,20 @@ footer {
 }
 
 .progress-container {
-    flex-grow: 1;
-    margin-right: 10px;
+    position: fixed;
+    bottom: 0;
+    left: 10px;
+    right: 10px;
+    width: calc(100% - 20px);
     height: 10px;
     background-color: #555;
     border-radius: 5px;
+    margin-bottom: 10px;
+    z-index: 999;
 }
 
 #progressBar {
-    width: 0%;
+    width: calc(100% - 20px);
     height: 100%;
     background-color: hotpink;
     border-radius: 5px;

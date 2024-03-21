@@ -124,7 +124,9 @@ function setNowPlayingInfo(currentSong) {
         artwork = currentSong.artwork;
     }
 
-    artwork = currentUrl + "api/album-art/" + artwork;
+    // artwork = currentUrl + "api/album-art/" + artwork;
+    artwork = "http://localhost:8898/api/album-art/" + artwork;
+
 
     $('#npArtwork').attr('src', artwork);
     $('#npTitle').text(name);
@@ -181,7 +183,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
     </div>
 </div>
 
-
 `
     // Add each song to the list, name is the text, midiFile is the value
     for (let i = 0; i < songs.length; i++) {
@@ -209,8 +210,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%debugSong%', isDebugSong);
 
         songElement = songElement.replace('%developer-favorite%', song.favorite);
-
-
 
         $('.grid').append(songElement);
     }

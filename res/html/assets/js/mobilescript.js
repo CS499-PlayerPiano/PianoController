@@ -9,7 +9,10 @@ $(document).ready(function () {
             "That's all folks!",
             "It's quiet in here...",
             "CAUTION: Side effects may include spontaneous dancing, uncontrollable smiling, bouts of joy, humming melodies in your sleep, and an irresistible urge to learn piano...",
-            "The search continues..."
+            "The search continues...",
+            "We've been trying to reach you concerning your vehicle's extended warranty",
+            "Ceci n'est pas un piano",
+            "0% sugar!"
         ];
         var randomIndex = Math.floor(Math.random() * messages.length);
         var endTextElement = document.getElementById("endText");

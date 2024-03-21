@@ -53,10 +53,9 @@
 
 #quicksearch {
     font-family: 'Courier New', Courier, monospace;
-    width: 30%;
+    width: 85%;
     height: 50px;
     padding-left: 10px;
-    padding-right: 150px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
@@ -65,6 +64,7 @@
 }
 
 #quicksearch:focus {
+    font-family: 'Courier New', Courier, monospace;
     outline: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
@@ -101,6 +101,7 @@
     font-size: 24px;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
+    margin-right: 10px;
 }
 
     .container {

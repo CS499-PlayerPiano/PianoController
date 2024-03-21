@@ -2,7 +2,6 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
-
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
         $('.moon:lt(' + index + ')').addClass('hovered').text('🌕'); //moons to the left of the cursor will be full
@@ -126,7 +125,6 @@ function setNowPlayingInfo(currentSong) {
 
     // artwork = currentUrl + "api/album-art/" + artwork;
     artwork = "http://localhost:8898/api/album-art/" + artwork;
-
 
     $('#npArtwork').attr('src', artwork);
     $('#npTitle').text(name);
@@ -335,20 +333,14 @@ function arrayToCommaSeparatedString(array) {
     return string;
 }
 
-
 //on sort-dropdown change
 //Change the sort of the isotope grid depending on the dropdown value
 $('#sort-dropdown').on('change', function () {
     let value = $(this).val();
-
-    //if the option has data-descending, sort descending
-
     let ascending = true;
-    //if the option has data-ascending AND it's false, sort descending
     if ($(this).find(':selected').data('ascending') == false) {
         ascending = false;
     }
-
     console.log("Sorting by", value, "ascending", ascending);
 
     $grid.isotope({ sortBy: value, sortAscending: ascending, layoutMode: 'vertical' });
@@ -375,7 +367,6 @@ function initSearchBarThingy() {
                 difficulty = $this.attr('data-difficulty') == selectedDifficulty;
             }
 
-            //Else do normal sorting
             let searchTitle = qsRegex ? (title.match(qsRegex) != null) : true;
             let searchArtist = qsRegex ? (artist.match(qsRegex) != null) : true;
             let searchTags = qsRegex ? (tags.match(qsRegex) != null) : true;
@@ -388,21 +379,16 @@ function initSearchBarThingy() {
                 }
                 return false;
             }
-
-            //console.log("searchTitle", searchTitle, "searchArtist", searchArtist, "searchTags", searchTags, "difficulty", difficulty, "searchGenres", searchGenres, "isDebugSong", isDebugSong)
-
             return (searchTitle || searchArtist || searchTags || searchGenres) && difficulty;
         },
         getSortData: {
             difficulty: '[data-difficulty] parseInt',
-            // Name and artist case insensitive
             name: function (itemElem) {
                 return $(itemElem).find('.song-title').text().toLowerCase();
             },
             artist: function (itemElem) {
                 return $(itemElem).find('.artist').text().toLowerCase();
             },
-
 
             tags: '[data-tags]',
             genres: '[data-genres]',
@@ -415,7 +401,6 @@ function initSearchBarThingy() {
         let searchValue = $quicksearch.val().trim();
 
         qsRegex = new RegExp(searchValue, 'gi');
-
 
         if (searchValue == '') {
             qsRegex = null;
@@ -484,8 +469,6 @@ function formatMS(duration) {
     return minutes + "m " + seconds + "s";
 }
 
-//I really dislike javascript sometimes.
-//Boolean("false") is true! Because logic.
 function parseBool(value) {
     return (String(value).toLowerCase() === 'true');
 }

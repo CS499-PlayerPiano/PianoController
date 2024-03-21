@@ -26,29 +26,32 @@
 
 
 <div class="container">
-        <div class="grid">
-            <!-- Song elements will be added here -->
-        </div>
+    <div class="grid">
+        <!-- Song elements will be added here -->
+    </div>
+    <div class="end-text" id="endText">
+        <!-- end message will be added here -->
+    </div>
     </div>
 
-    <div class="now-playing-container" style="display: none;">
-        <div class="now-playing">
-            <button class="back-to-list">Back to Song List</button>
-            <!-- Content for the Now Playing screen goes here -->
-        </div>
+<div class="now-playing-container" style="display: none;">
+    <div class="now-playing">
+        <button class="back-to-list">Back to Song List</button>
+        <!-- Content for the Now Playing screen goes here -->
     </div>
+</div>
 
 <footer>
     <img loading="lazy" id="npArtwork" src="https://piano.ericshome.xyz/api/album-art/null">
-    <div>
-        <p id="npTitle">Nothing Playing</p>
-        <p id="npArtist"></p>
-    </div>
-    <div class="music-controls">
-        <div class="music-icons">
-            <i id="npbPlayPause" class="material-symbols-outlined">pause</i>
-            <i id="npbSkipForward" class="material-symbols-outlined">arrow_forward</i>
+    <div class="np-info-container">
+        <div>
+            <p id="npTitle">Nothing Playing</p>
+            <p id="npArtist"></p>
         </div>
+    </div>
+    <div class="music-icons">
+        <i id="npbPlayPause" class="material-symbols-outlined">⏸️</i>
+        <i id="npbSkipForward" class="material-symbols-outlined">⏩</i>
     </div>
     <div class="progress-container">
         <div id="progressBar"></div>

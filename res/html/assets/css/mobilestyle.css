@@ -1,5 +1,6 @@
 /* fallback */
-/* @font-face {
+/*
+@font-face {
     font-family: 'Material Symbols Outlined';
     font-style: normal;
     font-weight: 100 700;
@@ -20,18 +21,46 @@
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
-} */
+}
+*/
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';
     font-style: normal;
-    font-size: 24px;
+    font-size: 20px;
     line-height: 1;
     display: inline-block;
     white-space: nowrap;
     direction: ltr;
     -webkit-font-feature-settings: 'liga';
     -webkit-font-smoothing: antialiased;
+}
+
+.music-icons { /*change when new emojis get put in*/
+    margin-left: auto;
+    margin-right: 0px;
+    margin-bottom: 15px;
+    width: auto;
+    top: 0;
+}
+
+.music-icons i.material-symbols-outlined {
+    margin-right: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 1px;
+    padding-right: 1px;
+    cursor: pointer;
+}
+
+.music-icons i.material-symbols-outlined:hover {
+    background-color: #333;
+    border-radius: 50%;
+}
+
+.disableMusicIcon {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
 body {
@@ -224,7 +253,6 @@ body {
     white-space: nowrap;
     color: white;
     text-align: left;
-    text-overflow: ellipsis;
     max-width: 90%;
 }
 
@@ -324,23 +352,16 @@ footer {
     align-items: center;
     position: fixed;
     width: 100%;
+    height: 70px;
     bottom: 0;
-}
-
-.music-controls {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    justify-content: space-between;
-    padding-left: 10px;
 }
 
 .progress-container {
     position: fixed;
     bottom: 0;
-    left: 10px;
+    left: 70px;
     right: 10px;
-    width: calc(100% - 20px);
+    width: calc(100% - 80px);
     height: 10px;
     background-color: #555;
     border-radius: 5px;
@@ -349,30 +370,10 @@ footer {
 }
 
 #progressBar {
-    width: calc(100% - 20px);
+    width: calc(100% - 80px);
     height: 100%;
     background-color: hotpink;
     border-radius: 5px;
-}
-
-.music-icons {
-    margin-right: 20px;
-}
-
-.music-icons i.material-symbols-outlined {
-    margin-right: 20px;
-    padding: 20px;
-    cursor: pointer;
-}
-
-.music-icons i.material-symbols-outlined:hover {
-    background-color: #333;
-    border-radius: 50%;
-}
-
-.disableMusicIcon {
-    pointer-events: none;
-    opacity: 0.5;
 }
 
 footer img {
@@ -385,8 +386,40 @@ footer img {
     border-radius: 10px;
 }
 
-#npTitle, #npArtist {
-    padding-left: 10px;
-    padding-right: 10px;
+.np-info-container {
+    position: relative;
 }
+
+:root {
+    --max-width: calc(100vw - 190px);
+}
+
+#npTitle,
+#npArtist {
+    margin-top: 0px;
+    font-size: 12px;
+    padding-left: 0px;
+    padding-right: 10px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: var(--max-width);
+}
+
+#npTitle {
+    margin-bottom: 4px;
+}
+
+#npArtist {
+    margin-bottom: 12px;
+}
+
+.end-text {
+    text-align: center;
+    font-size: 12px;
+    margin-top: 20px;
+    font-style: italic;
+}
+
 #debugSongs {}

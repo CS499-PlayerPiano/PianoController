@@ -2,6 +2,22 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
+    function displayRandomMessage() {
+
+        var messages = [
+            "Thank you Mario! But our princess is in another castle!",
+            "That's all folks!",
+            "What did you expect, more songs?",
+            "Hope you enjoyed the music",
+            "The playlist ends here"
+        ];
+        var randomIndex = Math.floor(Math.random() * messages.length);
+        var endTextElement = document.getElementById("endText");
+        endTextElement.textContent = messages[randomIndex];
+    }
+    displayRandomMessage();
+
+
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
         $('.moon:lt(' + index + ')').addClass('hovered').text('🌕'); //moons to the left of the cursor will be full
@@ -148,9 +164,9 @@ function setUIIsPaused(isPaused) {
     }
 
     if (isPaused) {
-        $('#npbPlayPause').text('play_arrow');
+        $('#npbPlayPause').text('▶️'); // FIX!!!
     } else {
-        $('#npbPlayPause').text('pause');
+        $('#npbPlayPause').text('⏸️');
     }
 }
 

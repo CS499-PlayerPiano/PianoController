@@ -1,13 +1,17 @@
 let selectedDifficulty = null;
 
+const EMOJI_NEW_MOON = '<img src="assets/emoji/new-moon.png" alt="🌑" class="emoji" draggable="false" />';
+const EMOJI_LAST_QUARTER_MOON = '<img src="assets/emoji/last-quarter-moon.png" alt="🌓" class="emoji" draggable="false" />';
+const EMOJI_FULL_MOON = '<img src="assets/emoji/full-moon.png" alt="🌕" class="emoji" draggable="false" />';
+
 $(document).ready(function () {
 
 
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
-        $('.moon:lt(' + index + ')').addClass('hovered').text('🌕'); //moons to the left of the cursor will be full
-        $('.moon:eq(' + index + ')').addClass('hovered').text(isHalf ? '🌗' : '🌕'); // sets current moon to either full or half depending on the mouse placement
-        $('.moon:gt(' + index + ')').removeClass('hovered').text('🌑'); // moons to the right of the cursor will be empty
+        $('.moon:lt(' + index + ')').addClass('hovered').html(EMOJI_FULL_MOON); //moons to the left of the cursor will be full
+        $('.moon:eq(' + index + ')').addClass('hovered').html(isHalf ? EMOJI_LAST_QUARTER_MOON : EMOJI_FULL_MOON); // sets current moon to either full or half depending on the mouse placement
+        $('.moon:gt(' + index + ')').removeClass('hovered').html(EMOJI_NEW_MOON); // moons to the right of the cursor will be empty
     }
 
     $('.moon').on('mouseenter mousemove', function (event) {
@@ -20,21 +24,21 @@ $(document).ready(function () {
             let isHalf = selectedDifficulty % 2 === 1; // Check if the last moon is half
             for (let i = 0; i < $('.moon').length; i++) {
                 if (i < fullMoons) {
-                    $('.moon').eq(i).addClass('hovered').text('🌕');
+                    $('.moon').eq(i).addClass('hovered').html(EMOJI_FULL_MOON);
                 } else if (i === fullMoons && isHalf) {
-                    $('.moon').eq(i).addClass('hovered').text('🌗');
+                    $('.moon').eq(i).addClass('hovered').html(EMOJI_LAST_QUARTER_MOON);
                 } else {
-                    $('.moon').eq(i).removeClass('hovered').text('🌑');
+                    $('.moon').eq(i).removeClass('hovered').html(EMOJI_NEW_MOON);
                 }
             }
         } else {
-            $('.moon').removeClass('hovered').text('🌑'); // Reset all moons to empty if no moon was clicked
+            $('.moon').removeClass('hovered').html(EMOJI_NEW_MOON); // Reset all moons to empty if no moon was clicked
         }
     });
 
     $('.moon').on('click', function () {
         let currentIndex = $(this).index(); //gets index of the clicked moon
-        let isHalf = $(this).text() === '🌗'; // checks state of current moon
+        let isHalf = $(this).text() === EMOJI_LAST_QUARTER_MOON; // checks state of current moon
         selectedDifficulty = 1 + (currentIndex * 2) + (isHalf ? 0 : 1); //set selected difficulty based on the moon clicked
 
         $('.moon').removeClass('selected');
@@ -44,8 +48,8 @@ $(document).ready(function () {
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
-        $grid.isotope({ sortBy: 'original-order', sortAscending: true})
-        $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
+        $grid.isotope({ sortBy: 'original-order', sortAscending: true })
+        $('.moon').removeClass('hovered').html(EMOJI_NEW_MOON); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         selectedDifficulty = null;
         qsRegex = null; // Reset search regex
@@ -301,17 +305,17 @@ function noteDensityToDifficulty(noteDensity) {
  */
 function difficultyToEmojis(difficulty) {
     switch (difficulty) {
-        case 0: return '🌑🌑🌑🌑🌑';
-        case 1: return '🌗🌑🌑🌑🌑';
-        case 2: return '🌕🌑🌑🌑🌑';
-        case 3: return '🌕🌗🌑🌑🌑';
-        case 4: return '🌕🌕🌑🌑🌑';
-        case 5: return '🌕🌕🌗🌑🌑';
-        case 6: return '🌕🌕🌕🌑🌑';
-        case 7: return '🌕🌕🌕🌗🌑';
-        case 8: return '🌕🌕🌕🌕🌑';
-        case 9: return '🌕🌕🌕🌕🌗';
-        case 10: return '🌕🌕🌕🌕🌕';
+        case 0: return EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 1: return EMOJI_LAST_QUARTER_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 2: return EMOJI_FULL_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 3: return EMOJI_FULL_MOON + EMOJI_LAST_QUARTER_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 4: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 5: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_LAST_QUARTER_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 6: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_NEW_MOON + EMOJI_NEW_MOON;
+        case 7: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_LAST_QUARTER_MOON + EMOJI_NEW_MOON;
+        case 8: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_NEW_MOON;
+        case 9: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_LAST_QUARTER_MOON;
+        case 10: return EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON + EMOJI_FULL_MOON;
         default: return '🔥🔥🔥🔥🔥';
     }
 }

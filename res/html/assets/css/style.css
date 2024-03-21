@@ -31,6 +31,12 @@ body {
     padding: 0;
 }
 
+img.emoji {
+    height: 1.5em;
+    width: 1.5em;
+    margin: 0 .05em 0 .1em;
+}
+
 .sticky-container {
     position: sticky;
     top: 0;
@@ -53,7 +59,7 @@ body {
     position: absolute;
     top: 35px;
     right: 35px;
-    font-size: 24px;
+    font-size: 20px;
     text-align: center;
 }
 

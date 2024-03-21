@@ -7,9 +7,9 @@ $(document).ready(function () {
         var messages = [
             "Thank you Mario! But our princess is in another castle!",
             "That's all folks!",
-            "What did you expect, more songs?",
-            "Hope you enjoyed the music",
-            "The playlist ends here"
+            "It's quiet in here...",
+            "CAUTION: Side effects may include spontaneous dancing, uncontrollable smiling, bouts of joy, humming melodies in your sleep, and an irresistible urge to learn piano...",
+            "The search continues..."
         ];
         var randomIndex = Math.floor(Math.random() * messages.length);
         var endTextElement = document.getElementById("endText");

@@ -38,7 +38,11 @@ $(document).ready(function () {
 
     $('.moon').on('click', function () {
         let currentIndex = $(this).index(); //gets index of the clicked moon
-        let isHalf = $(this).text() === EMOJI_LAST_QUARTER_MOON; // checks state of current moon
+
+        //This is not the correct way to do this, but it works for now.
+        let isHalf = $(this).html().toString().includes("last-quarter-moon"); //This checks if its a half moon or not.
+
+
         selectedDifficulty = 1 + (currentIndex * 2) + (isHalf ? 0 : 1); //set selected difficulty based on the moon clicked
 
         $('.moon').removeClass('selected');

@@ -1,9 +1,9 @@
 {
-  "enabled": false,
+  "enabled": true,
   "comPort": "COM3",
   "baudRate": 115200,
   "printDebugOutputFromArduino": true,
-  "ignoreVelocity": false,
+  "ignoreVelocity": true,
   "velocityMapping": {
     "min": 106,
     "max": 255

@@ -1,12 +1,15 @@
 package plu.capstone.playerpiano.programs.maincontroller;
 
 import com.google.gson.JsonObject;
+import java.io.File;
 import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.plugins.PluginLoader;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
 import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
+import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 
 public class PlayerPianoController implements Runnable {
 
@@ -45,22 +48,16 @@ public class PlayerPianoController implements Runnable {
         queueManager = new QueueManager(this);
         queueManager.start();
         
-//        try {
-//
-//            Thread.sleep(5000);
-//            System.out.println("Queueing song");
-//
-//            queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/12th_Street_Rag.mid"))));
-//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid"))));
-//            //queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/RUSH_E_FINAL.mid")));
-//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid"))));
-//           // queueManager.queueSong(new MidiSheetMusic(new File("res/songs-db/songs/Beethoven_Fur_Elise.mid")));
-//            //queueManager.queueSong(MidiCleanerSM.applyChanges(new MidiSheetMusic(new File("res/songs-db/songs/TEST_full_scale.mid"))));
-//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/full_scale_test.MID")));
-//            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/Hungarian_Rhapsody_No.2_Friska_-_Franz_Liszt.mid")));
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+
+            Thread.sleep(5000);
+            System.out.println("Queueing song");
+
+
+            //queueManager.queueSong(new MidiSheetMusic(new File("tmp/Moonlight_Sonata_Nightmare.mid")));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     //The downside to using plugins...

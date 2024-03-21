@@ -3,6 +3,8 @@ let selectedDifficulty = null;
 const EMOJI_NEW_MOON = '<img src="assets/emoji/new-moon.png" alt="🌑" class="emoji" draggable="false" />';
 const EMOJI_LAST_QUARTER_MOON = '<img src="assets/emoji/last-quarter-moon.png" alt="🌓" class="emoji" draggable="false" />';
 const EMOJI_FULL_MOON = '<img src="assets/emoji/full-moon.png" alt="🌕" class="emoji" draggable="false" />';
+const EMOJI_PLAY_ARROW = '<img src="assets/emoji/play-arrow.png" alt="▶️" class="emoji" draggable="false" />';
+const EMOJI_PAUSE = '<img src="assets/emoji/pause.png" alt="⏸️" class="emoji" draggable="false" />';
 
 $(document).ready(function () {
 
@@ -156,9 +158,9 @@ function setUIIsPaused(isPaused) {
     }
 
     if (isPaused) {
-        $('#npbPlayPause').text('play_arrow');
+        $('#npbPlayPause').html(EMOJI_PLAY_ARROW);
     } else {
-        $('#npbPlayPause').text('pause');
+        $('#npbPlayPause').html(EMOJI_PAUSE);
     }
 }
 

@@ -2,6 +2,25 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
+    function displayRandomMessage() {
+
+        var messages = [
+            "Thank you Mario! But our princess is in another castle!",
+            "That's all folks!",
+            "It's quiet in here...",
+            "CAUTION: Side effects may include spontaneous dancing, uncontrollable smiling, bouts of joy, humming melodies in your sleep, and an irresistible urge to learn piano...",
+            "The search continues...",
+            "We've been trying to reach you concerning your vehicle's extended warranty",
+            "Ceci n'est pas un piano",
+            "0% sugar!"
+        ];
+        var randomIndex = Math.floor(Math.random() * messages.length);
+        var endTextElement = document.getElementById("endText");
+        endTextElement.textContent = messages[randomIndex];
+    }
+    displayRandomMessage();
+
+
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
         $('.moon:lt(' + index + ')').addClass('hovered').text('🌕'); //moons to the left of the cursor will be full
@@ -148,9 +167,9 @@ function setUIIsPaused(isPaused) {
     }
 
     if (isPaused) {
-        $('#npbPlayPause').text('play_arrow');
+        $('#npbPlayPause').text('▶️'); // FIX!!!
     } else {
-        $('#npbPlayPause').text('pause');
+        $('#npbPlayPause').text('⏸️');
     }
 }
 

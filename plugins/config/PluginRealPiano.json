@@ -3,7 +3,7 @@
   "comPort": "COM3",
   "baudRate": 115200,
   "printDebugOutputFromArduino": true,
-  "ignoreVelocity": true,
+  "ignoreVelocity": false,
   "velocityMapping": {
     "min": 106,
     "max": 255

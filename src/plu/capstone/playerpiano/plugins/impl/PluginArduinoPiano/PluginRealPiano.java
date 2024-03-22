@@ -4,6 +4,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,16 +150,93 @@ public class PluginRealPiano extends Plugin {
 
         if(!arduino.isOpen()) {return;}
 
-        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 3));
+        //We have two different packets we can send to the arduino, a note packet and a batch note packet.
+        //Depending on the size of the packet, we will send the smaller one.
+        //It just depends how many notes and the type are hit.
+        final byte[] nPacket = noteArrayToNPacket(notes);
+        final byte[] bPacket = noteArrayToBPacket(notes);
 
-        /*
-        N - Packet to tell the arduino we are sending a list of notes
-        Number of notes
+        System.out.println("nPacket: " + nPacket.length);
+        System.out.println("bPacket: " + bPacket.length);
+        System.out.println();
+
+        //Write the smaller packet to the arduino.
+        //If they are equal, we use the N packet
+
+        byte[] dataToBeWritten = nPacket;
+        if(bPacket.length < nPacket.length) {
+            dataToBeWritten = bPacket;
+            System.out.println("Using B Packet");
+        }
+
+
+        writeBytes(dataToBeWritten);
+
+    }
+
+    /*
+    Batch note packet format:
+        B - Packet to tell the arduino we are sending a batch change of notes
+        Number of batches
         Array of notes:
             Key
             IsOn
             Velocity
-         */
+    */
+    private byte[] noteArrayToBPacket(List<Note> notes) {
+
+        //sort the notes by key number
+        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+
+        //batch the notes into list of notes that are the same on and velocity
+        List<List<Note>> batchedNotes = new ArrayList<>();
+        for(Note note : notes) {
+            boolean found = false;
+            for(List<Note> batch : batchedNotes) {
+                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()) {
+                    batch.add(note);
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                List<Note> newBatch = new ArrayList<>();
+                newBatch.add(note);
+                batchedNotes.add(newBatch);
+            }
+        }
+
+        //B continousNum, starting, velcoity
+        ByteBuffer buffer = ByteBuffer.allocate(2 + (batchedNotes.size() * 3));
+        buffer.put((byte) 'B');
+        buffer.put((byte) batchedNotes.size());
+
+        for(List<Note> batch : batchedNotes) {
+            byte startingKey = (byte) batch.get(0).getKeyNumber();
+            byte contiguous = (byte) (batch.size() - startingKey + 1); //Key index is 0 based
+            byte velocity = (byte) batch.get(0).getVelocity();
+
+            buffer.put(contiguous);
+            buffer.put(startingKey);
+            buffer.put(velocity);
+        }
+
+        return buffer.array();
+
+    }
+
+    /*
+    Note packet format:
+        N - Packet to tell the arduino we are sending a list of notes
+        Number of notes
+        Array of notes:
+            Key
+            Velocity
+    */
+    private byte[] noteArrayToNPacket(List<Note> notes) {
+        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 2));
+
+
 
         buffer.put((byte) 'N');
         buffer.put((byte) notes.size());
@@ -170,8 +249,8 @@ public class PluginRealPiano extends Plugin {
                 continue;
             }
             buffer.put((byte) (int)keyIndex);
-            buffer.put((byte) (note.isNoteOn() ? 1 : 0));
 
+            //If the note is on, the velocity isn't 0. If the note is off, the velocity is 0
             byte velocity = 0;
 
             if(note.isNoteOn()){
@@ -183,24 +262,30 @@ public class PluginRealPiano extends Plugin {
                     velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
                 }
             }
+            else {
+                velocity = 0;
+            }
 
             buffer.put(velocity);
         }
 
-        writeBytes(buffer.array());
-
+        return buffer.array();
     }
 
+    //TODO: Remove this method in refactor!
     @Deprecated
     public void sendRawIndexWithoutMapping(int index, boolean isOn, byte velocity) {
         if(!arduino.isOpen()) {return;}
 
         ByteBuffer buffer = ByteBuffer.allocate(5);
 
+        if(!isOn) {
+            velocity = 0;
+        }
+
         buffer.put((byte) 'N');
         buffer.put((byte) 1);
         buffer.put((byte) index);
-        buffer.put((byte) (isOn ? 1 : 0));
         buffer.put(velocity);
 
         writeBytes(buffer.array());
@@ -250,7 +335,7 @@ public class PluginRealPiano extends Plugin {
         if(!arduino.isOpen()) {return;}
 
         /*
-         * F - Packet to tell the arduino to turn off all notes, we have paused the song
+         * P - Packet to tell the arduino to turn off all notes, we have paused the song
          */
 
         byte[] data = {

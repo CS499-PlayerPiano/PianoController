@@ -2,14 +2,20 @@
 
 //----------------SETTINGS------------------------------
 //Algorithm: ALG_NAIVE, ALG_BRESENHAM
-//#define ALG_NAIVE
-#define ALG_BRESENHAM
+#define ALG_NAIVE
+//#define ALG_BRESENHAM
 
 // Print debugging over serial port
 // #define DEBUG_SERIAL
 
 //Amount of boards we have hooked up
 #define SHIFT_REGISTER_COUNT 11
+
+// How often we check for note updates
+#define VELOCITY_UPDATE_INTERVAL 25
+
+//Num milliseconds we PWM on before 255
+#define MAX_PWM_ON_TIME 500
 
 //-----------------------------------------------
 
@@ -34,7 +40,10 @@
 #include "ShiftRegisterPWM.h"
 
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
-ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 128);
+ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64); //Run out of memory?
+
+//time the key went down
+long pwmStartTime[TOTAL_PINS];
 
 
 void setPin(int pin, int value)
@@ -49,6 +58,25 @@ void setPin(int pin, int value)
     We want 0 to be the first pin on the first shift register.
     */
     sr.set(TOTAL_PINS - pin - 1, value);
+}
+
+long lastVelocityTime = 0;
+void updatePinVelocity()
+{
+  long currentTime = millis();
+  if(currentTime - lastVelocityTime > VELOCITY_UPDATE_INTERVAL && currentTime > MAX_PWM_ON_TIME)
+  {
+    lastVelocityTime = currentTime;
+    long cutoffTime = currentTime - MAX_PWM_ON_TIME;
+    for(int i = 0; i < TOTAL_PINS; i++)
+    {
+       if(pwmStartTime[i] != 0 && pwmStartTime[i] < cutoffTime)
+       {
+          pwmStartTime[i] = 0;
+          setPin(i, 255);
+       }
+    }
+  }
 }
 
 // Read the serial port and process the incoming data from the PianoController software.
@@ -114,6 +142,13 @@ void processIncomingSerial()
                 bool isOn = noteData[i * 3 + 1] == 1;
                 byte velocity = noteData[i * 3 + 2];
 
+                if(isOn && velocity != 255) {
+                  pwmStartTime[note] = millis();
+                }
+                else {
+                  pwmStartTime[note] = 0;
+                }
+
                 setPin(note, isOn ? velocity : 0);
             }
         }
@@ -130,8 +165,10 @@ void processIncomingSerial()
             for (int i = 0; i < TOTAL_PINS; i++)
             {
                 setPin(i, 0);
+                pwmStartTime[i] = 0;
             }
         }
+        updatePinVelocity();
     }
 }
 
@@ -188,11 +225,16 @@ void setup()
     sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
 #endif
 
+    for(int i = 0; i < TOTAL_PINS; i++) {
+        pwmStartTime[i] = 0;
+    }
+
     // Wait for the serial port to connect
     while (!Serial)
     {
         ;
     }
+    
 
     Serial.println(F("Hello from Arduino!"));
 }
@@ -201,6 +243,7 @@ void loop()
 {
     //Serial code that breaks with solinoid
     processIncomingSerial();
+    updatePinVelocity();
 
 //    long start = micros();
 //    for (int i = 0; i < 1000; ++i) {

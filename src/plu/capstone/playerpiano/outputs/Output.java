@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import lombok.AccessLevel;
 import lombok.Getter;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
@@ -23,12 +24,16 @@ public abstract class Output implements SheetMusicCallback {
 
     private final Queue<TimedEvents> eventQueue = new ConcurrentLinkedQueue<>();
 
-    private JsonConfigWrapper config;
+    @Getter(AccessLevel.PROTECTED) private JsonConfigWrapper config;
 
     /**
      * Called when the output is enabled
      */
     protected void onEnable() {};
+
+    //Do we need to implement this / remove this?
+    @Deprecated
+    protected void setDefaultConfigValues() {}
 
     /**
      * Only call this once on the first load!

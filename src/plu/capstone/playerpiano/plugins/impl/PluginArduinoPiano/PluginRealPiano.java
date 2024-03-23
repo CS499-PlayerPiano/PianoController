@@ -155,9 +155,16 @@ public class PluginRealPiano extends Plugin {
         //It just depends how many notes and the type are hit.
         final byte[] nPacket = noteArrayToNPacket(notes);
         final byte[] bPacket = noteArrayToBPacket(notes);
+        final byte[] mPacket = noteArrayToMPacket(notes);
 
         System.out.println("nPacket: " + nPacket.length);
         System.out.println("bPacket: " + bPacket.length);
+        if(mPacket != null) {
+            System.out.println("mPacket: " + mPacket.length);
+        }
+        else {
+            System.out.println("mPacket: null");
+        }
         System.out.println();
 
         //Write the smaller packet to the arduino.
@@ -169,7 +176,11 @@ public class PluginRealPiano extends Plugin {
             System.out.println("Using B Packet");
         }
 
-
+        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
+            dataToBeWritten = mPacket;
+            System.out.println("Using M Packet");
+        }
+        
         writeBytes(dataToBeWritten);
 
     }
@@ -247,7 +258,46 @@ public class PluginRealPiano extends Plugin {
 
     }
 
-   
+    /*
+    Mutiple note packet format:
+        M - Packet to tell the arduino we are sending mutiple notes with the same velocity
+        Number of notes
+        Velocity
+        Array of notes:
+            Key
+
+      WILL RETURN NULL IF VELOCITIES ARE NOT THE SAME
+    */
+    private byte[] noteArrayToMPacket(List<Note> notes) {
+
+        //sort the notes by key number
+        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+
+        int velocity = notes.get(0).getVelocity();
+        for(Note note : notes) {
+            if(note.getVelocity() != velocity) {
+                return null;
+            }
+        }
+
+        //B continousNum, starting, velcoity
+        ByteBuffer buffer = ByteBuffer.allocate(3 + notes.size());
+        buffer.put((byte) 'M');
+        buffer.put((byte) notes.size());
+        buffer.put((byte) velocity);
+
+        for(Note note : notes) {
+            Integer keyIndex = noteMapping.get(note.getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + note.toPianoKey());
+                continue;
+            }
+            buffer.put((byte) (int)keyIndex);
+        }
+
+        return buffer.array();
+
+    }
 
     /*
     Note packet format:

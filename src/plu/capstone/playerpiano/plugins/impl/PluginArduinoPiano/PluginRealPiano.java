@@ -180,7 +180,7 @@ public class PluginRealPiano extends Plugin {
             dataToBeWritten = mPacket;
             System.out.println("Using M Packet");
         }
-        
+
         writeBytes(dataToBeWritten);
 
     }
@@ -271,7 +271,7 @@ public class PluginRealPiano extends Plugin {
     private byte[] noteArrayToMPacket(List<Note> notes) {
 
         //sort the notes by key number
-        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+//        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
 
         int velocity = notes.get(0).getVelocity();
         for(Note note : notes) {
@@ -279,8 +279,7 @@ public class PluginRealPiano extends Plugin {
                 return null;
             }
         }
-
-        //B continousNum, starting, velcoity
+        
         ByteBuffer buffer = ByteBuffer.allocate(3 + notes.size());
         buffer.put((byte) 'M');
         buffer.put((byte) notes.size());

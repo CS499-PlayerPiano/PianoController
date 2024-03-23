@@ -200,6 +200,61 @@ void parseBPacket()
     }
 }
 
+void parseMPacket()
+{
+    byte numberOfNotes = Serial.read();
+    byte velocity = Serial.read();
+
+    int howManyBytes = numberOfNotes;
+
+    // read the note data
+    byte noteData[howManyBytes];
+
+    int read = Serial.readBytes(noteData, howManyBytes);
+
+    if (read != howManyBytes)
+    {
+#ifdef DEBUG_SERIAL
+        Serial.print(F("Error reading MPacket note data. Expected "));
+        Serial.print(howManyBytes);
+        Serial.print(F(" bytes but got "));
+        Serial.print(read);
+        Serial.print(F(". Tried to read "));
+        Serial.print(numOfBatches);
+        Serial.println(F(" notes."));
+#endif
+
+        return;
+    }
+
+#ifdef DEBUG_SERIAL
+    Serial.print(F("Recieved "));
+    Serial.print(numOfBatches);
+    Serial.println(F(" notes."));
+#endif
+
+    for (int i = 0; i < numberOfNotes; i++)
+    {
+        byte note = noteData[i];
+
+        if (note < 0 || note >= TOTAL_PINS)
+        {
+            continue;
+        }
+
+        if (velocity != 0 && velocity != 255)
+        {
+            pwmStartTime[note] = millis();
+        }
+        else
+        {
+            pwmStartTime[note] = 0;
+        }
+
+        setPin(note, velocity);
+    }
+}
+
 void parseFSPPacket()
 {
     // turn all the lights off
@@ -223,10 +278,13 @@ void processIncomingSerial()
         {
             parseNPacket();
         }
-
         else if (command == 'B')
         {
             parseBPacket();
+        }
+        else if (command == 'M')
+        {
+            parseMPacket();
         }
 
         /*

@@ -187,31 +187,26 @@ public class PluginRealPiano extends Plugin {
         //sort the notes by key number
         notes.sort(Comparator.comparingInt(Note::getKeyNumber));
 
-        //batch the notes into list of notes that are the same on and velocity
-//        List<List<Note>> batchedNotes = new ArrayList<>();
-//        for(Note note : notes) {
-//            boolean found = false;
-//            for(List<Note> batch : batchedNotes) {
-//                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()) {
-//                    batch.add(note);
-//                    found = true;
-//                    break;
-//                }
-//            }
-//            if(!found) {
-//                List<Note> newBatch = new ArrayList<>();
-//                newBatch.add(note);
-//                batchedNotes.add(newBatch);
-//            }
-//        }
-
         List<List<Note>> batchedNotes = new ArrayList<>();
         for(Note note : notes) {
             boolean found = false;
             for(List<Note> batch : batchedNotes) {
+
+                Integer keyNumMinus1 = noteMapping.get(note.getKeyNumber() - 1);
+                if(keyNumMinus1 == null) {
+                    logger.error("Failed to find key index for note " + note.toPianoKey());
+                    continue;
+                }
+
+                Integer lastKey = noteMapping.get(note.getKeyNumber());
+                if(lastKey == null) {
+                    logger.error("Failed to find key index for note " + note.toPianoKey());
+                    continue;
+                }
+
                 if(batch.get(0).isNoteOn() == note.isNoteOn() &&
                         batch.get(0).getVelocity() == note.getVelocity() &&
-                        batch.get(batch.size() - 1).getKeyNumber() == note.getKeyNumber() - 1
+                        lastKey == keyNumMinus1
 
                 ) {
                     batch.add(note);
@@ -233,7 +228,14 @@ public class PluginRealPiano extends Plugin {
 
         for(List<Note> batch : batchedNotes) {
             byte contiguous = (byte) batch.size(); //Key index is 0 based
-            byte startingKey = (byte) batch.get(0).getKeyNumber();
+
+            Integer keyIndex = noteMapping.get(batch.get(0).getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + batch.get(0).toPianoKey());
+                continue;
+            }
+
+            byte startingKey = (byte) (int)keyIndex;
             byte velocity = (byte) batch.get(0).getVelocity();
 
             buffer.put(contiguous);
@@ -244,6 +246,8 @@ public class PluginRealPiano extends Plugin {
         return buffer.array();
 
     }
+
+   
 
     /*
     Note packet format:

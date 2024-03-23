@@ -128,9 +128,7 @@ void parseNPacket()
         byte note = noteData[i * 2];
         byte velocity = noteData[i * 2 + 1];
 
-        bool isOn = velocity != 0;
-
-        if (isOn && velocity != 255)
+        if (velocity != 0 && velocity != 255)
         {
             pwmStartTime[note] = millis();
         }
@@ -139,7 +137,7 @@ void parseNPacket()
             pwmStartTime[note] = 0;
         }
 
-        setPin(note, isOn ? velocity : 0);
+        setPin(note, velocity);
     }
 }
 
@@ -188,9 +186,7 @@ void parseBPacket()
                 continue;
             }
 
-            bool isOn = velocity != 0;
-
-            if (isOn && velocity != 255)
+            if (velocity != 0 && velocity != 255)
             {
                 pwmStartTime[note] = millis();
             }
@@ -199,7 +195,7 @@ void parseBPacket()
                 pwmStartTime[note] = 0;
             }
 
-            setPin(note, isOn ? velocity : 0);
+            setPin(note, velocity);
         }
     }
 }

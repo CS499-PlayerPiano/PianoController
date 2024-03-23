@@ -178,9 +178,8 @@ public class PluginRealPiano extends Plugin {
     Batch note packet format:
         B - Packet to tell the arduino we are sending a batch change of notes
         Number of batches
-        Array of notes:
+        Array of batches:
             Key
-            IsOn
             Velocity
     */
     private byte[] noteArrayToBPacket(List<Note> notes) {
@@ -189,11 +188,32 @@ public class PluginRealPiano extends Plugin {
         notes.sort(Comparator.comparingInt(Note::getKeyNumber));
 
         //batch the notes into list of notes that are the same on and velocity
+//        List<List<Note>> batchedNotes = new ArrayList<>();
+//        for(Note note : notes) {
+//            boolean found = false;
+//            for(List<Note> batch : batchedNotes) {
+//                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()) {
+//                    batch.add(note);
+//                    found = true;
+//                    break;
+//                }
+//            }
+//            if(!found) {
+//                List<Note> newBatch = new ArrayList<>();
+//                newBatch.add(note);
+//                batchedNotes.add(newBatch);
+//            }
+//        }
+
         List<List<Note>> batchedNotes = new ArrayList<>();
         for(Note note : notes) {
             boolean found = false;
             for(List<Note> batch : batchedNotes) {
-                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()) {
+                if(batch.get(0).isNoteOn() == note.isNoteOn() &&
+                        batch.get(0).getVelocity() == note.getVelocity() &&
+                        batch.get(batch.size() - 1).getKeyNumber() == note.getKeyNumber() - 1
+
+                ) {
                     batch.add(note);
                     found = true;
                     break;
@@ -212,8 +232,8 @@ public class PluginRealPiano extends Plugin {
         buffer.put((byte) batchedNotes.size());
 
         for(List<Note> batch : batchedNotes) {
+            byte contiguous = (byte) batch.size(); //Key index is 0 based
             byte startingKey = (byte) batch.get(0).getKeyNumber();
-            byte contiguous = (byte) (batch.size() - startingKey + 1); //Key index is 0 based
             byte velocity = (byte) batch.get(0).getVelocity();
 
             buffer.put(contiguous);

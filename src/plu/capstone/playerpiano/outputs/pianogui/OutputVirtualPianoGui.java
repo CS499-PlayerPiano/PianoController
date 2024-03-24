@@ -27,6 +27,11 @@ public class OutputVirtualPianoGui extends OutputStateKeeper {
     }
 
     @Override
+    public String getName() {
+        return "Virtual Piano GUI";
+    }
+
+    @Override
     public void onEnable() {
 
         piano.setBackgroundColor(Color.BLUE);

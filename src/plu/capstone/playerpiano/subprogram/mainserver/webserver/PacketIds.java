@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginWebAPI;
+package plu.capstone.playerpiano.subprogram.mainserver.webserver;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,0 +1,12 @@
+{
+  "Logger": {
+    "enabled": true
+  },
+  "Midi Synthesizer": {
+    "enabled": true
+  },
+  "Virtual Piano GUI": {
+    "enabled": true,
+    "colorMode": "RAINBOW_GRADIENT"
+  }
+}

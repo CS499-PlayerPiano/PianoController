@@ -1,9 +1,8 @@
-package plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints;
+package plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints;
 
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 
 public class EndpointsUser implements Endpoint {
 

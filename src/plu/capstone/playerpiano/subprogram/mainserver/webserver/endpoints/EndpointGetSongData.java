@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints;
+package plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,8 +11,7 @@ import io.javalin.openapi.OpenApiResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.Song;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.Song;
 
 public class EndpointGetSongData implements Endpoint {
 

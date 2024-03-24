@@ -1,16 +1,13 @@
-package plu.capstone.playerpiano.programs.maincontroller;
+package plu.capstone.playerpiano.subprogram.mainserver;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.plugins.Plugin;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.PacketIds;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 //TODO: Move currentSheetMusic to QueueManager
 public class QueueManager {
@@ -20,8 +17,8 @@ public class QueueManager {
 
     private QueuedSongWithMetadata currentSheetMusic;
 
-    private final PlayerPianoController controller;
-    public QueueManager(PlayerPianoController playerPianoController) {
+    private final SubProgramMainController controller;
+    public QueueManager(SubProgramMainController playerPianoController) {
         controller = playerPianoController;
     }
 
@@ -89,10 +86,8 @@ public class QueueManager {
     private void playSheetMusic() {
 
         synchronized (currentSheetMusic) {
-            for (Plugin plugin : controller.getPluginLoader().getPlugins()) {
-                if (plugin.isEnabled()) {
-                    currentSheetMusic.getSheetMusic().addCallback(plugin);
-                }
+            for (SheetMusicCallback callbacks : controller.getSheetMusicCallbacks()) {
+                currentSheetMusic.getSheetMusic().addCallback(callbacks);
             }
 
             // We use a new thread for this, so we don't hang the main thread
@@ -189,33 +184,6 @@ public class QueueManager {
             }
         }
         return null;
-    }
-
-    //////////////////////////////////////
-    /**
-     * Plays multiple notes.
-     * @param notes The notes to play live.
-     */
-    public void playNotes(List<Note> notes) {
-        this.playNotes(notes, SheetMusicCallback.LIVE_TIMESTAMP);
-    }
-
-    /**
-     * Plays multiple notes.
-     * @param notes The notes to play.
-     * @param timestamp The timestamp of the notes.
-     *                  Use {@link plu.capstone.playerpiano.sheetmusic.SheetMusicCallback#LIVE_TIMESTAMP} for live playing, or {@link #playNotes(java.util.List)} for a shortcut
-     */
-    public void playNotes(List<Note> notes, long timestamp) {
-        if(notes == null || notes.isEmpty()) {
-            logger.warning("Attempted to play null note!");
-            return;
-        }
-        for(Plugin plugin : controller.getPluginLoader().getPlugins()) {
-            if(plugin.isEnabled()) {
-                plugin.onNotesPlayed(notes, timestamp);
-            }
-        }
     }
 
 }

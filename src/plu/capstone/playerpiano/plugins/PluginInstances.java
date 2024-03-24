@@ -5,7 +5,6 @@ import plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano.PluginRealPiano;
 import plu.capstone.playerpiano.plugins.impl.PluginMidiKeyboard.PluginMidiKeyboard;
 import plu.capstone.playerpiano.plugins.impl.PluginPatternDebugGui.PluginPatternDebugGui;
 import plu.capstone.playerpiano.plugins.impl.PluginSynthesiaClone.PluginSynthesiaGui;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
 
 @AllArgsConstructor
 public enum PluginInstances {

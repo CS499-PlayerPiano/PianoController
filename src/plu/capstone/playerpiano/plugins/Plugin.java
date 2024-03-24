@@ -10,9 +10,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
-import plu.capstone.playerpiano.programs.maincontroller.QueueError;
-import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
+import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
+import plu.capstone.playerpiano.subprogram.mainserver.QueueError;
+import plu.capstone.playerpiano.subprogram.mainserver.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
@@ -196,7 +196,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param notes The notes to play live.
      */
     public final void playNotes(List<Note> notes) {
-        PlayerPianoController.getInstance().getQueueManager().playNotes(notes);
+        SubProgramMainController.getInstance().getQueueManager().playNotes(notes);
     }
 
     /**
@@ -206,7 +206,7 @@ public abstract class Plugin implements SheetMusicCallback {
      */
     @Deprecated
     public final int playSheetMusic(SheetMusic music) throws QueueError {
-        return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+        return SubProgramMainController.getInstance().getQueueManager().queueSong(music);
     }
 
     /**
@@ -215,7 +215,7 @@ public abstract class Plugin implements SheetMusicCallback {
      * @return the position in the queue.
      */
     public final int playSheetMusic(QueuedSongWithMetadata music) throws QueueError {
-        return PlayerPianoController.getInstance().getQueueManager().queueSong(music);
+        return SubProgramMainController.getInstance().getQueueManager().queueSong(music);
     }
 
     /**
@@ -230,11 +230,11 @@ public abstract class Plugin implements SheetMusicCallback {
      * @return true if the sheet music is currently playing.
      */
     public final boolean isSheetMusicPlaying() {
-        return PlayerPianoController.getInstance().getQueueManager().isSheetMusicPlaying();
+        return SubProgramMainController.getInstance().getQueueManager().isSheetMusicPlaying();
     }
 
     public final void skipSong() {
-        PlayerPianoController.getInstance().getQueueManager().stopOrSkipCurrentSong();
+        SubProgramMainController.getInstance().getQueueManager().stopOrSkipCurrentSong();
     }
 
     /**

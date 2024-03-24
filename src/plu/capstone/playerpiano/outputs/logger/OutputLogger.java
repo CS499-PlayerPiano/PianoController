@@ -14,6 +14,11 @@ import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 public class OutputLogger extends Output {
 
     @Override
+    public String getName() {
+        return "Logger";
+    }
+
+    @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         super.onSongStarted(timestamp, entireNoteMap);
         logger.info("Song Started");

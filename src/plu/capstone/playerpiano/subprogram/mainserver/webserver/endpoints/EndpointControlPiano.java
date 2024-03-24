@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginWebAPI.endpoints;
+package plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -11,13 +11,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PacketIds;
-import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
-import plu.capstone.playerpiano.programs.maincontroller.QueueError;
-import plu.capstone.playerpiano.programs.maincontroller.QueuedSongWithMetadata;
-import plu.capstone.playerpiano.plugins.impl.PluginWebAPI.PluginWebAPI;
+import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
+import plu.capstone.playerpiano.subprogram.mainserver.QueueError;
+import plu.capstone.playerpiano.subprogram.mainserver.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
@@ -46,7 +43,7 @@ public class EndpointControlPiano implements Endpoint {
     }
 
     private void pauseUnpause(Context context) {
-        boolean success = PlayerPianoController.getInstance().getQueueManager().pauseUnpauseSong();
+        boolean success = SubProgramMainController.getInstance().getQueueManager().pauseUnpauseSong();
         JsonObject response = new JsonObject();
         response.addProperty("success", success);
         context.status(HttpStatus.OK);
@@ -54,7 +51,7 @@ public class EndpointControlPiano implements Endpoint {
     }
 
     private void getQueue(Context context) {
-        JsonObject queue = PlayerPianoController.getInstance().getQueueManager().getQueueAsJson();
+        JsonObject queue = SubProgramMainController.getInstance().getQueueManager().getQueueAsJson();
         context.status(HttpStatus.OK);
         context.json(queue);
     }

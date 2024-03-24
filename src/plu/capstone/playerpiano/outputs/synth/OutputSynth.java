@@ -17,6 +17,11 @@ public class OutputSynth extends Output {
     //each channel has its own synth so that multiple notes can be played at once without java dying
     private Synthesizer[] midiSynth = new Synthesizer[NUM_CHANNELS];
 
+    @Override
+    public String getName() {
+        return "Midi Synthesizer";
+    }
+
     /**
      * When the plugin is enabled, we need to open the synthesizers.
      * We also need to load the default soundbank so that we can play notes.
@@ -67,7 +72,6 @@ public class OutputSynth extends Output {
 
         if(note.isNoteOn()) {
             channel.noteOn(keyNum, velocity);
-           // logger.info("Note on: " + keyNum + " " + velocity);
         }
         else {
             channel.noteOff(keyNum, velocity);

@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginWebAPI;
+package plu.capstone.playerpiano.subprogram.mainserver.webserver;
 
 import io.javalin.openapi.JsonSchema;
 import io.javalin.openapi.OpenApi;

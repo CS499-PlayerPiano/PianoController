@@ -16,11 +16,15 @@ import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
 public abstract class Output implements SheetMusicCallback {
 
-    @Getter
-    protected final Logger logger = new Logger(this);
+    public abstract String getName();
 
     @Getter
-    private final String name = getClass().getSimpleName();
+    protected final Logger logger = new Logger("Output-" + getName());
+
+//    @Getter
+//    private final String name = getClass().getSimpleName();
+
+
 
     private final Queue<TimedEvents> eventQueue = new ConcurrentLinkedQueue<>();
 
@@ -60,7 +64,7 @@ public abstract class Output implements SheetMusicCallback {
                 splitEvents(timedNotes.getEvents(), timedNotes.getTimestamp());
             }
 
-        }, this.name + " - Master Thread").start();
+        }, "Output " + this.getName() + " - Master Thread").start();
     }
 
     /**

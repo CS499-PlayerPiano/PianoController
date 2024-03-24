@@ -2,7 +2,6 @@ package plu.capstone.playerpiano.programs.mappinggenerator;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -16,9 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.plugins.PluginInstances;
-import plu.capstone.playerpiano.plugins.PluginLoader;
 import plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano.PluginRealPiano;
-import plu.capstone.playerpiano.programs.maincontroller.PlayerPianoController;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 

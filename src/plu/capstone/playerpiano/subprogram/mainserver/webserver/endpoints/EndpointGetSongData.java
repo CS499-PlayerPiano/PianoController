@@ -11,6 +11,7 @@ import io.javalin.openapi.OpenApiResponse;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.JavalinWebServerOutput;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.Song;
 
 public class EndpointGetSongData implements Endpoint {
@@ -20,7 +21,7 @@ public class EndpointGetSongData implements Endpoint {
     private static final File SONGS_DB = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
 
     @Override
-    public void register(PluginWebAPI server, Javalin app) {
+    public void register(JavalinWebServerOutput server, Javalin app) {
         app.get("/api/songs", this::getSongs);
         app.get("/api/album-art/{name}", this::getAlbumArt);
     }

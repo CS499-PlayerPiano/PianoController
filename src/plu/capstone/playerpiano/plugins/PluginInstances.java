@@ -13,7 +13,7 @@ public enum PluginInstances {
 //    LOGGER(PluginLogger .class),
 //    EMULATOR(PluginVirtualPianoEmulatorGui.class),
 //    SYNTH(PluginSynth.class),
-    WEB_SERVER(PluginWebAPI.class),
+//    WEB_SERVER(PluginWebAPI.class),
     MIDI_KEYBOARD(PluginMidiKeyboard.class),
     PATTERN_DEBUG(PluginPatternDebugGui.class),
     SYNTHESIA_GUI(PluginSynthesiaGui.class),

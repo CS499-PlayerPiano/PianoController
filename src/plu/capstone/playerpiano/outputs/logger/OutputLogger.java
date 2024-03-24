@@ -45,7 +45,7 @@ public class OutputLogger extends Output {
     @Override
     public void onTimestampEvent(long current, long end) {
         super.onTimestampEvent(current, end);
-        logger.info("Current Time: " + current + "ms, End Time: " + end + "ms");
+        //logger.info("Current Time: " + current + "ms, End Time: " + end + "ms");
     }
 
     @Override

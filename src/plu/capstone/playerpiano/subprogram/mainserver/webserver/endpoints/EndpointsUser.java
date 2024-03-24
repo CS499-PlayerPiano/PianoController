@@ -3,13 +3,14 @@ package plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints;
 import com.google.gson.JsonObject;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.JavalinWebServerOutput;
 
 public class EndpointsUser implements Endpoint {
 
     public static final String SESSION_UUID = "piano-uuid";
 
     @Override
-    public void register(PluginWebAPI server, Javalin app) {
+    public void register(JavalinWebServerOutput server, Javalin app) {
 
         app.get("/api/users/getSession", this::getOrCreateSession);
 

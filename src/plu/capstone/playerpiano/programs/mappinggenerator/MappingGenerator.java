@@ -42,7 +42,9 @@ public class MappingGenerator {
         }
 
         //Hack to load the plugins without running the main controller. Really need to redo this code.
-        realPiano = (PluginRealPiano) new PluginLoader().loadPlugin(PluginInstances.PHYSICAL_PIANO.getPluginClass());
+        //realPiano = (PluginRealPiano) new PluginLoader().loadPlugin(PluginInstances.PHYSICAL_PIANO.getPluginClass());
+        //TODO: FIX
+
         realPiano.loadPlugin();
 
         piano.setBackgroundColor(Color.YELLOW);

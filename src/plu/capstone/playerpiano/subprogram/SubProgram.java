@@ -15,22 +15,16 @@ import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 
+@Command
 public abstract class SubProgram implements Callable<Integer> {
 
-//    private static final Output[] OUTPUTS = {
-//            new OutputLogger(),
-//            new OutputSynth(),
-//            new OutputVirtualPianoGui()
-//    };
-
+    @Getter
    private Set<Output> outputs = new HashSet<>();
     {
         outputs.add(new OutputLogger());
         outputs.add(new OutputSynth());
         outputs.add(new OutputVirtualPianoGui());
     }
-
-//    @Getter Set<SheetMusicCallback> sheetMusicCallbacks = new HashSet<>();
 
     private final Logger logger = new Logger(this);
 

@@ -187,16 +187,18 @@ public abstract class Plugin implements SheetMusicCallback {
      * Plays a single note.
      * @param note The note to play live.
      */
+    @Deprecated
     public final void playNote(Note note) {
-        this.playNotes(List.of(note));
+
     }
 
     /**
      * Plays multiple notes.
      * @param notes The notes to play live.
      */
+    @Deprecated
     public final void playNotes(List<Note> notes) {
-        SubProgramMainController.getInstance().getQueueManager().playNotes(notes);
+
     }
 
     /**
@@ -206,7 +208,7 @@ public abstract class Plugin implements SheetMusicCallback {
      */
     @Deprecated
     public final int playSheetMusic(SheetMusic music) throws QueueError {
-        return SubProgramMainController.getInstance().getQueueManager().queueSong(music);
+        return 0;
     }
 
     /**
@@ -214,28 +216,30 @@ public abstract class Plugin implements SheetMusicCallback {
      * @param music The sheet music to play.
      * @return the position in the queue.
      */
+    @Deprecated
     public final int playSheetMusic(QueuedSongWithMetadata music) throws QueueError {
-        return SubProgramMainController.getInstance().getQueueManager().queueSong(music);
+        return 0;
     }
 
     /**
      * Stops the current sheet music.
      */
-//    public final void stopSheetMusic() {
-//        PlayerPianoController.getInstance().getQueueManager().stopSheetMusic();
-//    }
+    @Deprecated
+    public final void stopSheetMusic() {
+
+    }
 
     /**
      * Returns true if the sheet music is currently playing.
      * @return true if the sheet music is currently playing.
      */
+    @Deprecated
     public final boolean isSheetMusicPlaying() {
-        return SubProgramMainController.getInstance().getQueueManager().isSheetMusicPlaying();
+       return false;
     }
 
-    public final void skipSong() {
-        SubProgramMainController.getInstance().getQueueManager().stopOrSkipCurrentSong();
-    }
+    @Deprecated
+    public final void skipSong() {}
 
     /**
      * This function is when the plugin is first loaded and the config file is created for the first time.

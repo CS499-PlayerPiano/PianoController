@@ -77,7 +77,7 @@ public class QueueManager {
     }
 
     private void sendCurrentQueueAsWSPacket() {
-        controller.sendWSPacket(PacketIds.QUEUE_UPDATED, getQueueAsJson());
+        controller.getWebServerOutput().sendWSPacket(PacketIds.QUEUE_UPDATED, getQueueAsJson());
     }
 
     /**
@@ -86,7 +86,7 @@ public class QueueManager {
     private void playSheetMusic() {
 
         synchronized (currentSheetMusic) {
-            for (SheetMusicCallback callbacks : controller.getSheetMusicCallbacks()) {
+            for (SheetMusicCallback callbacks : controller.getOutputs()) {
                 currentSheetMusic.getSheetMusic().addCallback(callbacks);
             }
 

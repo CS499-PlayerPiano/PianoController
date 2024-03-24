@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import lombok.Getter;
 import org.eclipse.jetty.server.session.DefaultSessionCache;
 import org.eclipse.jetty.server.session.FileSessionDataStore;
 import org.eclipse.jetty.server.session.SessionCache;
@@ -60,6 +61,7 @@ public class JavalinWebServerOutput extends Output {
     private static final int PORT = 8898;
     private static final int TIMESTAMP_INTERVAL = 500;
 
+    @Getter
     private final QueueManager queueManager;
     public JavalinWebServerOutput(QueueManager queueManager) {
         super();

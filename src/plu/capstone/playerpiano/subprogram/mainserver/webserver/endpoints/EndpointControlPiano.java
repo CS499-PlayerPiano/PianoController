@@ -11,21 +11,21 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import javax.sound.midi.InvalidMidiDataException;
-import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
-import plu.capstone.playerpiano.subprogram.mainserver.QueueError;
-import plu.capstone.playerpiano.subprogram.mainserver.QueuedSongWithMetadata;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.subprogram.mainserver.QueueError;
+import plu.capstone.playerpiano.subprogram.mainserver.QueuedSongWithMetadata;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.JavalinWebServerOutput;
 
 public class EndpointControlPiano implements Endpoint {
 
     private Logger logger = new Logger(this);
-    private PluginWebAPI server;
+    private JavalinWebServerOutput server;
     private JsonArray songDB;
 
     @Override
-    public void register(PluginWebAPI server, Javalin app) {
+    public void register(JavalinWebServerOutput server, Javalin app) {
         this.server = server;
         app.post("/api/control/queue", this::queueSong);
         app.post("/api/control/skip", this::skipSong);
@@ -43,7 +43,7 @@ public class EndpointControlPiano implements Endpoint {
     }
 
     private void pauseUnpause(Context context) {
-        boolean success = SubProgramMainController.getInstance().getQueueManager().pauseUnpauseSong();
+        boolean success = server.getQueueManager().pauseUnpauseSong();
         JsonObject response = new JsonObject();
         response.addProperty("success", success);
         context.status(HttpStatus.OK);
@@ -51,7 +51,7 @@ public class EndpointControlPiano implements Endpoint {
     }
 
     private void getQueue(Context context) {
-        JsonObject queue = SubProgramMainController.getInstance().getQueueManager().getQueueAsJson();
+        JsonObject queue = server.getQueueManager().getQueueAsJson();
         context.status(HttpStatus.OK);
         context.json(queue);
     }
@@ -81,7 +81,7 @@ public class EndpointControlPiano implements Endpoint {
             return;
         }
 
-        server.skipSong();
+        server.getQueueManager().stopOrSkipCurrentSong();
         context.status(HttpStatus.OK);
         response.addProperty("success", true);
         context.json(response);
@@ -136,7 +136,7 @@ public class EndpointControlPiano implements Endpoint {
             SheetMusic sm = new MidiSheetMusic(songFile);
 
             try {
-                int position = server.playSheetMusic(new QueuedSongWithMetadata(sm, song, sessionUUID));
+                int position = server.getQueueManager().queueSong(new QueuedSongWithMetadata(sm, song, sessionUUID));
                 response.addProperty("success", true);
                 response.addProperty("position", position);
             }

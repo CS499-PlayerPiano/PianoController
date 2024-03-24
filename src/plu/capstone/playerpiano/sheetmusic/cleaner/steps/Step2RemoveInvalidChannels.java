@@ -1,6 +1,6 @@
-package plu.capstone.playerpiano.programs.miditopianofile.steps;
+package plu.capstone.playerpiano.sheetmusic.cleaner.steps;
 
-import plu.capstone.playerpiano.programs.miditopianofile.MidiConversionStep;
+import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 

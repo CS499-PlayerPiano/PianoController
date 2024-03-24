@@ -2,7 +2,7 @@ package plu.capstone.playerpiano.subprogram.mainserver;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
-import plu.capstone.playerpiano.programs.miditopianofile.MidiCleanerSM;
+import plu.capstone.playerpiano.sheetmusic.cleaner.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
 @Getter

@@ -1,11 +1,11 @@
-package plu.capstone.playerpiano.programs.miditopianofile.steps;
+package plu.capstone.playerpiano.sheetmusic.cleaner.steps;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
-import plu.capstone.playerpiano.programs.miditopianofile.MidiConversionStep;
+import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;

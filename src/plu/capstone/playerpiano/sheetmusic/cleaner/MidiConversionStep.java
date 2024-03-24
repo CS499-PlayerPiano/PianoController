@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.programs.miditopianofile;
+package plu.capstone.playerpiano.sheetmusic.cleaner;
 
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 

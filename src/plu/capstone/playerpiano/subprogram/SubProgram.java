@@ -30,9 +30,13 @@ public abstract class SubProgram implements Callable<Integer> {
 
     public abstract String getSubCommand();
 
+    @Getter
+    private JsonConfigWrapper outputConfig = new JsonConfigWrapper(new File("config/outputs.json"));
+
     @Override
     public final Integer call() {
         try {
+            outputConfig.loadConfig();
             addProgramSpecificOutputPlugins(outputs);
             loadOutputPlugins();
             run();
@@ -47,11 +51,11 @@ public abstract class SubProgram implements Callable<Integer> {
 
     public abstract void run() throws Exception;
 
-    @Getter
-    private JsonConfigWrapper outputConfig = new JsonConfigWrapper(new File("config/outputs.json"));
+
 
     private void loadOutputPlugins() {
 
+        Set<Output> disabledOutputs = new HashSet<>();
         for(Output output : outputs) {
             JsonConfigWrapper config = outputConfig.getNestedConfig(output.getName());
             if(config.getBoolean("enabled", false)) {
@@ -60,8 +64,12 @@ public abstract class SubProgram implements Callable<Integer> {
             }
             else {
                 logger.info("Skipping disabled output: " + output.getName());
+                disabledOutputs.add(output);
             }
         }
+
+        //Avoid concurrent modification exception
+        outputs.removeAll(disabledOutputs);
 
     }
 

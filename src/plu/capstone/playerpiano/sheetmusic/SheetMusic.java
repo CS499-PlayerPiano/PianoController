@@ -14,7 +14,7 @@ import plu.capstone.playerpiano.utilities.Stopwatch;
  * Base class for any type of sheet music.
  * Can be extended, or used as is.
  */
-public class SheetMusic {
+public class SheetMusic implements Cloneable {
 
     private final Logger logger = new Logger(this);
 
@@ -30,6 +30,17 @@ public class SheetMusic {
     private List<SheetMusicCallback> callbacks = new ArrayList<>();
 
     private final Stopwatch stopwatch = new Stopwatch();
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        SheetMusic clone = new SheetMusic();
+        clone.eventMap = new HashMap<>(eventMap);
+        clone.callbacks = new ArrayList<>(callbacks);
+        clone.isSheetMusicStillScrolling = isSheetMusicStillScrolling;
+        clone.songLengthMS = songLengthMS;
+
+        return clone;
+    }
 
     /**
      * Put an event into the event map at the given time.

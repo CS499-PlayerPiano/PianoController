@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.programs.wip.notemapviewer;
+package plu.capstone.playerpiano.subprogram.midiviewer;
 
 import java.awt.Color;
 import java.awt.Component;

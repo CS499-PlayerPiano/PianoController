@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.programs.wip.notemapviewer;
+package plu.capstone.playerpiano.subprogram.midiviewer;
 
 import java.awt.Component;
 import java.util.ArrayList;
@@ -10,12 +10,14 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumnModel;
+import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.utilities.graphics.RowNumberTable;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 public class SheetMusicViewer {
 
-    //private final Map<Long, List<Note>> noteMap;
+    private final Logger logger = new Logger(this);
 
 
     private Map<Long, List<Note>> newNoteMap = new HashMap<>();
@@ -24,15 +26,18 @@ public class SheetMusicViewer {
     String[] columnNames;
     int maxChannel;
 
-    public SheetMusicViewer(Map<Long, List<Note>> noteMap) {
+    public SheetMusicViewer(Map<Long, List<SheetMusicEvent>> noteMap) {
         //this.noteMap = noteMap;
 
         maxChannel = 0;
 
         for(Long time : noteMap.keySet()) {
-            for(Note note : noteMap.get(time)) {
-                if(note.getChannelNum() > maxChannel) {
-                    maxChannel = note.getChannelNum();
+            for(SheetMusicEvent event : noteMap.get(time)) {
+                if(event instanceof Note) {
+                    Note note = (Note)event;
+                    if (note.getChannelNum() > maxChannel) {
+                        maxChannel = note.getChannelNum();
+                    }
                 }
             }
         }
@@ -45,7 +50,12 @@ public class SheetMusicViewer {
                 newNoteMap.get(time).add(null);
             }
 
-            for(Note note : noteMap.get(time)) {
+            for(SheetMusicEvent event : noteMap.get(time)) {
+                if(!(event instanceof Note)) {
+                    continue;
+                }
+
+                Note note = (Note)event;
                 int row = note.getChannelNum();
 
                 newNoteMap.get(time).add(row, note);
@@ -53,7 +63,7 @@ public class SheetMusicViewer {
             }
         }
 
-        System.out.println("newNoteMap: " + newNoteMap.size());
+       logger.info("newNoteMap: " + newNoteMap.size());
 
 
         //covert notemap to 2d string array
@@ -85,7 +95,7 @@ public class SheetMusicViewer {
 
     }
 
-    public void createAndShowWindow() {
+    public void createAndShowWindow(String windowName) {
 
         for(int i = 0; i < columnNames.length; i++) {
             columnNames[i] = "";
@@ -99,11 +109,11 @@ public class SheetMusicViewer {
         };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        System.out.println("datalen: " + data.length);
-        System.out.println("data[0]len: " + data[0].length);
-        System.out.println("columnNameslen: " + columnNames.length);
+       logger.info("datalen: " + data.length);
+       logger.info("data[0]len: " + data[0].length);
+       logger.info("columnNameslen: " + columnNames.length);
 
-        JFrame frame = new JFrame("Sheet Music Viewer");
+        JFrame frame = new JFrame("SMView - " + windowName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 600);
 

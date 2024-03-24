@@ -4,6 +4,7 @@ import picocli.CommandLine.Option;
 import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.subprogram.SubProgramTest;
 import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
+import plu.capstone.playerpiano.subprogram.songdb.SubProgramSongDBVerification;
 
 public class Main implements Callable<Integer> {
 
@@ -11,7 +12,9 @@ public class Main implements Callable<Integer> {
     boolean usageHelpRequested;
 
     private static final SubProgram SUB_PROGRAMS[] = {
-        new SubProgramMainController()
+            new SubProgramMainController(),
+            new SubProgramSongDBVerification(),
+            new SubProgramTest()
     };
 
     @Override

@@ -4,12 +4,12 @@ import picocli.CommandLine.Option;
 
 public class SubProgramTest extends SubProgram {
 
-    @Option(names = {"-f", "--foo"}, description = "foo option", required = true, defaultValue = "false")
+    @Option(names = {"-f", "--foo"}, description = "foo option", required = true)
     private String foo;
 
     @Override
     public String getSubCommand() {
-        return "run-server";
+        return "test";
     }
 
     @Override

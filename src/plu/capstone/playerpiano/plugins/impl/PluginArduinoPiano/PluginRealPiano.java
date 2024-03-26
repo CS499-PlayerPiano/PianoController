@@ -203,23 +203,20 @@ public class PluginRealPiano extends Plugin {
             boolean found = false;
             for(List<Note> batch : batchedNotes) {
 
-                Integer keyNumMinus1 = noteMapping.get(note.getKeyNumber() - 1);
-                if(keyNumMinus1 == null) {
+                Integer currentKeyIndex = noteMapping.get(note.getKeyNumber());
+                if(currentKeyIndex == null) {
                     logger.error("Failed to find key index for note " + note.toPianoKey());
                     continue;
                 }
 
-                Integer lastKey = noteMapping.get(note.getKeyNumber());
-                if(lastKey == null) {
-                    logger.error("Failed to find key index for note " + note.toPianoKey());
+                Integer lastBatchIndex = noteMapping.get(batch.get(batch.size() - 1).getKeyNumber());
+                if(lastBatchIndex == null) {
+                    logger.error("Failed to find key index for note " + batch.get(batch.size() - 1).toPianoKey());
                     continue;
                 }
 
-                if(batch.get(0).isNoteOn() == note.isNoteOn() &&
-                        batch.get(0).getVelocity() == note.getVelocity() &&
-                        lastKey == keyNumMinus1
-
-                ) {
+                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()
+                && currentKeyIndex == lastBatchIndex+1) {
                     batch.add(note);
                     found = true;
                     break;
@@ -315,6 +312,7 @@ public class PluginRealPiano extends Plugin {
         buffer.put((byte) notes.size());
 
         for(Note note : notes) {
+            //TODO: WE NEVER UPDATE NOTES.SIZE()
             if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {

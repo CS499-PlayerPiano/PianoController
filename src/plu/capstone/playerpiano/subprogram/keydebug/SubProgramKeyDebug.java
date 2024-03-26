@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginPatternDebugGui;
+package plu.capstone.playerpiano.subprogram.keydebug;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -12,7 +12,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
+import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
+import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.utilities.graphics.JTextNumericField;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
@@ -20,7 +22,7 @@ import plu.capstone.playerpiano.sheetmusic.events.Note;
 /**
  * Plugin to
  */
-public class PluginPatternDebugGui extends Plugin {
+public class SubProgramKeyDebug extends SubProgram {
 
     private final JFrame frame = new JFrame("PianoPattern");
     private final ComponentPiano piano = new ComponentPiano();
@@ -28,13 +30,19 @@ public class PluginPatternDebugGui extends Plugin {
     private int theKey;
     private boolean started = false;
 
+    private final Logger logger = new Logger(this);
+
     JTextNumericField onTimeInput;
     JTextNumericField offTimeInput;
     JTextNumericField velocityInput;
 
     @Override
-    public void onEnable() {
+    public String getSubCommand() {
+        return "key-debug";
+    }
 
+    @Override
+    public void run() throws Exception {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
 
@@ -141,13 +149,6 @@ public class PluginPatternDebugGui extends Plugin {
         SwingUtilities.invokeLater(() -> {
             frame.setVisible(true);
         });
-
     }
-
-    @Override
-    public void setDefaultConfigValues() {
-
-    }
-
 
 }

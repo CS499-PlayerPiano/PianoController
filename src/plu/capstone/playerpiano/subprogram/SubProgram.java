@@ -15,6 +15,7 @@ import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 @Command
 public abstract class SubProgram implements Callable<Integer> {
@@ -76,6 +77,12 @@ public abstract class SubProgram implements Callable<Integer> {
         //Avoid concurrent modification exception
         outputs.removeAll(disabledOutputs);
 
+    }
+
+    public void playNote(Note note) {
+        for(Output output : outputs) {
+            output.onNotePlayed(note, -1);
+        }
     }
 
 }

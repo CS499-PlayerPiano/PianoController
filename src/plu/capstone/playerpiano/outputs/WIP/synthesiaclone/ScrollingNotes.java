@@ -36,13 +36,13 @@ public class ScrollingNotes extends JPanel {
 
         for(Note note : keys) {
 
-            final int keyNumber = note.toPianoKey();
+            final int keyNumber = note.getKeyNumber() - 21;
 
             //turn note off if we need to
             if(!note.isNoteOn()) {
                 synchronized (notesWeAreCurrentlyDrawing) {
                     for (SNote n : notesWeAreCurrentlyDrawing) {
-                        if (n.getPianoKeyIndex() == note.toPianoKey()) {
+                        if (n.getPianoKeyIndex() == keyNumber) {
                             n.setNoteOff();
                         }
                     }

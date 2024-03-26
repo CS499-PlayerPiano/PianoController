@@ -206,13 +206,13 @@ public class OutputArduino extends Output {
 
                 Integer currentKeyIndex = noteMapping.get(note.getKeyNumber());
                 if(currentKeyIndex == null) {
-                    logger.error("Failed to find key index for note " + note.toPianoKey());
+                    logger.error("Failed to find key index for note " + note.getKeyNumber());
                     continue;
                 }
 
                 Integer lastBatchIndex = noteMapping.get(batch.get(batch.size() - 1).getKeyNumber());
                 if(lastBatchIndex == null) {
-                    logger.error("Failed to find key index for note " + batch.get(batch.size() - 1).toPianoKey());
+                    logger.error("Failed to find key index for note " + batch.get(batch.size() - 1).getKeyNumber());
                     continue;
                 }
 
@@ -240,7 +240,7 @@ public class OutputArduino extends Output {
 
             Integer keyIndex = noteMapping.get(batch.get(0).getKeyNumber());
             if(keyIndex == null) {
-                logger.error("Failed to find key index for note " + batch.get(0).toPianoKey());
+                logger.error("Failed to find key index for note " + batch.get(0).getKeyNumber());
                 continue;
             }
 
@@ -286,7 +286,7 @@ public class OutputArduino extends Output {
         for(Note note : notes) {
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
-                logger.error("Failed to find key index for note " + note.toPianoKey());
+                logger.error("Failed to find key index for note " + note.getKeyNumber());
                 continue;
             }
             buffer.put((byte) (int)keyIndex);
@@ -317,7 +317,7 @@ public class OutputArduino extends Output {
             if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
-                logger.error("Failed to find key index for note " + note.toPianoKey());
+                logger.error("Failed to find key index for note " + note.getKeyNumber());
                 continue;
             }
             buffer.put((byte) (int)keyIndex);

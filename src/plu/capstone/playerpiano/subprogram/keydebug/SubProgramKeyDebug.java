@@ -57,14 +57,16 @@ public class SubProgramKeyDebug extends SubProgram {
 
                     for(int i = 0; i < 88; i++) {
 
-                        Note tmpNote = new Note(Note.fromPianoKeyIndexToMidiNote(i), (byte) 0, false);
+                        // Convert i to midi. 21 is the first key on a piano
+                        Note tmpNote = new Note((byte) (i + 21), (byte) 0, false);
                         piano.setKeyLit(tmpNote, null);
                         toSend[i] = tmpNote;
                     }
 
 
                     if(theKey != -1) {
-                        Note tmpNote = new Note(Note.fromPianoKeyIndexToMidiNote(theKey), Note.MAX_VELOCITY, true);
+                        // Convert theKey to midi. 21 is the first key on a piano
+                        Note tmpNote = new Note((byte) (theKey + 21), Note.MAX_VELOCITY, true);
                         piano.setKeyLit(tmpNote, Color.YELLOW);
                         toSend[theKey] = tmpNote;
                     }
@@ -100,9 +102,11 @@ public class SubProgramKeyDebug extends SubProgram {
 //                        }
 
                         try {
-                            playNote(new Note(Note.fromPianoKeyIndexToMidiNote(theKey), (byte) velocityInput.getValue(), true));
+                            //COnvert theKey index to midi note
+                            playNote(new Note((byte) (theKey + 21), (byte) velocityInput.getValue(), true));
                             Thread.sleep(onTimeInput.getValue());
-                            playNote(new Note(Note.fromPianoKeyIndexToMidiNote(theKey), (byte) 0, false));
+                            //COnvert theKey index to midi note
+                            playNote(new Note((byte) (theKey + 21), (byte) 0, false));
                             Thread.sleep(offTimeInput.getValue());
                         }
                         catch(Exception igored) {}

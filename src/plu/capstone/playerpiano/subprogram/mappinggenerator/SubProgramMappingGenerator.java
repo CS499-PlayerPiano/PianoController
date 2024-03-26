@@ -121,7 +121,7 @@ public class SubProgramMappingGenerator extends SubProgram {
 
             piano.setKeyIndexLit(tmpKey, false, null);
 
-            int midiNote = Note.fromPianoKeyIndexToMidiNote(tmpKey);
+            int midiNote = (tmpKey + 21);
 
             addMapping(physicalKey, midiNote);
             alreadyConfigured.add(tmpKey);

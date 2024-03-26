@@ -38,14 +38,14 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
 
                     Note note = (Note) event;
 
-                    if(note.isNoteOn() && !isNoteOn[note.toPianoKey()]) {
+                    if(note.isNoteOn() && !isNoteOn[getKeyIndex(note)]) {
                         notesOn++;
                     }
-                    else if(!note.isNoteOn() && isNoteOn[note.toPianoKey()]) {
+                    else if(!note.isNoteOn() && isNoteOn[getKeyIndex(note)]) {
                         notesOn--;
                     }
 
-                    isNoteOn[note.toPianoKey()] = note.isNoteOn();
+                    isNoteOn[getKeyIndex(note)] = note.isNoteOn();
 
                     if(notesOn > MAX_NOTES_ON) {
 
@@ -61,7 +61,7 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
                         }
 
                         notesOn--;
-                        isNoteOn[note.toPianoKey()] = false;
+                        isNoteOn[getKeyIndex(note)] = false;
                     }
 
                 }
@@ -74,6 +74,10 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
             System.out.println("Removing " + noteToBeRemoved.get(timestamp).size() + " notes at " + timestamp);
             sheetMusic.getEventMap().get(timestamp).removeAll(noteToBeRemoved.get(timestamp));
         }
+    }
+
+    private int getKeyIndex(Note key) {
+        return key.getKeyNumber() - 21;
     }
 
 }

@@ -1,33 +1,35 @@
-package plu.capstone.playerpiano.plugins.impl.PluginMidiKeyboard;
+package plu.capstone.playerpiano.subprogram.midiin;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
+import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.plugins.Plugin;
+import plu.capstone.playerpiano.subprogram.SubProgram;
 
-public class PluginMidiKeyboard extends Plugin {
+public class SubProgramMidiKeyboard extends SubProgram {
 
+    //TODO: Config!
+    private static final String DEVICE_NAME = "AKM320";
+    protected static final boolean IGNORE_VELOCITY = true;
+    private static final boolean PRINT_ALL_DEVICE_NAMES = true;
 
-    /**
-     * Set the default values for the config file before it is loaded.
-     */
+    private final Logger logger = new Logger(this);
     @Override
-    public void setDefaultConfigValues() {
-        config.setString("deviceName", "AKM320");
-        config.setBoolean("ignoreVelocity", true);
-        config.setBoolean("printAllDeviceNames", false);
+    public String getSubCommand() {
+        return "midi-keyboard";
     }
 
     @Override
-    protected void onEnable() {
+    public void run() throws Exception {
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
         for (MidiDevice.Info info : infos) {
 
-            if(config.getBoolean("printAllDeviceNames", false)) {
+            if(PRINT_ALL_DEVICE_NAMES) {
                 logger.debug("Found midi device: " + info.toString());
             }
 
-            if(info.getName().equals(config.getString("deviceName", ""))) {
+            if(info.getName().equals(DEVICE_NAME)) {
                 try {
                     MidiDevice device = MidiSystem.getMidiDevice(info);
                     try {
@@ -43,10 +45,7 @@ public class PluginMidiKeyboard extends Plugin {
                     logger.error("Midi device unavailable!", e);
                 }
             }
-
-
-
-
         }
     }
+
 }

@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginMidiKeyboard;
+package plu.capstone.playerpiano.subprogram.midiin;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
@@ -7,9 +7,9 @@ import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 public class MidiInputReceiver implements Receiver {
 
-    private final PluginMidiKeyboard pluginMidiKeyboard;
+    private final SubProgramMidiKeyboard pluginMidiKeyboard;
 
-    public MidiInputReceiver(PluginMidiKeyboard pluginMidiKeyboard) {
+    public MidiInputReceiver(SubProgramMidiKeyboard pluginMidiKeyboard) {
         this.pluginMidiKeyboard = pluginMidiKeyboard;
     }
 
@@ -31,7 +31,7 @@ public class MidiInputReceiver implements Receiver {
             Note note = Note.fromMidiMessage(sm);
 
             //If the ignore velocity option is enabled, set the velocity to 127 for only note
-            if(pluginMidiKeyboard.getConfig().getBoolean("ignoreVelocity", false)) {
+            if(pluginMidiKeyboard.IGNORE_VELOCITY){
                 if (note.isNoteOn()) {
                     note.setVelocity(127);
                 }

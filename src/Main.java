@@ -6,6 +6,7 @@ import plu.capstone.playerpiano.subprogram.SubProgramTest;
 import plu.capstone.playerpiano.subprogram.keydebug.SubProgramKeyDebug;
 import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
 import plu.capstone.playerpiano.subprogram.mappinggenerator.SubProgramMappingGenerator;
+import plu.capstone.playerpiano.subprogram.midiin.SubProgramMidiKeyboard;
 import plu.capstone.playerpiano.subprogram.midiviewer.SubProgramMidiViewer;
 import plu.capstone.playerpiano.subprogram.songdb.SubProgramSongDBVerification;
 
@@ -20,7 +21,8 @@ public class Main implements Callable<Integer> {
             new SubProgramMidiViewer(),
             new SubProgramTest(),
             new SubProgramMappingGenerator(),
-            new SubProgramKeyDebug()
+            new SubProgramKeyDebug(),
+            new SubProgramMidiKeyboard()
     };
 
     @Override

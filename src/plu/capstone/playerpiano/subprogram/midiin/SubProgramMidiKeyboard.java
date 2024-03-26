@@ -4,7 +4,6 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.plugins.Plugin;
 import plu.capstone.playerpiano.subprogram.SubProgram;
 
 public class SubProgramMidiKeyboard extends SubProgram {

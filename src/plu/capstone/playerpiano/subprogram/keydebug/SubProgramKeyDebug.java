@@ -13,11 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.plugins.Plugin;
+import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.utilities.graphics.JTextNumericField;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
 
 /**
  * Plugin to

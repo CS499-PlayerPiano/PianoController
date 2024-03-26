@@ -9,8 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.nio.file.Files;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.plugins.Plugin;
-import plu.capstone.playerpiano.plugins.PluginConfig.DefaultConfig;
 
 public class JsonConfigWrapper {
 

@@ -10,14 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import plu.capstone.playerpiano.JsonConfigWrapper;
-import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.plugins.PluginConfig;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
-import plu.capstone.playerpiano.plugins.Plugin;
-import plu.capstone.playerpiano.utilities.MathUtilities;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.utilities.MathUtilities;
 
 /**
  * Plugin to communicate with an Arduino to play notes on a real piano.

@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginSynthesiaClone;
+package plu.capstone.playerpiano.outputs.WIP.synthesiaclone;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,7 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import plu.capstone.playerpiano.plugins.PluginStateKeeper;
+import plu.capstone.playerpiano.outputs.OutputStateKeeper;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
@@ -16,11 +16,16 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 /**
  * Plugin to visualize the piano keys.
  */
-public class PluginSynthesiaGui extends PluginStateKeeper {
+public class OutputSynthesiaGui extends OutputStateKeeper {
 
     private final JFrame frame = new JFrame("Synthesia Viewer");
     private final ComponentPiano piano = new ComponentPiano();
     private final ScrollingNotes scrollingNotes = new ScrollingNotes(piano);
+
+    @Override
+    public String getName() {
+        return "Synthesia Viewer";
+    }
 
     @Override
     public void onEnable() {

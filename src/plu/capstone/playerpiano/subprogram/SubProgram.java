@@ -10,6 +10,7 @@ import picocli.CommandLine.Command;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.outputs.Output;
+import plu.capstone.playerpiano.outputs.WIP.synthesiaclone.OutputSynthesiaGui;
 import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
@@ -30,6 +31,7 @@ public abstract class SubProgram implements Callable<Integer> {
         outputs.add(new OutputSynth());
         outputs.add(new OutputVirtualPianoGui());
         outputs.add(OUTPUT_ARDUINO);
+        //outputs.add(new OutputSynthesiaGui()); //WIP
     }
 
     private final Logger logger = new Logger(this);

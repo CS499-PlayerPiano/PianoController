@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginSynthesiaClone;
+package plu.capstone.playerpiano.outputs.WIP.synthesiaclone;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

@@ -9,6 +9,9 @@
     "enabled": true,
     "colorMode": "RAINBOW_GRADIENT"
   },
+  "Synthesia Viewer": {
+    "enabled": false
+  },
   "Arduino": {
     "enabled": true,
     "comPort": "COM3",

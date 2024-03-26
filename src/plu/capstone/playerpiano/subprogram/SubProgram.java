@@ -20,7 +20,7 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 public abstract class SubProgram implements Callable<Integer> {
 
     //Special case due to sub programs needing custom functions
-    private final OutputArduino OUTPUT_ARDUINO = new OutputArduino();
+    protected final OutputArduino OUTPUT_ARDUINO = new OutputArduino();
 
     @Getter
    private Set<Output> outputs = new HashSet<>();

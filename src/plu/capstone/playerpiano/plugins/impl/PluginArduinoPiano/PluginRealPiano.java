@@ -4,6 +4,8 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,21 +150,169 @@ public class PluginRealPiano extends Plugin {
 
         if(!arduino.isOpen()) {return;}
 
-        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 3));
+        //We have two different packets we can send to the arduino, a note packet and a batch note packet.
+        //Depending on the size of the packet, we will send the smaller one.
+        //It just depends how many notes and the type are hit.
+        final byte[] nPacket = noteArrayToNPacket(notes);
+        final byte[] bPacket = noteArrayToBPacket(notes);
+        final byte[] mPacket = noteArrayToMPacket(notes);
 
-        /*
+        System.out.println("nPacket: " + nPacket.length);
+        System.out.println("bPacket: " + bPacket.length);
+        if(mPacket != null) {
+            System.out.println("mPacket: " + mPacket.length);
+        }
+        else {
+            System.out.println("mPacket: null");
+        }
+        System.out.println();
+
+        //Write the smaller packet to the arduino.
+        //If they are equal, we use the N packet
+
+        byte[] dataToBeWritten = nPacket;
+        if(bPacket.length < nPacket.length) {
+            dataToBeWritten = bPacket;
+            System.out.println("Using B Packet");
+        }
+
+        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
+            dataToBeWritten = mPacket;
+            System.out.println("Using M Packet");
+        }
+
+        writeBytes(dataToBeWritten);
+
+    }
+
+    /*
+    Batch note packet format:
+        B - Packet to tell the arduino we are sending a batch change of notes
+        Number of batches
+        Array of batches:
+            Key
+            Velocity
+    */
+    private byte[] noteArrayToBPacket(List<Note> notes) {
+
+        //sort the notes by key number
+        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+
+        List<List<Note>> batchedNotes = new ArrayList<>();
+        for(Note note : notes) {
+            boolean found = false;
+            for(List<Note> batch : batchedNotes) {
+
+                Integer currentKeyIndex = noteMapping.get(note.getKeyNumber());
+                if(currentKeyIndex == null) {
+                    logger.error("Failed to find key index for note " + note.toPianoKey());
+                    continue;
+                }
+
+                Integer lastBatchIndex = noteMapping.get(batch.get(batch.size() - 1).getKeyNumber());
+                if(lastBatchIndex == null) {
+                    logger.error("Failed to find key index for note " + batch.get(batch.size() - 1).toPianoKey());
+                    continue;
+                }
+
+                if(batch.get(0).isNoteOn() == note.isNoteOn() && batch.get(0).getVelocity() == note.getVelocity()
+                && currentKeyIndex == lastBatchIndex+1) {
+                    batch.add(note);
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                List<Note> newBatch = new ArrayList<>();
+                newBatch.add(note);
+                batchedNotes.add(newBatch);
+            }
+        }
+
+        //B continousNum, starting, velcoity
+        ByteBuffer buffer = ByteBuffer.allocate(2 + (batchedNotes.size() * 3));
+        buffer.put((byte) 'B');
+        buffer.put((byte) batchedNotes.size());
+
+        for(List<Note> batch : batchedNotes) {
+            byte contiguous = (byte) batch.size(); //Key index is 0 based
+
+            Integer keyIndex = noteMapping.get(batch.get(0).getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + batch.get(0).toPianoKey());
+                continue;
+            }
+
+            byte startingKey = (byte) (int)keyIndex;
+            byte velocity = (byte) batch.get(0).getVelocity();
+
+            buffer.put(contiguous);
+            buffer.put(startingKey);
+            buffer.put(velocity);
+        }
+
+        return buffer.array();
+
+    }
+
+    /*
+    Mutiple note packet format:
+        M - Packet to tell the arduino we are sending mutiple notes with the same velocity
+        Number of notes
+        Velocity
+        Array of notes:
+            Key
+
+      WILL RETURN NULL IF VELOCITIES ARE NOT THE SAME
+    */
+    private byte[] noteArrayToMPacket(List<Note> notes) {
+
+        //sort the notes by key number
+//        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+
+        int velocity = notes.get(0).getVelocity();
+        for(Note note : notes) {
+            if(note.getVelocity() != velocity) {
+                return null;
+            }
+        }
+        
+        ByteBuffer buffer = ByteBuffer.allocate(3 + notes.size());
+        buffer.put((byte) 'M');
+        buffer.put((byte) notes.size());
+        buffer.put((byte) velocity);
+
+        for(Note note : notes) {
+            Integer keyIndex = noteMapping.get(note.getKeyNumber());
+            if(keyIndex == null) {
+                logger.error("Failed to find key index for note " + note.toPianoKey());
+                continue;
+            }
+            buffer.put((byte) (int)keyIndex);
+        }
+
+        return buffer.array();
+
+    }
+
+    /*
+    Note packet format:
         N - Packet to tell the arduino we are sending a list of notes
         Number of notes
         Array of notes:
             Key
-            IsOn
             Velocity
-         */
+    */
+    private byte[] noteArrayToNPacket(List<Note> notes) {
+        ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 2));
+
+
 
         buffer.put((byte) 'N');
         buffer.put((byte) notes.size());
 
         for(Note note : notes) {
+            //TODO: WE NEVER UPDATE NOTES.SIZE()
             if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
@@ -170,8 +320,8 @@ public class PluginRealPiano extends Plugin {
                 continue;
             }
             buffer.put((byte) (int)keyIndex);
-            buffer.put((byte) (note.isNoteOn() ? 1 : 0));
 
+            //If the note is on, the velocity isn't 0. If the note is off, the velocity is 0
             byte velocity = 0;
 
             if(note.isNoteOn()){
@@ -183,24 +333,30 @@ public class PluginRealPiano extends Plugin {
                     velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
                 }
             }
+            else {
+                velocity = 0;
+            }
 
             buffer.put(velocity);
         }
 
-        writeBytes(buffer.array());
-
+        return buffer.array();
     }
 
+    //TODO: Remove this method in refactor!
     @Deprecated
     public void sendRawIndexWithoutMapping(int index, boolean isOn, byte velocity) {
         if(!arduino.isOpen()) {return;}
 
         ByteBuffer buffer = ByteBuffer.allocate(5);
 
+        if(!isOn) {
+            velocity = 0;
+        }
+
         buffer.put((byte) 'N');
         buffer.put((byte) 1);
         buffer.put((byte) index);
-        buffer.put((byte) (isOn ? 1 : 0));
         buffer.put(velocity);
 
         writeBytes(buffer.array());
@@ -250,7 +406,7 @@ public class PluginRealPiano extends Plugin {
         if(!arduino.isOpen()) {return;}
 
         /*
-         * F - Packet to tell the arduino to turn off all notes, we have paused the song
+         * P - Packet to tell the arduino to turn off all notes, we have paused the song
          */
 
         byte[] data = {

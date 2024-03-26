@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano;
+package plu.capstone.playerpiano.outputs.arduino;
 
 import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
@@ -9,6 +9,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import plu.capstone.playerpiano.JsonConfigWrapper;
+import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.plugins.PluginConfig;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
@@ -30,7 +32,7 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
  *          (byte) IsOn
  *          (byte) Velocity
  */
-public class PluginRealPiano extends Plugin {
+public class OutputArduino extends Output {
 
     private final Logger loggerArduino = new Logger(logger, "Arduino");
 
@@ -55,38 +57,39 @@ public class PluginRealPiano extends Plugin {
      */
     @Override
     public void setDefaultConfigValues() {
-        config.setString("comPort", "COM3");
-        config.setInteger("baudRate", 115200);
-        config.setBoolean("printDebugOutputFromArduino", true);
-        config.setBoolean("ignoreVelocity", false);
-
-        PluginConfig velocityMappingConfig = new PluginConfig(this);
-        velocityMappingConfig.setInteger("min", velocityMappingMin);
-        velocityMappingConfig.setInteger("max", velocityMappingMax);
-        config.setNestedConfig("velocityMapping", velocityMappingConfig);
-
-        PluginConfig noteMappingConfig = new PluginConfig(this);
-
-        //Note index from 0-88 to midi note
-        for(int i = 0; i < 88; i++) {
-            int midiNote = i + 21;
-            noteMappingConfig.setInteger(Integer.toString(i), midiNote);
-        }
-
-        config.setNestedConfig("noteMapping", noteMappingConfig);
-
-
+//        config.setString("comPort", "COM3");
+//        config.setInteger("baudRate", 115200);
+//        config.setBoolean("printDebugOutputFromArduino", true);
+//        config.setBoolean("ignoreVelocity", false);
+//
+//        PluginConfig velocityMappingConfig = new PluginConfig(this);
+//        velocityMappingConfig.setInteger("min", velocityMappingMin);
+//        velocityMappingConfig.setInteger("max", velocityMappingMax);
+//        config.setNestedConfig("velocityMapping", velocityMappingConfig);
+//
+//        PluginConfig noteMappingConfig = new PluginConfig(this);
+//
+//        //Note index from 0-88 to midi note
+//        for(int i = 0; i < 88; i++) {
+//            int midiNote = i + 21;
+//            noteMappingConfig.setInteger(Integer.toString(i), midiNote);
+//        }
+//
+//        config.setNestedConfig("noteMapping", noteMappingConfig);
     }
+
+    @Override
+    public String getName() {return "Arduino";}
 
     @Override
     protected void onEnable() {
 
         logger.setDebugEnabled(true);
 
-        final String COM_PORT = config.getString("comPort");
+        final String COM_PORT = getConfig().getString("comPort");
 
         arduino = SerialPort.getCommPort(COM_PORT);
-        arduino.setComPortParameters(config.getInteger("baudRate"), DATA_BITS, STOP_BITS, PARITY_NONE);
+        arduino.setComPortParameters(getConfig().getInteger("baudRate"), DATA_BITS, STOP_BITS, PARITY_NONE);
         arduino.setComPortTimeouts(SerialPort.TIMEOUT_NONBLOCKING, 0, 0);
 
         if(arduino.openPort()) {
@@ -125,17 +128,17 @@ public class PluginRealPiano extends Plugin {
         //NOTE: This is backwards then what is stored in the config file!
         //Config: Key -> Midi Note
         //This: Midi Note -> Key
-        PluginConfig noteMappingConfig = config.getNestedConfig("noteMapping");
+        JsonConfigWrapper noteMappingConfig = getConfig().getNestedConfig("noteMapping");
         for(int keyIndex = 0; keyIndex < 88; keyIndex++) {
             int midiNote = noteMappingConfig.getInteger(Integer.toString(keyIndex));
             noteMapping.put(midiNote, keyIndex);
         }
 
-        PluginConfig velocityMappingConfig = config.getNestedConfig("velocityMapping");
+        JsonConfigWrapper velocityMappingConfig = getConfig().getNestedConfig("velocityMapping");
         velocityMappingMin = velocityMappingConfig.getInteger("min");
         velocityMappingMax = velocityMappingConfig.getInteger("max");
 
-        ignoreVelocity = config.getBoolean("ignoreVelocity");
+        ignoreVelocity = getConfig().getBoolean("ignoreVelocity");
     }
 
 

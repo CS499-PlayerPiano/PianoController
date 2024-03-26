@@ -10,6 +10,7 @@ import picocli.CommandLine.Command;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.outputs.Output;
+import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
@@ -18,12 +19,16 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 @Command
 public abstract class SubProgram implements Callable<Integer> {
 
+    //Special case due to sub programs needing custom functions
+    private final OutputArduino OUTPUT_ARDUINO = new OutputArduino();
+
     @Getter
    private Set<Output> outputs = new HashSet<>();
     {
         outputs.add(new OutputLogger());
         outputs.add(new OutputSynth());
         outputs.add(new OutputVirtualPianoGui());
+        outputs.add(OUTPUT_ARDUINO);
     }
 
     private final Logger logger = new Logger(this);

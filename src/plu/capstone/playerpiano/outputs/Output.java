@@ -21,14 +21,12 @@ public abstract class Output implements SheetMusicCallback {
     @Getter
     protected final Logger logger = new Logger("Output-" + getName());
 
-//    @Getter
-//    private final String name = getClass().getSimpleName();
-
-
-
     private final Queue<TimedEvents> eventQueue = new ConcurrentLinkedQueue<>();
 
     @Getter(AccessLevel.PROTECTED) private JsonConfigWrapper config;
+
+    @Getter
+    private boolean enabled = false;
 
     /**
      * Called when the output is enabled
@@ -43,6 +41,7 @@ public abstract class Output implements SheetMusicCallback {
      * Only call this once on the first load!
      */
     public void load(JsonConfigWrapper config) {
+        enabled = true;
         this.config = config;
 
         new Thread(() -> {

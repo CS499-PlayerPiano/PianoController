@@ -14,8 +14,7 @@ import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import plu.capstone.playerpiano.plugins.PluginInstances;
-import plu.capstone.playerpiano.plugins.impl.PluginArduinoPiano.PluginRealPiano;
+import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 
@@ -28,7 +27,7 @@ public class MappingGenerator {
 
     static int currentKeyWeAreMapping = 0;
 
-    static PluginRealPiano realPiano;
+    static OutputArduino realPiano;
 
     static Set<Integer> alreadyConfigured = new HashSet<>();
 
@@ -45,7 +44,7 @@ public class MappingGenerator {
         //realPiano = (PluginRealPiano) new PluginLoader().loadPlugin(PluginInstances.PHYSICAL_PIANO.getPluginClass());
         //TODO: FIX
 
-        realPiano.loadPlugin();
+        //realPiano.loadPlugin();
 
         piano.setBackgroundColor(Color.YELLOW);
         frame.add(new JScrollPane(piano));

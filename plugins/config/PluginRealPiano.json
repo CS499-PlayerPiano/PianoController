@@ -5,7 +5,7 @@
   "printDebugOutputFromArduino": true,
   "ignoreVelocity": false,
   "velocityMapping": {
-    "min": 106,
+    "min": 120,
     "max": 255
   },
   "noteMapping": {

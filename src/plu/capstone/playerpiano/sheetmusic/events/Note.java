@@ -68,6 +68,11 @@ public class Note implements SheetMusicEvent, Cloneable {
         this(keyNumber, velocity, noteOn, NO_CHANNEL);
     }
     public Note(byte keyNumber, byte velocity, boolean noteOn, int channelNum) {
+
+        if(isValidPianoKey(keyNumber)) {
+            throw new IllegalArgumentException("Invalid key number: " + keyNumber);
+        }
+
         this.keyNumber = keyNumber;
 
         final NoteDetails noteDetails = NoteDetails.from(keyNumber);
@@ -114,7 +119,7 @@ public class Note implements SheetMusicEvent, Cloneable {
      * Checks if this note is a valid piano key.
      * @return true if this note is a valid piano key, false otherwise.
      */
-    public boolean isValidPianoKey() {
+    private static final boolean isValidPianoKey(int keyNumber) {
         return keyNumber >= 21 && keyNumber <= 108;
     }
 

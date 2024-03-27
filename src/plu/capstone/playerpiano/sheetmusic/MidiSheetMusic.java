@@ -96,13 +96,17 @@ public class MidiSheetMusic extends SheetMusic {
 
                 if(sm.getCommand() == ShortMessage.NOTE_ON || sm.getCommand() == ShortMessage.NOTE_OFF) {
 
-                    Note note = Note.fromMidiMessage(sm);
-                    if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
+                    try {
+                        Note note = Note.fromMidiMessage(sm);
 
-                    if(note.isNoteOn() && note.getVelocity() == 0) {
-                        logger.warning("Note on with velocity 0 at " + whereMS + "ms");
+                        if (note.isNoteOn() && note.getVelocity() == 0) {
+                            logger.warning("Note on with velocity 0 at " + whereMS + "ms");
+                        }
+                        putEvent(whereMS, note);
                     }
-                    putEvent(whereMS, note);
+                    catch(Exception e) {
+                        logger.error("Error parsing note: " + e);
+                    }
                 }
 
                 else if(sm.getCommand() == ShortMessage.CONTROL_CHANGE) {

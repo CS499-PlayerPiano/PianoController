@@ -45,8 +45,8 @@ public class JsonConfigWrapper {
      */
     public void loadConfig() {
         if(!CONFIG_FILE.exists()) {
-            logger.info("Creating default config file");
-            saveConfig();
+            logger.warning("Creating default config file");
+            //saveConfig();
         }
         try {
             underlyingConfig = GSON.fromJson(new FileReader(CONFIG_FILE), JsonObject.class);
@@ -58,18 +58,18 @@ public class JsonConfigWrapper {
     /**
      * Saves the config to the config file.
      */
-    public void saveConfig() {
-        if(!CONFIG_FILE.exists()) {
-            CONFIG_FILE.getParentFile().mkdirs();
-        }
-        String jsonString = GSON.toJson(underlyingConfig);
-        try {
-            Files.write(CONFIG_FILE.toPath(), jsonString.getBytes());
-        }
-        catch(Exception e) {
-            logger.error("Failed to save config file!", e);
-        }
-    }
+//    public void saveConfig() {
+//        if(!CONFIG_FILE.exists()) {
+//            CONFIG_FILE.getParentFile().mkdirs();
+//        }
+//        String jsonString = GSON.toJson(underlyingConfig);
+//        try {
+//            Files.write(CONFIG_FILE.toPath(), jsonString.getBytes());
+//        }
+//        catch(Exception e) {
+//            logger.error("Failed to save config file!", e);
+//        }
+//    }
 
     /**
      * Small helper method to get an element from the config, or return null if it doesn't exist.
@@ -428,7 +428,7 @@ public class JsonConfigWrapper {
                 logger.error("Unknown type for default value: " + obj.getClass().getName());
             }
 
-            saveConfig();
+            //saveConfig();
         }
     }
 

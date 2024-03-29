@@ -87,6 +87,7 @@ public class QueueManager {
 
         synchronized (currentSheetMusic) {
             for (SheetMusicCallback callbacks : controller.getOutputs()) {
+                logger.debug("Adding callback to sheet music: " + callbacks.getClass().getName());
                 currentSheetMusic.getSheetMusic().addCallback(callbacks);
             }
 

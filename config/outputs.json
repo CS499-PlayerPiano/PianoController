@@ -12,6 +12,10 @@
   "Synthesia Viewer": {
     "enabled": false
   },
+  "Javalin Web Server": {
+    "port": 8898,
+    "timestampInterval": 500
+  },
   "Arduino": {
     "enabled": true,
     "comPort": "COM3",

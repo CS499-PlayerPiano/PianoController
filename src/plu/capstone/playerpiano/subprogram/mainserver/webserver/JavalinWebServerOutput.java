@@ -75,6 +75,9 @@ public class JavalinWebServerOutput extends Output {
 
     public void start() {
 
+        logger.info("Starting Javalin Web Server");
+        logger.debug(getConfig().toString());
+
         Gson gson = new GsonBuilder().create();
         JsonMapper gsonMapper = new JsonMapper() {
             @Override

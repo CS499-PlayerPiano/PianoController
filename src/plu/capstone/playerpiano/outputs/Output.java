@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;

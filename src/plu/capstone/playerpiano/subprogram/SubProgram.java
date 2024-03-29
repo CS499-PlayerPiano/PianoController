@@ -34,6 +34,8 @@ public abstract class SubProgram implements Callable<Integer> {
         //outputs.add(new OutputSynthesiaGui()); //WIP
     }
 
+    private Set<Output> subProgramSpecificOutputsTMP = new HashSet<>();
+
     private final Logger logger = new Logger(this);
 
     public abstract String getSubCommand();
@@ -45,7 +47,7 @@ public abstract class SubProgram implements Callable<Integer> {
     public final Integer call() {
         try {
             outputConfig.loadConfig();
-            addProgramSpecificOutputPlugins(outputs);
+            addProgramSpecificOutputPlugins(subProgramSpecificOutputsTMP);
             loadOutputPlugins();
             run();
             return 0;
@@ -76,8 +78,18 @@ public abstract class SubProgram implements Callable<Integer> {
             }
         }
 
+        for(Output output : subProgramSpecificOutputsTMP) {
+            JsonConfigWrapper config = outputConfig.getNestedConfig(output.getName());
+            logger.info("Loading program specific output: " + output.getName());
+            output.load(config);
+            outputs.add(output); //Add this custom output to the main list
+        }
+
         //Avoid concurrent modification exception
         outputs.removeAll(disabledOutputs);
+
+        //clear the temp set
+        subProgramSpecificOutputsTMP.clear();
 
     }
 

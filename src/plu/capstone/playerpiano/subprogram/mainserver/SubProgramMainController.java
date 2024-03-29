@@ -31,7 +31,7 @@ public class SubProgramMainController extends SubProgram {
 
         queueManager.start();
 
-        webServerOutput.start();
+//        webServerOutput.start();
 
     }
 

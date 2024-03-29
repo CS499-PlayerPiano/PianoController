@@ -58,8 +58,8 @@ public class JavalinWebServerOutput extends Output {
     private static final String API_DOCS_SWAGGER_PATH = "/docs";
 
     //TODO: Make these config options
-    private static final int PORT = 8898;
-    private static final int TIMESTAMP_INTERVAL = 500;
+    private int PORT = 8898;
+    private int TIMESTAMP_INTERVAL = 500;
 
     @Getter
     private final QueueManager queueManager;
@@ -73,10 +73,14 @@ public class JavalinWebServerOutput extends Output {
         return "Javalin Web Server";
     }
 
-    public void start() {
+    @Override
+    protected void onEnable() {
+        PORT = getConfig().getInteger("port", PORT);
+        TIMESTAMP_INTERVAL = getConfig().getInteger("timestampInterval", TIMESTAMP_INTERVAL);
+        start();
+    }
 
-        logger.info("Starting Javalin Web Server");
-        logger.debug(getConfig().toString());
+    private void start() {
 
         Gson gson = new GsonBuilder().create();
         JsonMapper gsonMapper = new JsonMapper() {

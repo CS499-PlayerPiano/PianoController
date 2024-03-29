@@ -44,7 +44,7 @@ $(document).ready(function () {
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
-        $grid.isotope({ sortBy: 'original-order', sortAscending: true})
+        $grid.isotope({ sortBy: 'original-order', sortAscending: true })
         $('.moon').removeClass('hovered').text('🌑'); // Reset moon states
         $('#quicksearch').val(''); // Clear search field
         selectedDifficulty = null;
@@ -79,8 +79,8 @@ function onConnectedEvent(data) {
     console.log("Connected event!", data)
     let currentSong = data.currentSong;
     setNowPlayingInfo(currentSong);
-
     setUIIsPaused(data.isPaused);
+    setProgressBarUI(0);
 }
 
 function onSongStartedEvent(data) {

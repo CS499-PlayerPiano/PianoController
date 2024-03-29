@@ -15,7 +15,7 @@
 #define VELOCITY_UPDATE_INTERVAL 25
 
 // Num milliseconds we PWM on before 255
-#define MAX_PWM_ON_TIME 500
+#define MAX_PWM_ON_TIME 150
 
 //-----------------------------------------------
 
@@ -94,6 +94,12 @@ void parseNPacket()
 {
     byte howManyNotes = Serial.read();
 
+//SANITY CHECK
+    if(howManyNotes > 88)
+    {
+      return;
+    }
+
     // each note is 2 bytes. Note number and velocity
     // isOn if velocity is not 0
     int howManyBytes = howManyNotes * 2;
@@ -127,6 +133,11 @@ void parseNPacket()
     {
         byte note = noteData[i * 2];
         byte velocity = noteData[i * 2 + 1];
+
+//SANITY CHECK
+        if(note > 87) {
+          return;
+        }
 
         if (velocity != 0 && velocity != 255)
         {
@@ -278,14 +289,14 @@ void processIncomingSerial()
         {
             parseNPacket();
         }
-        else if (command == 'B')
-        {
-            parseBPacket();
-        }
-        else if (command == 'M')
-        {
-            parseMPacket();
-        }
+//        else if (command == 'B')
+//        {
+//            parseBPacket();
+//        }
+//        else if (command == 'M')
+//        {
+//            parseMPacket();
+//        }
 
         /*
             Turn off all the keys

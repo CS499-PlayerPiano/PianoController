@@ -146,6 +146,7 @@ public class OutputArduino extends Output {
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      *                  and the timestamp will be the time since the song started.
      */
+    int totalBytes = 0;
     @Override
     public void onNotesPlayed(List<Note> notes, long timestamp) {
 
@@ -155,34 +156,36 @@ public class OutputArduino extends Output {
         //Depending on the size of the packet, we will send the smaller one.
         //It just depends how many notes and the type are hit.
         final byte[] nPacket = noteArrayToNPacket(notes);
-        final byte[] bPacket = noteArrayToBPacket(notes);
-        final byte[] mPacket = noteArrayToMPacket(notes);
+//        totalBytes += nPacket.length;
+//        System.out.println("Total Bytes: " + totalBytes);
+//        final byte[] bPacket = noteArrayToBPacket(notes);
+//        final byte[] mPacket = noteArrayToMPacket(notes);
+//
+//        System.out.println("nPacket: " + nPacket.length);
+//        System.out.println("bPacket: " + bPacket.length);
+//        if(mPacket != null) {
+//            System.out.println("mPacket: " + mPacket.length);
+//        }
+//        else {
+//            System.out.println("mPacket: null");
+//        }
+//        System.out.println();
+//
+//        //Write the smaller packet to the arduino.
+//        //If they are equal, we use the N packet
+//
+//        byte[] dataToBeWritten = nPacket;
+//        if(bPacket.length < nPacket.length) {
+//            dataToBeWritten = bPacket;
+//            System.out.println("Using B Packet");
+//        }
+//
+//        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
+//            dataToBeWritten = mPacket;
+//            System.out.println("Using M Packet");
+//        }
 
-        System.out.println("nPacket: " + nPacket.length);
-        System.out.println("bPacket: " + bPacket.length);
-        if(mPacket != null) {
-            System.out.println("mPacket: " + mPacket.length);
-        }
-        else {
-            System.out.println("mPacket: null");
-        }
-        System.out.println();
-
-        //Write the smaller packet to the arduino.
-        //If they are equal, we use the N packet
-
-        byte[] dataToBeWritten = nPacket;
-        if(bPacket.length < nPacket.length) {
-            dataToBeWritten = bPacket;
-            System.out.println("Using B Packet");
-        }
-
-        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
-            dataToBeWritten = mPacket;
-            System.out.println("Using M Packet");
-        }
-
-        writeBytes(dataToBeWritten);
+        writeBytes(nPacket);
 
     }
 
@@ -347,7 +350,7 @@ public class OutputArduino extends Output {
     //TODO: Remove this method in refactor!
     @Deprecated
     public void sendRawIndexWithoutMapping(int index, boolean isOn, byte velocity) {
-        if(!arduino.isOpen()) {return;}
+        if(arduino == null || !arduino.isOpen()) {return;}
 
         ByteBuffer buffer = ByteBuffer.allocate(5);
 

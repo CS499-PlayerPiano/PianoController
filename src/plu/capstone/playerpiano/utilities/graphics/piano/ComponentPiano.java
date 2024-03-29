@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
-import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 
 public class ComponentPiano extends JComponent {
@@ -216,7 +215,7 @@ public class ComponentPiano extends JComponent {
                 g.setColor(Color.RED);
                 g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
 
-                int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
+                int midiNote = (i + 21);
                 //NoteDetails noteDetails = NoteDetails.from(i);
                 //g.setColor(Color.YELLOW.darker());
                 // g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);
@@ -255,10 +254,8 @@ public class ComponentPiano extends JComponent {
         return -1;
     }
 
-    public void setKeyLit(Note note, Color color) {
-        if(note.isValidPianoKey()) {
-            setKeyIndexLit(note.toPianoKey(), note.isNoteOn(), color);
-        }
+    public void setKeyLit(NoteEvent note, Color color) {
+        setKeyIndexLit(note.getKeyNumber() - 21, note.isNoteOn(), color);
     }
 
     @Deprecated

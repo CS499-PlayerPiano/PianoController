@@ -105,7 +105,7 @@ public class MidiSheetMusic extends SheetMusic {
                         putEvent(whereMS, note);
                     }
                     catch(Exception e) {
-                        logger.error("Error parsing note: " + e);
+                        logger.error("Error parsing note: " + e.getMessage());
                     }
                 }
 

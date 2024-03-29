@@ -47,7 +47,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
         if(!PRINT_DEBUG_FILES){return;}
 
-        final int indexNumber = Note.fromMidiNoteToPianoKeyIndex(midiKeyNumber);
+        final int indexNumber = (midiKeyNumber - 21);
         final boolean shouldPrint = (indexNumber == 43);
 
         if(!shouldPrint){return;}

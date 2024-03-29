@@ -69,7 +69,7 @@ public class Note implements SheetMusicEvent, Cloneable {
     }
     public Note(byte keyNumber, byte velocity, boolean noteOn, int channelNum) {
 
-        if(isValidPianoKey(keyNumber)) {
+        if(!isValidPianoKey(keyNumber)) {
             throw new IllegalArgumentException("Invalid key number: " + keyNumber);
         }
 

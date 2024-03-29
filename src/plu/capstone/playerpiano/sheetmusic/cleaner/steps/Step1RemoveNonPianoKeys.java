@@ -19,7 +19,7 @@ public class Step1RemoveNonPianoKeys implements MidiConversionStep {
             listOfEvents.removeIf(event -> {
                 if(event instanceof Note) {
                     Note note = (Note) event;
-                    return !note.isValidPianoKey();
+                    return !isValidPianoKey(note);
                 }
                 return false;
             });
@@ -28,5 +28,9 @@ public class Step1RemoveNonPianoKeys implements MidiConversionStep {
         // Remove empty entries from the event map
         sheetMusic.getEventMap().entrySet().removeIf(entry -> entry.getValue().isEmpty());
 
+    }
+
+    private static final boolean isValidPianoKey(Note note) {
+        return note.getKeyNumber() >= 21 && note.getKeyNumber() <= 108;
     }
 }

@@ -256,9 +256,7 @@ public class ComponentPiano extends JComponent {
     }
 
     public void setKeyLit(Note note, Color color) {
-        if(note.isValidPianoKey()) {
-            setKeyIndexLit(note.getKeyNumber() - 21, note.isNoteOn(), color);
-        }
+        setKeyIndexLit(note.getKeyNumber() - 21, note.isNoteOn(), color);
     }
 
     @Deprecated

@@ -8,7 +8,7 @@ import plu.capstone.playerpiano.sheetmusic.events.Note;
  */
 public abstract class OutputStateKeeper extends Output {
 
-    private static final int TOTAL_KEYS = 128;
+    private static final int TOTAL_KEYS = 88;
 
     private Note[] notes = new Note[TOTAL_KEYS];
 
@@ -20,7 +20,7 @@ public abstract class OutputStateKeeper extends Output {
 
         for(int i = 0; i < notes.length; ++i) {
             notes[i] = new Note(
-                    (byte) i,
+                    (byte) (i + 21),
                     (byte) 0,
                     false);
         }
@@ -36,7 +36,13 @@ public abstract class OutputStateKeeper extends Output {
     public final void onNotesPlayed(List<Note> notes, long timestamp) {
         for(Note note : notes) {
             final int key = note.getKeyNumber();
-            this.notes[key] = note;
+
+            if(key < 21 || key > 108) {
+                logger.error("Invalid key number played: " + key);
+                continue;
+            }
+
+            this.notes[key - 21] = note;
         }
         onNoteChange(this.notes, timestamp);
     }

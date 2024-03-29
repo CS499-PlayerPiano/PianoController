@@ -18,6 +18,7 @@ import picocli.CommandLine.Option;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
+import plu.capstone.playerpiano.sheetmusic.cleaner.MidiCleanerSM;
 import plu.capstone.playerpiano.sheetmusic.events.Note;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.SubProgram;
@@ -117,6 +118,7 @@ public class SubProgramSongDBVerification extends SubProgram {
 
                 File midiFile = new File(MIDI_DIR, song.get(FIELD_MIDIFILE).getAsString());
                 SheetMusic sheetMusic = new MidiSheetMusic(midiFile);
+                sheetMusic = MidiCleanerSM.applyChanges(sheetMusic);
                 long songLengthMS = sheetMusic.getSongLengthMS();
                 long noteCount = getTotalNoteCount(sheetMusic);
 
@@ -188,13 +190,7 @@ public class SubProgramSongDBVerification extends SubProgram {
                 if(event instanceof Note) {
                     Note note = (Note) event;
                     if (note.isNoteOn()) {
-                        if (ONLY_VALID_KEYS) {
-                            if (note.isValidPianoKey()) {
-                                count++;
-                            }
-                        } else {
-                            count++;
-                        }
+                        count++;
                     }
                 }
             }

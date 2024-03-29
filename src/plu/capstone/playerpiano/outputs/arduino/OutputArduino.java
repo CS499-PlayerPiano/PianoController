@@ -317,7 +317,6 @@ public class OutputArduino extends Output {
 
         for(Note note : notes) {
             //TODO: WE NEVER UPDATE NOTES.SIZE()
-            if(!note.isValidPianoKey()) {continue;} //Ignore invalid notes
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + note.getKeyNumber());

@@ -12,14 +12,13 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Callable;
 import javax.imageio.ImageIO;
 import picocli.CommandLine.Option;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiSheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.cleaner.MidiCleanerSM;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.subprogram.mainserver.SubProgramException;
@@ -187,8 +186,8 @@ public class SubProgramSongDBVerification extends SubProgram {
 
         for(List<SheetMusicEvent> events : sheetMusic.getEventMap().values()) {
             for(SheetMusicEvent event : events) {
-                if(event instanceof Note) {
-                    Note note = (Note) event;
+                if(event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent) event;
                     if (note.isNoteOn()) {
                         count++;
                     }

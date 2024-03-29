@@ -10,7 +10,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 import plu.capstone.playerpiano.utilities.graphics.piano.KeyShape;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 public class ScrollingNotes extends JPanel {
 
@@ -32,9 +32,9 @@ public class ScrollingNotes extends JPanel {
 
     List<SNote> notesWeAreCurrentlyDrawing = new java.util.ArrayList<>();
 
-    public void onNoteChange(Note[] keys, long timestamp) {
+    public void onNoteChange(NoteEvent[] keys, long timestamp) {
 
-        for(Note note : keys) {
+        for(NoteEvent note : keys) {
 
             final int keyNumber = note.getKeyNumber() - 21;
 

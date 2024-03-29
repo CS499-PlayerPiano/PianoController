@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
-import plu.capstone.playerpiano.sheetmusic.MidiConstants.NoteDetails;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 
 public class ComponentPiano extends JComponent {
@@ -255,7 +254,7 @@ public class ComponentPiano extends JComponent {
         return -1;
     }
 
-    public void setKeyLit(Note note, Color color) {
+    public void setKeyLit(NoteEvent note, Color color) {
         setKeyIndexLit(note.getKeyNumber() - 21, note.isNoteOn(), color);
     }
 

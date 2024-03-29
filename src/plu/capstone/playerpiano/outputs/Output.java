@@ -7,11 +7,10 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
@@ -92,8 +91,8 @@ public abstract class Output implements SheetMusicCallback {
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      *                  and the timestamp will be the time since the song started.
      */
-    public void onNotesPlayed(List<Note> notes, long timestamp) {
-        for(Note note : notes) {
+    public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
+        for(NoteEvent note : notes) {
             onNotePlayed(note, timestamp);
         }
     }
@@ -114,7 +113,7 @@ public abstract class Output implements SheetMusicCallback {
      * @param note
      * @param timestamp
      */
-    public void onNotePlayed(Note note, long timestamp) {}
+    public void onNotePlayed(NoteEvent note, long timestamp) {}
 
     /**
      * Splits the events into notes and time change events.
@@ -123,11 +122,11 @@ public abstract class Output implements SheetMusicCallback {
      */
     private void splitEvents(List<SheetMusicEvent> events, long timestamp) {
 
-        List<Note> notes = new ArrayList<>();
+        List<NoteEvent> notes = new ArrayList<>();
 
         for(SheetMusicEvent event : events) {
-            if(event instanceof Note) {
-                notes.add((Note) event);
+            if(event instanceof NoteEvent) {
+                notes.add((NoteEvent) event);
             }
             else if(event instanceof SustainPedalEvent) {
                 onSustainPedal((SustainPedalEvent) event, timestamp);

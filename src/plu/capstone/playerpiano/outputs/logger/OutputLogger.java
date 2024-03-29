@@ -2,9 +2,8 @@ package plu.capstone.playerpiano.outputs.logger;
 
 import java.util.List;
 import java.util.Map;
-import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
@@ -55,13 +54,13 @@ public class OutputLogger extends Output {
     }
 
     @Override
-    public void onNotesPlayed(List<Note> notes, long timestamp) {
+    public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("Notes Played: [");
         for(int i = 0; i < notes.size(); i++) {
 
-            Note note = notes.get(i);
+            NoteEvent note = notes.get(i);
             sb.append("(N: ");
             sb.append(note.getKeyNumber());
             sb.append(", O: ");

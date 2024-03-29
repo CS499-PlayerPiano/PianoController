@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.outputs;
 
 import java.util.List;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 /**
  * An extension of the Output class that keeps track of the state of the piano notes.
@@ -10,7 +10,7 @@ public abstract class OutputStateKeeper extends Output {
 
     private static final int TOTAL_KEYS = 88;
 
-    private Note[] notes = new Note[TOTAL_KEYS];
+    private NoteEvent[] notes = new NoteEvent[TOTAL_KEYS];
 
     /**
      * Creates a new OutputStateKeeper.
@@ -19,7 +19,7 @@ public abstract class OutputStateKeeper extends Output {
         super();
 
         for(int i = 0; i < notes.length; ++i) {
-            notes[i] = new Note(
+            notes[i] = new NoteEvent(
                     (byte) (i + 21),
                     (byte) 0,
                     false);
@@ -33,8 +33,8 @@ public abstract class OutputStateKeeper extends Output {
      *                  and the timestamp will be the time since the song started.
      */
     @Override
-    public final void onNotesPlayed(List<Note> notes, long timestamp) {
-        for(Note note : notes) {
+    public final void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
+        for(NoteEvent note : notes) {
             final int key = note.getKeyNumber();
 
             if(key < 21 || key > 108) {
@@ -58,9 +58,9 @@ public abstract class OutputStateKeeper extends Output {
     public void onSongFinished(long timestamp) {
 
         for(int i = 0; i < notes.length; ++i) {
-            final Note oldNote = notes[i];
+            final NoteEvent oldNote = notes[i];
             if(oldNote != null) {
-                final Note newNote = new Note(
+                final NoteEvent newNote = new NoteEvent(
                         (byte) oldNote.getKeyNumber(),
                         (byte) oldNote.getVelocity(),
                         false
@@ -77,6 +77,6 @@ public abstract class OutputStateKeeper extends Output {
      * @param keys The new state of the keys.
      * @param timestamp The timestamp of the event in milliseconds. If this is a live event, this will be {@link plu.capstone.playerpiano.sheetmusic.SheetMusicCallback#LIVE_TIMESTAMP}
      */
-    public abstract void onNoteChange(Note[] keys, long timestamp);
+    public abstract void onNoteChange(NoteEvent[] keys, long timestamp);
 
 }

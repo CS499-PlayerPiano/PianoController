@@ -13,7 +13,7 @@ import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.ConsoleColors;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.utilities.MathUtilities;
 
@@ -148,7 +148,7 @@ public class OutputArduino extends Output {
      */
     int totalBytes = 0;
     @Override
-    public void onNotesPlayed(List<Note> notes, long timestamp) {
+    public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
 
         if(!arduino.isOpen()) {return;}
 
@@ -197,15 +197,15 @@ public class OutputArduino extends Output {
             Key
             Velocity
     */
-    private byte[] noteArrayToBPacket(List<Note> notes) {
+    private byte[] noteArrayToBPacket(List<NoteEvent> notes) {
 
         //sort the notes by key number
-        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+        notes.sort(Comparator.comparingInt(NoteEvent::getKeyNumber));
 
-        List<List<Note>> batchedNotes = new ArrayList<>();
-        for(Note note : notes) {
+        List<List<NoteEvent>> batchedNotes = new ArrayList<>();
+        for(NoteEvent note : notes) {
             boolean found = false;
-            for(List<Note> batch : batchedNotes) {
+            for(List<NoteEvent> batch : batchedNotes) {
 
                 Integer currentKeyIndex = noteMapping.get(note.getKeyNumber());
                 if(currentKeyIndex == null) {
@@ -227,7 +227,7 @@ public class OutputArduino extends Output {
                 }
             }
             if(!found) {
-                List<Note> newBatch = new ArrayList<>();
+                List<NoteEvent> newBatch = new ArrayList<>();
                 newBatch.add(note);
                 batchedNotes.add(newBatch);
             }
@@ -238,7 +238,7 @@ public class OutputArduino extends Output {
         buffer.put((byte) 'B');
         buffer.put((byte) batchedNotes.size());
 
-        for(List<Note> batch : batchedNotes) {
+        for(List<NoteEvent> batch : batchedNotes) {
             byte contiguous = (byte) batch.size(); //Key index is 0 based
 
             Integer keyIndex = noteMapping.get(batch.get(0).getKeyNumber());
@@ -269,13 +269,13 @@ public class OutputArduino extends Output {
 
       WILL RETURN NULL IF VELOCITIES ARE NOT THE SAME
     */
-    private byte[] noteArrayToMPacket(List<Note> notes) {
+    private byte[] noteArrayToMPacket(List<NoteEvent> notes) {
 
         //sort the notes by key number
 //        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
 
         int velocity = notes.get(0).getVelocity();
-        for(Note note : notes) {
+        for(NoteEvent note : notes) {
             if(note.getVelocity() != velocity) {
                 return null;
             }
@@ -286,7 +286,7 @@ public class OutputArduino extends Output {
         buffer.put((byte) notes.size());
         buffer.put((byte) velocity);
 
-        for(Note note : notes) {
+        for(NoteEvent note : notes) {
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + note.getKeyNumber());
@@ -307,7 +307,7 @@ public class OutputArduino extends Output {
             Key
             Velocity
     */
-    private byte[] noteArrayToNPacket(List<Note> notes) {
+    private byte[] noteArrayToNPacket(List<NoteEvent> notes) {
         ByteBuffer buffer = ByteBuffer.allocate(2 + (notes.size() * 2));
 
 
@@ -315,7 +315,7 @@ public class OutputArduino extends Output {
         buffer.put((byte) 'N');
         buffer.put((byte) notes.size());
 
-        for(Note note : notes) {
+        for(NoteEvent note : notes) {
             //TODO: WE NEVER UPDATE NOTES.SIZE()
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {

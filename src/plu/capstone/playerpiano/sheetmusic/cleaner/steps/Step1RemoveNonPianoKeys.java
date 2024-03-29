@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.sheetmusic.cleaner.steps;
 
 import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 
 public class Step1RemoveNonPianoKeys implements MidiConversionStep {
@@ -17,8 +17,8 @@ public class Step1RemoveNonPianoKeys implements MidiConversionStep {
         // Remove all notes that are not valid piano keys
         sheetMusic.getEventMap().values().forEach(listOfEvents -> {
             listOfEvents.removeIf(event -> {
-                if(event instanceof Note) {
-                    Note note = (Note) event;
+                if(event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent) event;
                     return !isValidPianoKey(note);
                 }
                 return false;
@@ -30,7 +30,7 @@ public class Step1RemoveNonPianoKeys implements MidiConversionStep {
 
     }
 
-    private static final boolean isValidPianoKey(Note note) {
+    private static final boolean isValidPianoKey(NoteEvent note) {
         return note.getKeyNumber() >= 21 && note.getKeyNumber() <= 108;
     }
 }

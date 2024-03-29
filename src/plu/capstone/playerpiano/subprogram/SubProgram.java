@@ -1,6 +1,5 @@
 package plu.capstone.playerpiano.subprogram;
 
-import com.google.gson.JsonObject;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,13 +9,11 @@ import picocli.CommandLine.Command;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.outputs.WIP.synthesiaclone.OutputSynthesiaGui;
 import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
-import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 @Command
 public abstract class SubProgram implements Callable<Integer> {
@@ -93,7 +90,7 @@ public abstract class SubProgram implements Callable<Integer> {
 
     }
 
-    public void playNote(Note note) {
+    public void playNote(NoteEvent note) {
         for(Output output : outputs) {
             output.onNotePlayed(note, -1);
         }

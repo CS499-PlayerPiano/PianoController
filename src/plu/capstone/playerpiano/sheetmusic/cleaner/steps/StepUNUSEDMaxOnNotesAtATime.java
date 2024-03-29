@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
@@ -24,7 +24,7 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
     public void process(SheetMusic sheetMusic) {
 
         int notesOn = 0;
-        Map<Long, List<Note>> noteToBeRemoved = new HashMap<>();
+        Map<Long, List<NoteEvent>> noteToBeRemoved = new HashMap<>();
         boolean[] isNoteOn = new boolean[88];
 
         for(int i = 0; i < 88; i++) {
@@ -34,9 +34,9 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
         for (long timestamp : sheetMusic.getEventMap().keySet()) {
             for (SheetMusicEvent event : sheetMusic.getEventMap().get(timestamp)) {
 
-                if(event instanceof Note) {
+                if(event instanceof NoteEvent) {
 
-                    Note note = (Note) event;
+                    NoteEvent note = (NoteEvent) event;
 
                     if(note.isNoteOn() && !isNoteOn[getKeyIndex(note)]) {
                         notesOn++;
@@ -55,7 +55,7 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
                             System.out.println("Removing note at " + timestamp + " because there are too many notes on (" + notesOn + ")");
                         }
                         else {
-                            List<Note> notes = new ArrayList<>();
+                            List<NoteEvent> notes = new ArrayList<>();
                             notes.add(note);
                             noteToBeRemoved.put(timestamp, notes);
                         }
@@ -76,7 +76,7 @@ public class StepUNUSEDMaxOnNotesAtATime implements MidiConversionStep {
         }
     }
 
-    private int getKeyIndex(Note key) {
+    private int getKeyIndex(NoteEvent key) {
         return key.getKeyNumber() - 21;
     }
 

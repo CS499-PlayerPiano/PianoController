@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.logger.Logger;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.utilities.graphics.JTextNumericField;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
@@ -53,12 +53,12 @@ public class SubProgramKeyDebug extends SubProgram {
                 if(e.getButton() == MouseEvent.BUTTON1) {
                     theKey = piano.getKeyAtPoint(e.getPoint());
 
-                    Note[] toSend = new Note[88];
+                    NoteEvent[] toSend = new NoteEvent[88];
 
                     for(int i = 0; i < 88; i++) {
 
                         // Convert i to midi. 21 is the first key on a piano
-                        Note tmpNote = new Note((byte) (i + 21), (byte) 0, false);
+                        NoteEvent tmpNote = new NoteEvent((byte) (i + 21), (byte) 0, false);
                         piano.setKeyLit(tmpNote, null);
                         toSend[i] = tmpNote;
                     }
@@ -66,7 +66,7 @@ public class SubProgramKeyDebug extends SubProgram {
 
                     if(theKey != -1) {
                         // Convert theKey to midi. 21 is the first key on a piano
-                        Note tmpNote = new Note((byte) (theKey + 21), Note.MAX_VELOCITY, true);
+                        NoteEvent tmpNote = new NoteEvent((byte) (theKey + 21), NoteEvent.MAX_VELOCITY, true);
                         piano.setKeyLit(tmpNote, Color.YELLOW);
                         toSend[theKey] = tmpNote;
                     }
@@ -103,10 +103,10 @@ public class SubProgramKeyDebug extends SubProgram {
 
                         try {
                             //COnvert theKey index to midi note
-                            playNote(new Note((byte) (theKey + 21), (byte) velocityInput.getValue(), true));
+                            playNote(new NoteEvent((byte) (theKey + 21), (byte) velocityInput.getValue(), true));
                             Thread.sleep(onTimeInput.getValue());
                             //COnvert theKey index to midi note
-                            playNote(new Note((byte) (theKey + 21), (byte) 0, false));
+                            playNote(new NoteEvent((byte) (theKey + 21), (byte) 0, false));
                             Thread.sleep(offTimeInput.getValue());
                         }
                         catch(Exception igored) {}
@@ -137,7 +137,7 @@ public class SubProgramKeyDebug extends SubProgram {
         // OnTime and OffTime inputs
         onTimeInput = new JTextNumericField(0, Integer.MAX_VALUE, 50);
         offTimeInput = new JTextNumericField(0, Integer.MAX_VALUE, 50);
-        velocityInput = new JTextNumericField(0, Note.MAX_VELOCITY, Note.MAX_VELOCITY);
+        velocityInput = new JTextNumericField(0, NoteEvent.MAX_VELOCITY, NoteEvent.MAX_VELOCITY);
 
         controlsPanel.add(new JLabel("OnTime:"));
         controlsPanel.add(onTimeInput);

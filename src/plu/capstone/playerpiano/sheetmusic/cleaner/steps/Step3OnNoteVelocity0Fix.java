@@ -1,7 +1,7 @@
 package plu.capstone.playerpiano.sheetmusic.cleaner.steps;
 
 import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 
@@ -17,8 +17,8 @@ public class Step3OnNoteVelocity0Fix implements MidiConversionStep {
 
         for(long time : sheetMusic.getEventMap().keySet()) {
             for(SheetMusicEvent event : sheetMusic.getEventMap().get(time)) {
-                if(event instanceof Note) {
-                    Note note = (Note) event;
+                if(event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent) event;
 
                     //Note that are on and have a velocity of 0 are actually off notes
                     if(note.getVelocity() == 0 && note.isNoteOn()) {

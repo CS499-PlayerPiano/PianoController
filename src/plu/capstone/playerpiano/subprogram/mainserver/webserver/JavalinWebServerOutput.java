@@ -25,7 +25,7 @@ import org.eclipse.jetty.server.session.SessionCache;
 import org.eclipse.jetty.server.session.SessionHandler;
 import org.jetbrains.annotations.NotNull;
 import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.mainserver.QueueManager;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.Endpoint;
@@ -251,7 +251,7 @@ public class JavalinWebServerOutput extends Output {
     }
 
     @Override
-    public void onNotesPlayed(List<Note> notes, long timestamp) {
+    public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
         JsonObject data = new JsonObject();
         data.addProperty("timestamp", timestamp);
         data.add("notes", GSON.toJsonTree(notes));

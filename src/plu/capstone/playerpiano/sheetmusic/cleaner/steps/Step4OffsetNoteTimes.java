@@ -10,7 +10,7 @@ import java.util.Map;
 import lombok.AllArgsConstructor;
 import plu.capstone.playerpiano.sheetmusic.cleaner.MidiConversionStep;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
@@ -56,8 +56,8 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             FileWriter writer = new FileWriter("tmp/" + fileName + ".txt", false);
 
             for(TimeAndNote tn : timeAndNote) {
-                if(tn.event instanceof Note) {
-                    Note n = (Note) tn.event;
+                if(tn.event instanceof NoteEvent) {
+                    NoteEvent n = (NoteEvent) tn.event;
                     writer.write(tn.time + " | " + n.isNoteOn() + " | " + n.getVelocity() + "\n");
                 }
             }
@@ -85,8 +85,8 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-1");
         //Step 1: Bias ons bu the time they take to hit
         for(TimeAndNote tn : timeAndNote) {
-            if(tn.event instanceof Note) {
-                Note note = (Note) tn.event;
+            if(tn.event instanceof NoteEvent) {
+                NoteEvent note = (NoteEvent) tn.event;
                 if(note.isNoteOn()) {
                     //If the note is on, we need to offset the time it takes to hit the note
                     tn.time -= timeToHit(note);
@@ -102,9 +102,9 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         //Step 3: Remove any two offs in a row
         for(int i = 0; i < timeAndNote.size(); i++) {
             if(i > 0) {
-                if(timeAndNote.get(i).event instanceof Note && timeAndNote.get(i-1).event instanceof Note) {
-                    Note note = (Note) timeAndNote.get(i).event;
-                    Note previousNote = (Note) timeAndNote.get(i-1).event;
+                if(timeAndNote.get(i).event instanceof NoteEvent && timeAndNote.get(i-1).event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent) timeAndNote.get(i).event;
+                    NoteEvent previousNote = (NoteEvent) timeAndNote.get(i-1).event;
                     if(!note.isNoteOn() && !previousNote.isNoteOn()) {
                         timeAndNote.remove(i);
                         i--;
@@ -121,9 +121,9 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                 TimeAndNote current = timeAndNote.get(i);
                 TimeAndNote previous = timeAndNote.get(i-1);
 
-                if(current.event instanceof Note && previous.event instanceof Note) {
-                    Note currentNote = (Note) current.event;
-                    Note previousNote = (Note) previous.event;
+                if(current.event instanceof NoteEvent && previous.event instanceof NoteEvent) {
+                    NoteEvent currentNote = (NoteEvent) current.event;
+                    NoteEvent previousNote = (NoteEvent) previous.event;
                     if(currentNote.isNoteOn() && !previousNote.isNoteOn()) {
                         if(current.time - previous.time < timeToRelease(previousNote)) {
                             previous.time = current.time - timeToRelease(previousNote);
@@ -148,16 +148,16 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                 TimeAndNote current = timeAndNote.get(i);
                 TimeAndNote previous = timeAndNote.get(i-1);
 
-                if(current.event instanceof Note && previous.event instanceof Note) {
-                    Note currentNote = (Note) current.event;
-                    Note previousNote = (Note) previous.event;
+                if(current.event instanceof NoteEvent && previous.event instanceof NoteEvent) {
+                    NoteEvent currentNote = (NoteEvent) current.event;
+                    NoteEvent previousNote = (NoteEvent) previous.event;
                     if(currentNote.isNoteOn() && previousNote.isNoteOn()) {
 
                         //If the time between the two notes is greater than the time it takes to release the previous note
                         if(current.time - previous.time > timeToRelease(previousNote)) {
                             //Insert a off note
                             final long newTime = current.time - timeToRelease(previousNote);
-                            final Note newOffNote = currentNote.clone();
+                            final NoteEvent newOffNote = currentNote.clone();
                             newOffNote.setNoteOn(false);
                             newOffNote.setVelocity(0);
                             timeAndNote.add(i, new TimeAndNote(newTime, newOffNote));
@@ -235,8 +235,8 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
                 int keyNumber;
 
-                if(event instanceof Note) {
-                    Note note = (Note) event;
+                if(event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent) event;
                     keyNumber = note.getKeyNumber();
                 }
                 else if(event instanceof SustainPedalEvent) {

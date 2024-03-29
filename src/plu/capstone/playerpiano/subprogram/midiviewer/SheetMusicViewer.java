@@ -13,14 +13,14 @@ import javax.swing.table.TableColumnModel;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.utilities.graphics.RowNumberTable;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 public class SheetMusicViewer {
 
     private final Logger logger = new Logger(this);
 
 
-    private Map<Long, List<Note>> newNoteMap = new HashMap<>();
+    private Map<Long, List<NoteEvent>> newNoteMap = new HashMap<>();
 
     Integer[][] data;
     String[] columnNames;
@@ -33,8 +33,8 @@ public class SheetMusicViewer {
 
         for(Long time : noteMap.keySet()) {
             for(SheetMusicEvent event : noteMap.get(time)) {
-                if(event instanceof Note) {
-                    Note note = (Note)event;
+                if(event instanceof NoteEvent) {
+                    NoteEvent note = (NoteEvent)event;
                     if (note.getChannelNum() > maxChannel) {
                         maxChannel = note.getChannelNum();
                     }
@@ -51,11 +51,11 @@ public class SheetMusicViewer {
             }
 
             for(SheetMusicEvent event : noteMap.get(time)) {
-                if(!(event instanceof Note)) {
+                if(!(event instanceof NoteEvent)) {
                     continue;
                 }
 
-                Note note = (Note)event;
+                NoteEvent note = (NoteEvent)event;
                 int row = note.getChannelNum();
 
                 newNoteMap.get(time).add(row, note);
@@ -86,7 +86,7 @@ public class SheetMusicViewer {
 
         for(int i = 0; i < newNoteMap.size(); i++) {
             long time = (long)newNoteMap.keySet().toArray()[i];
-            for(Note note : newNoteMap.get(time)) {
+            for(NoteEvent note : newNoteMap.get(time)) {
                 if(note != null) {
                     data[note.getChannelNum()][i] = note.getKeyNumber();
                 }

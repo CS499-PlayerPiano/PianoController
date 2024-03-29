@@ -5,7 +5,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Synthesizer;
 import plu.capstone.playerpiano.outputs.Output;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 /**
  * This plugin is responsible for playing notes through the computer's speakers.
@@ -59,7 +59,7 @@ public class OutputSynth extends Output {
      * @param timestamp the timestamp of when the note was played
      */
     @Override
-    public void onNotePlayed(Note note, long timestamp) {
+    public void onNotePlayed(NoteEvent note, long timestamp) {
 
 
         final int channelNum = note.getChannelNum() == -1 ? 0 : note.getChannelNum();

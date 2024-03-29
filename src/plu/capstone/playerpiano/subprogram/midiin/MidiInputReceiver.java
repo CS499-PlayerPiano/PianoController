@@ -3,7 +3,7 @@ package plu.capstone.playerpiano.subprogram.midiin;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 public class MidiInputReceiver implements Receiver {
 
@@ -28,7 +28,7 @@ public class MidiInputReceiver implements Receiver {
             }
 
             // This will throw an exception if the message is not a note on or note off message
-            Note note = Note.fromMidiMessage(sm);
+            NoteEvent note = NoteEvent.fromMidiMessage(sm);
 
             //If the ignore velocity option is enabled, set the velocity to 127 for only note
             if(pluginMidiKeyboard.IGNORE_VELOCITY){

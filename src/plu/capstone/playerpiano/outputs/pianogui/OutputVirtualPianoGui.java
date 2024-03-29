@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 import plu.capstone.playerpiano.outputs.OutputStateKeeper;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 
@@ -53,9 +53,9 @@ public class OutputVirtualPianoGui extends OutputStateKeeper {
     }
 
     @Override
-    public void onNoteChange(Note[] keys, long timestamp) {
+    public void onNoteChange(NoteEvent[] keys, long timestamp) {
 
-        for(Note note : keys) {
+        for(NoteEvent note : keys) {
 
             Color color;
 
@@ -89,7 +89,7 @@ public class OutputVirtualPianoGui extends OutputStateKeeper {
         piano.clearLitKeys();
     }
 
-    private static Color getColorForNoteRainbowGradient(Note note) {
+    private static Color getColorForNoteRainbowGradient(NoteEvent note) {
         int totalNotes = 88;
         int key = note.getKeyNumber();
 
@@ -105,11 +105,11 @@ public class OutputVirtualPianoGui extends OutputStateKeeper {
         return Color.getHSBColor(percent, 1, 1);
     }
 
-    private static Color getColorForNoteTrackNumber(Note note) {
+    private static Color getColorForNoteTrackNumber(NoteEvent note) {
         int totalTracks = 16;
         int channel = note.getChannelNum();
 
-        if(channel == Note.NO_CHANNEL) {
+        if(channel == NoteEvent.NO_CHANNEL) {
             return Color.RED;
         }
 

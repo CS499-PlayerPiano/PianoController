@@ -12,7 +12,7 @@ import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.MidiConstants.ControlMessages;
-import plu.capstone.playerpiano.sheetmusic.events.Note;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 
 /**
@@ -97,7 +97,7 @@ public class MidiSheetMusic extends SheetMusic {
                 if(sm.getCommand() == ShortMessage.NOTE_ON || sm.getCommand() == ShortMessage.NOTE_OFF) {
 
                     try {
-                        Note note = Note.fromMidiMessage(sm);
+                        NoteEvent note = NoteEvent.fromMidiMessage(sm);
 
                         if (note.isNoteOn() && note.getVelocity() == 0) {
                             logger.warning("Note on with velocity 0 at " + whereMS + "ms");

@@ -37,12 +37,21 @@ public abstract class SubProgram implements Callable<Integer> {
 
     public abstract String getSubCommand();
 
+    private final JsonConfigWrapper outputConfig = new JsonConfigWrapper(new File("config/outputs.json"));
+    private final JsonConfigWrapper MASTER_SUB_PROGRAM_CONFIG = new JsonConfigWrapper(new File("config/programs.json"));
+
     @Getter
-    private JsonConfigWrapper outputConfig = new JsonConfigWrapper(new File("config/outputs.json"));
+    private JsonConfigWrapper subProgramConfig;
 
     @Override
     public final Integer call() {
         try {
+            MASTER_SUB_PROGRAM_CONFIG.loadConfig();
+            subProgramConfig = MASTER_SUB_PROGRAM_CONFIG.getNestedConfig(getSubCommand());
+
+            logger.info("Running sub program: " + getSubCommand());
+            logger.debug("Sub program config: " + subProgramConfig.toString());
+
             outputConfig.loadConfig();
             addProgramSpecificOutputPlugins(subProgramSpecificOutputsTMP);
             loadOutputPlugins();

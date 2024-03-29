@@ -9,9 +9,9 @@ import plu.capstone.playerpiano.subprogram.SubProgram;
 public class SubProgramMidiKeyboard extends SubProgram {
 
     //TODO: Config!
-    private static final String DEVICE_NAME = "AKM320";
-    protected static final boolean IGNORE_VELOCITY = true;
-    private static final boolean PRINT_ALL_DEVICE_NAMES = true;
+    private String DEVICE_NAME = "AKM320";
+    protected boolean IGNORE_VELOCITY = true;
+    private boolean PRINT_ALL_DEVICE_NAMES = true;
 
     private final Logger logger = new Logger(this);
     @Override
@@ -21,6 +21,12 @@ public class SubProgramMidiKeyboard extends SubProgram {
 
     @Override
     public void run() throws Exception {
+
+        DEVICE_NAME = getSubProgramConfig().getString("deviceName", DEVICE_NAME);
+        IGNORE_VELOCITY = getSubProgramConfig().getBoolean("ignoreVelocity", IGNORE_VELOCITY);
+        PRINT_ALL_DEVICE_NAMES = getSubProgramConfig().getBoolean("printAllDeviceNames", PRINT_ALL_DEVICE_NAMES);
+
+
         MidiDevice.Info[] infos = MidiSystem.getMidiDeviceInfo();
         for (MidiDevice.Info info : infos) {
 

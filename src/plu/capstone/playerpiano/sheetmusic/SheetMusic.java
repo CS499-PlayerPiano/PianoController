@@ -158,7 +158,7 @@ public class SheetMusic implements Cloneable {
         //Idea: Send all notes off
         
         for(SheetMusicCallback callback : callbacks) {
-            callback.onEventsPlayed(ALL_OFF_NOTES, songLengthMS);
+            //callback.onEventsPlayed(ALL_OFF_NOTES, songLengthMS);
             callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
             callback.onSongFinished(songLengthMS);
         }

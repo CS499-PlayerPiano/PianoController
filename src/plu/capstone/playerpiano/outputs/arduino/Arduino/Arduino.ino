@@ -266,7 +266,7 @@ void parseMPacket()
     }
 }
 
-void parseFSPPacket()
+void parseSPacket()
 {
     // turn all the lights off
     for (int i = 0; i < TOTAL_PINS; i++)
@@ -304,9 +304,9 @@ void processIncomingSerial()
             F == Finished playing song
             P == Pause
         */
-        else if (command == 'F' || command == 'S' || command == 'P')
+        else if (command == 'S')
         {
-            parseFSPPacket();
+            parseSPacket();
         }
         updatePinVelocity();
     }

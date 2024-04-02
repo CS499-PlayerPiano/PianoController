@@ -1,9 +1,9 @@
 {
   "Logger": {
-    "enabled": true
+    "enabled": false
   },
   "Midi Synthesizer": {
-    "enabled": true
+    "enabled": false
   },
   "Virtual Piano GUI": {
     "enabled": true,

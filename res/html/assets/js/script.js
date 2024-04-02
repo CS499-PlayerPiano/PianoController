@@ -191,6 +191,10 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
         let isDebugSong = song.tags.includes("debugging");
 
+        if (song.favorite) {
+            song.tags.push("favorite");
+        }
+
         let songElement = html;
         songElement = songElement.replace('%artwork%', song.artwork);
         songElement = songElement.replace('%title%', song.name);

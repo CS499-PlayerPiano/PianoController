@@ -92,6 +92,12 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                     tn.time -= timeToHit(note);
                 }
             }
+
+            //We move the on and offs back my timeToHit for the sustain pedal
+            else if(tn.event instanceof SustainPedalEvent) {
+                tn.time -= timeToHit((SustainPedalEvent) tn.event);
+            }
+
         }
         printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-2");
 
@@ -99,13 +105,25 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         timeAndNote.sort(Comparator.comparingLong(a -> a.time));
 
         printTimeAndNote(timeAndNote, midiKeyNumber, "tn-before-3");
-        //Step 3: Remove any two offs in a row
+        //Step 3: Remove any two offs in a row, or two ons in a row for the sustain pedal
         for(int i = 0; i < timeAndNote.size(); i++) {
             if(i > 0) {
                 if(timeAndNote.get(i).event instanceof NoteEvent && timeAndNote.get(i-1).event instanceof NoteEvent) {
                     NoteEvent note = (NoteEvent) timeAndNote.get(i).event;
                     NoteEvent previousNote = (NoteEvent) timeAndNote.get(i-1).event;
                     if(!note.isNoteOn() && !previousNote.isNoteOn()) {
+                        timeAndNote.remove(i);
+                        i--;
+                    }
+                }
+
+
+                else if(timeAndNote.get(i).event instanceof SustainPedalEvent && timeAndNote.get(i-1).event instanceof SustainPedalEvent) {
+                    boolean on = ((SustainPedalEvent) timeAndNote.get(i).event).isOn();
+                    boolean prevOn = ((SustainPedalEvent) timeAndNote.get(i-1).event).isOn();
+
+                    //If they are both on or both off
+                    if(on == prevOn) {
                         timeAndNote.remove(i);
                         i--;
                     }
@@ -121,6 +139,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                 TimeAndNote current = timeAndNote.get(i);
                 TimeAndNote previous = timeAndNote.get(i-1);
 
+                //Bias previous
                 if(current.event instanceof NoteEvent && previous.event instanceof NoteEvent) {
                     NoteEvent currentNote = (NoteEvent) current.event;
                     NoteEvent previousNote = (NoteEvent) previous.event;
@@ -135,6 +154,24 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
                         }
                     }
+                }
+
+                //If they are two close together
+                else if(current.event instanceof SustainPedalEvent && previous.event instanceof SustainPedalEvent) {
+                    SustainPedalEvent currentPedal = (SustainPedalEvent) current.event;
+                    SustainPedalEvent previousPedal = (SustainPedalEvent) previous.event;
+                    if(currentPedal.isOn() && !previousPedal.isOn()) {
+                        if(current.time - previous.time < timeToRelease(previousPedal)) {
+                            previous.time = current.time - timeToRelease(previousPedal);
+
+                            if(i > 1 && previous.time < timeAndNote.get(i-2).time) {
+                                timeAndNote.remove(i-1);
+                                i--;
+                            }
+
+                        }
+                    }
+
                 }
             }
         }
@@ -186,13 +223,23 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     //How long does it take to retract in MS
     //TODO: Implement this function based on note index and velocity
     private long timeToRelease(SheetMusicEvent event) {
+
+        if(event instanceof SustainPedalEvent) {
+            return 450;
+        }
+
         return 100;
     }
 
     //How long does it take to hit in MS
     //TODO: Implement this function based on note index and velocity
     private long timeToHit(SheetMusicEvent event) {
-       return 100;
+
+        if(event instanceof SustainPedalEvent) {
+            return 450;
+        }
+
+        return 100;
     }
 
     private SheetMusic fromNewFormatToSheetMusic(Map<Integer, List<TimeAndNote>> newSheetMusic) {

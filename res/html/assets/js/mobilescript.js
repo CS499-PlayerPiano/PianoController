@@ -254,11 +254,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
     $('.now-playing').on('click', '.back-to-list', function () {
         hideQueueContainer();
     });
-
-    $('.now-playing-container').on('click', function () {
-        hideQueueContainer();
-    });
-
 });
 
 
@@ -268,19 +263,34 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 let savedScrollPosition = 0;
 function showQueueContainer() {
     savedScrollPosition = $(window).scrollTop(); // save scroll position
-    $('.sticky-container').hide(); // hide header
-    $('.container').hide(); // hide song list
-    $('.now-playing-container').show(); // show queue container
+    $('body').css({
+        'overflow': 'hidden',
+        'position': 'fixed',
+        'width': '100%'
+    });
+    $('.np-overlay').fadeIn();
+    $('.now-playing-container').slideDown();
+    $('.now-playing-container').addClass('active');
     console.log("Saving scroll position", savedScrollPosition);
 }
 
 function hideQueueContainer() {
-    $('.sticky-container').show(); // show header
-    $('.container').show(); // show song list
-    $('.now-playing-container').hide(); // hide queue container
+    $('.now-playing-container').slideUp();
+    $('.np-overlay').fadeOut(function() {
+        $('body').css({
+            'overflow': 'auto',
+            'position': 'static',
+            'width': 'auto'
+        });
+    });
+    $('.now-playing-container').removeClass('active');
     $(window).scrollTop(savedScrollPosition); // restore scroll position
     console.log("Restoring scroll position", savedScrollPosition);
 }
+
+$('.np-overlay').on('click', function () {
+    hideQueueContainer();
+});
 
 function showSortContainer() {
     savedScrollPosition = $(window).scrollTop();
@@ -310,6 +320,7 @@ function hideSortContainer() {
 $('.overlay').on('click', function (e) {
     e.preventDefault();
     e.stopPropagation();
+    hideSortContainer();
 });
 
 $('.sticky-container').on('click', '.sort-button', function (e) {

@@ -245,21 +245,41 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
 });
 
+$('.sticky-container').on('click', '.info-button', function () {
+    showInfoContainer();
+});
+
+$('.info-popup').on('click', '.info-close-button', function () {
+    hideInfoContainer();
+});
+
 //Saveing and loading scroll position seems like a bit of a hack
 //Real fix here is most likely some CSS Magic that I am not aware of.
 let savedScrollPosition = 0;
 function showQueueContainer() {
     savedScrollPosition = $(window).scrollTop(); // save scroll position
-    $('.sticky-container').hide(); // hide header
-    $('.container').hide(); // hide song list
     $('.now-playing-container').show(); // show queue container
     console.log("Saving scroll position", savedScrollPosition);
 }
 
 function hideQueueContainer() {
+    $('.now-playing-container').hide(); // hide queue container
+    $(window).scrollTop(savedScrollPosition); // restore scroll position
+    console.log("Restoring scroll position", savedScrollPosition);
+}
+
+function showInfoContainer() {
+    savedScrollPosition = $(window).scrollTop(); // save scroll position
+    $('.info-popup').show(); // hide header
+    $('.container').hide(); // hide song list
+    $('.sticky-container').hide(); // hide song list
+    console.log("Saving scroll position", savedScrollPosition);
+}
+
+function hideInfoContainer() {
     $('.sticky-container').show(); // show header
     $('.container').show(); // show song list
-    $('.now-playing-container').hide(); // hide queue container
+    $('.info-popup').hide(); // hide queue container
     $(window).scrollTop(savedScrollPosition); // restore scroll position
     console.log("Restoring scroll position", savedScrollPosition);
 }

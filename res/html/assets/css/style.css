@@ -291,6 +291,21 @@ body {
     line-height: 25px;
 }
 
+.info-popup {
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 40%;
+    background-color: rgba(40, 40, 49, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
 .info-button:hover {
     background-color: #555;
 }
@@ -328,8 +343,6 @@ footer {
     justify-content: space-between;
     /* Align controls at the ends */
     padding-left: 10px;
-
-
 }
 
 .progress-container {

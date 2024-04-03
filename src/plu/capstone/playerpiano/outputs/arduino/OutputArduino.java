@@ -125,7 +125,18 @@ public class OutputArduino extends Output {
                 }
 
                 byte[] newData = event.getReceivedData();
-                loggerArduino.info("Received: " + new String(newData));
+                final String message = new String(newData);
+                final boolean isError = message.toLowerCase().contains("error");
+                final boolean isWarning = message.toLowerCase().contains("warning");
+                if(isError) {
+                    loggerArduino.error("Received: " + message);
+                }
+                else if(isWarning) {
+                    loggerArduino.warning("Received: " + message);
+                }
+                else {
+                    loggerArduino.info("Received: " + message);
+                }
 
             }
         });

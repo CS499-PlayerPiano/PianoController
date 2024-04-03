@@ -35,12 +35,13 @@
 #define LATCH_PIN 4
 #define SERIAL_SPEED 115200
 #define SERVO_PIN 6
+#define CHECKBIT_PIN 7
 #endif
 
 #include "ShiftRegisterPWM.h"
 
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
-ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64); // Run out of memory?
+ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64, CHECKBIT_PIN); // Run out of memory?
 
 // time the key went down
 long pwmStartTime[TOTAL_PINS];
@@ -321,6 +322,22 @@ void processIncomingSerial()
     }
 }
 
+long lastError = 0;
+#define ERROR_REPORT_TIME 5000
+void checkErrorState() 
+{
+  //We have an error
+  if(sr.checkBitError)
+  {
+    if(lastError + ERROR_REPORT_TIME < millis()) {
+      lastError = millis();
+
+      Serial.println(F("Error bit detected!"));
+    }
+    sr.checkBitError = false; //reset the error
+  }
+}
+
 void debugAllPins()
 {
     for (int i = 0; i < TOTAL_PINS; i++)
@@ -361,6 +378,8 @@ void setup()
     pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
+    pinMode(CHECKBIT_PIN, INPUT); // input for reading check bit.
+
     sustainServo.attach(SERVO_PIN);
     sustainServo.write(SERVO_MIN); //THis is really position 0
 
@@ -396,6 +415,7 @@ void loop()
     // Serial code that breaks with solinoid
     processIncomingSerial();
     updatePinVelocity();
+    checkErrorState();
 
     //    long start = micros();
     //    for (int i = 0; i < 1000; ++i) {

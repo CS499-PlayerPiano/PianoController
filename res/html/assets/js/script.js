@@ -210,7 +210,7 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         songElement = songElement.replace('%debugSong%', isDebugSong);
 
         songElement = songElement.replace('%developer-favorite%', song.favorite);
-        songElement = songElement.replace('%starOverlay%', song.favorite ? '<div class="star-overlay">⭐</div>' : '');
+        songElement = songElement.replace('%starOverlay%', song.favorite ? '  <div class="ribbon ribbon-top-right"><span>FAVORITE</span></div>' : '');
 
         $('.grid').append(songElement);
     }

@@ -46,6 +46,8 @@ ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64); // Run out of memory?
 long pwmStartTime[TOTAL_PINS];
 
 ServoTimer2 sustainServo;
+#define SERVO_MIN 600
+#define SERVO_MAX 2300
 
 void setPin(int pin, int value)
 {
@@ -283,7 +285,7 @@ void parseOPacket()
 void parseSPacket()
 {
   byte servoPos = Serial.read();
-  int val = map(servoPos, 0, 255, 1000, 2000);
+  int val = map(servoPos, 0, 255, SERVO_MIN, SERVO_MAX);
   sustainServo.write(val);
 }
 
@@ -360,7 +362,7 @@ void setup()
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
 
     sustainServo.attach(SERVO_PIN);
-    sustainServo.write(1000); //THis is really position 0
+    sustainServo.write(SERVO_MIN); //THis is really position 0
 
 #ifdef ESP32
     xTaskCreatePinnedToCore(

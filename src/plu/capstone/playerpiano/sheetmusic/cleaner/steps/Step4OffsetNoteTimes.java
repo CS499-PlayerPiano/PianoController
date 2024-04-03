@@ -117,7 +117,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
                     }
                 }
 
-                
+
                 else if(timeAndNote.get(i).event instanceof SustainPedalEvent && timeAndNote.get(i-1).event instanceof SustainPedalEvent) {
                     boolean on = ((SustainPedalEvent) timeAndNote.get(i).event).isOn();
                     boolean prevOn = ((SustainPedalEvent) timeAndNote.get(i-1).event).isOn();
@@ -225,7 +225,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     private long timeToRelease(SheetMusicEvent event) {
 
         if(event instanceof SustainPedalEvent) {
-            return 350;
+            return 450;
         }
 
         return 100;
@@ -236,7 +236,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     private long timeToHit(SheetMusicEvent event) {
 
         if(event instanceof SustainPedalEvent) {
-            return 350;
+            return 450;
         }
 
         return 100;

@@ -9,7 +9,6 @@ import plu.capstone.playerpiano.subprogram.mainserver.webserver.PacketIds;
 import plu.capstone.playerpiano.sheetmusic.SheetMusic;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 
-//TODO: Move currentSheetMusic to QueueManager
 public class QueueManager {
 
     private final Logger logger = new Logger(this);
@@ -18,6 +17,8 @@ public class QueueManager {
     private QueuedSongWithMetadata currentSheetMusic;
 
     private final SubProgramMainController controller;
+
+
     public QueueManager(SubProgramMainController playerPianoController) {
         controller = playerPianoController;
     }
@@ -85,6 +86,11 @@ public class QueueManager {
      */
     private void playSheetMusic() {
 
+        if(currentSheetMusic == null || currentSheetMusic.getSheetMusic() == null) {
+            logger.error("Tried to play sheet music, but it was null! How did we get here? (1)");
+            return;
+        }
+
         synchronized (currentSheetMusic) {
             for (SheetMusicCallback callbacks : controller.getOutputs()) {
                 logger.debug("Adding callback to sheet music: " + callbacks.getClass().getName());
@@ -93,6 +99,10 @@ public class QueueManager {
 
             // We use a new thread for this, so we don't hang the main thread
             new Thread(() -> {
+                if(currentSheetMusic == null || currentSheetMusic.getSheetMusic() == null) {
+                    logger.error("Tried to play sheet music, but it was null! How did we get here? (2)");
+                    return;
+                }
                 currentSheetMusic.getSheetMusic().play();
             }, "Sheet music playing thread").start();
 
@@ -105,6 +115,10 @@ public class QueueManager {
             synchronized (currentSheetMusic) {
                 currentSheetMusic.getSheetMusic().stop();
             }
+            currentSheetMusic = null;
+        }
+        else {
+            logger.error("Tried to stop or skip current song, but it was null! Ignoring...");
         }
     }
 

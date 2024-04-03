@@ -1,6 +1,6 @@
 {
   "Logger": {
-    "enabled": false
+    "enabled": true
   },
   "Midi Synthesizer": {
     "enabled": false

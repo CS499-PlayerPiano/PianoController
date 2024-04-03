@@ -19,10 +19,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JComponent;
+import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
 
 public class ComponentPiano extends JComponent {
+
+    private Logger logger = new Logger(this);
 
     private static final float WHITE_KEY_ASPECT = (7f / 8f) / (5.7f);
     private static final float BLACK_KEY_HEIGHT = 3.5f / 6f;
@@ -276,7 +279,10 @@ public class ComponentPiano extends JComponent {
 
 
     public void clearLitKeys() {
+        logger.info("Clearing lit keys from thread: " + Thread.currentThread().getName());
         litKeys.clear();
-        repaint();
+        for(KeyShape ks : getKeyShapes()) {
+            repaint(ks.getShape().getBounds());
+        }
     }
 }

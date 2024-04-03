@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import plu.capstone.playerpiano.logger.Logger;
+import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.utilities.Stopwatch;
 
@@ -30,6 +31,15 @@ public class SheetMusic implements Cloneable {
     private List<SheetMusicCallback> callbacks = new ArrayList<>();
 
     private final Stopwatch stopwatch = new Stopwatch();
+
+    List<SheetMusicEvent> ALL_OFF_NOTES = new ArrayList<>();
+
+    public SheetMusic() {
+        for(int i = 0; i < 88; i++) {
+            byte noteNum = (byte) (i + 21);
+            ALL_OFF_NOTES.add(new NoteEvent(noteNum, (byte) 0, false));
+        }
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -145,7 +155,10 @@ public class SheetMusic implements Cloneable {
 
         stopwatch.stop();
 
+        //Idea: Send all notes off
+        
         for(SheetMusicCallback callback : callbacks) {
+            //callback.onEventsPlayed(ALL_OFF_NOTES, songLengthMS);
             callback.onTimestampEvent(songLengthMS, songLengthMS); //While we should be at the end, we may not be.
             callback.onSongFinished(songLengthMS);
         }

@@ -50,6 +50,12 @@ public class OutputArduino extends Output {
     private int velocityMappingMax = 255;
     private boolean ignoreVelocity = false;
 
+    //the 12345 is just garbage data, the arduino will ignore it.
+    //Unsure if its needed but seemed flakey with one byte commands.
+    private static final byte[] TURN_OFF_ALL_NOTES = {
+            'S', 1,2,3,4,5
+    };
+
     /**
      * Set the default values for the config file before it is loaded.
      */
@@ -407,46 +413,21 @@ public class OutputArduino extends Output {
     @Override
     public void onPause() {
         if(!arduino.isOpen()) {return;}
-
-        /*
-         * P - Packet to tell the arduino to turn off all notes, we have paused the song
-         */
-
-        byte[] data = {
-                'P'
-        };
-
-        writeBytes(data);
+        writeBytes(TURN_OFF_ALL_NOTES);
     }
 
     @Override
     public void onSongStarted(long timestamp, Map<Long, List<SheetMusicEvent>> entireNoteMap) {
         if(!arduino.isOpen()) {return;}
 
-        /*
-         * S - Packet to tell the arduino we are starting a song
-         */
-
-        byte[] data = {
-                'S'
-        };
-
-        writeBytes(data);
+        writeBytes(TURN_OFF_ALL_NOTES);
     }
 
     @Override
     public void onSongFinished(long timestamp) {
         if(!arduino.isOpen()) {return;}
 
-        /*
-         * F - Packet to tell the arduino to turn off all notes, we have finished playing the song
-         */
-
-        byte[] data = {
-                'F'
-        };
-
-        writeBytes(data);
+        writeBytes(TURN_OFF_ALL_NOTES);
     }
 
     private void writeBytes(byte[] data) {

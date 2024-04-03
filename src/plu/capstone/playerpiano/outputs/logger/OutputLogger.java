@@ -50,32 +50,32 @@ public class OutputLogger extends Output {
     @Override
     public void onSustainPedal(SustainPedalEvent event, long timestamp) {
         super.onSustainPedal(event, timestamp);
-        logger.info("Sustain Pedal " + (event.isOn() ? "ON" : "OFF"));
+        logger.info("Sustain Pedal " + (event.isOn() ? "ON" : "OFF") + " @ " + timestamp + "ms");
     }
 
     @Override
     public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("Notes Played: [");
-        for(int i = 0; i < notes.size(); i++) {
-
-            NoteEvent note = notes.get(i);
-            sb.append("(N: ");
-            sb.append(note.getKeyNumber());
-            sb.append(", O: ");
-            sb.append(note.isNoteOn());
-            sb.append(", V: ");
-            sb.append(note.getVelocity());
-            sb.append(")");
-
-            if(i != notes.size() - 1)
-                sb.append(", ");
-
-            sb.append("]");
-        }
-
-        logger.info(sb.toString());
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Notes Played: [");
+//        for(int i = 0; i < notes.size(); i++) {
+//
+//            NoteEvent note = notes.get(i);
+//            sb.append("(N: ");
+//            sb.append(note.getKeyNumber());
+//            sb.append(", O: ");
+//            sb.append(note.isNoteOn());
+//            sb.append(", V: ");
+//            sb.append(note.getVelocity());
+//            sb.append(")");
+//
+//            if(i != notes.size() - 1)
+//                sb.append(", ");
+//
+//            sb.append("]");
+//        }
+//
+//        logger.info(sb.toString());
 
     }
 }

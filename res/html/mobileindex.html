@@ -24,7 +24,6 @@
     </div>
 </div>
 
-
 <div class="container">
     <div class="grid">
         <!-- Song elements will be added here -->
@@ -38,6 +37,37 @@
     <div class="now-playing">
         <button class="back-to-list">Back to Song List</button>
         <!-- Content for the Now Playing screen goes here -->
+    </div>
+</div>
+
+<div class="overlay" style="display: none;"></div>
+<div class="sort-container" style="display: none;">
+    <p class="difficulty-text">Filter by difficulty</p>
+    <button class="close-button">Close</button>
+    <div class="difficulty-container">
+
+        <div class="emojis-container">
+            <span class="moon">🌑</span>
+            <span class="moon">🌑</span>
+            <span class="moon">🌑</span>
+            <span class="moon">🌑</span>
+            <span class="moon">🌑</span>
+        </div>
+    </div>
+    <div class="dropdown-container">
+        <select id="sort-dropdown" class="sort-dropdown">
+            <option value="original-order" selected disabled>Sort by...</option>
+            <option value="original-order">Title (A ⇨ Z)</option>
+            <option value="original-order" data-ascending="false">Title (Z ⇨ A)</option>
+            <option value="artist">Artist (A ⇨ Z)</option>
+            <option value="artist" data-ascending="false">Artist (Z ⇨ A)</option>
+            <option value="difficulty">Difficulty (Ascending)</option>
+            <option value="difficulty" data-ascending="false">Difficulty (Descending)</option>
+            <option value="length">Length (Ascending)</option>
+            <option value="length" data-ascending="false">Length (Descending)</option>
+            <option value="random">Random</option>
+        </select>
+        <button class="undo-button">Reset Filters</button>
     </div>
 </div>
 
@@ -57,8 +87,6 @@
         <div id="progressBar"></div>
     </div>
 </footer>
-
-
     <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="assets/js/isotope.pkgd.min.js"></script>
     <script src="assets/js/iziToast.min.js"></script>

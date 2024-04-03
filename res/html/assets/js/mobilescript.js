@@ -261,6 +261,8 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
 });
 
+
+
 //Saveing and loading scroll position seems like a bit of a hack
 //Real fix here is most likely some CSS Magic that I am not aware of.
 let savedScrollPosition = 0;
@@ -279,6 +281,46 @@ function hideQueueContainer() {
     $(window).scrollTop(savedScrollPosition); // restore scroll position
     console.log("Restoring scroll position", savedScrollPosition);
 }
+
+function showSortContainer() {
+    savedScrollPosition = $(window).scrollTop();
+    $('body').css({
+        'overflow': 'hidden',
+        'position': 'fixed',
+        'width': '100%'
+    });
+    $('.overlay').fadeIn();
+    $('.sort-container').slideDown();
+    $('.sort-container').addClass('active');
+}
+
+function hideSortContainer() {
+    $('.sort-container').slideUp();
+    $('.overlay').fadeOut(function() {
+        $('body').css({
+            'overflow': 'auto',
+            'position': 'static',
+            'width': 'auto'
+        });
+    });
+    $('.sort-container').removeClass('active');
+    $(window).scrollTop(savedScrollPosition);
+}
+
+$('.overlay').on('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+});
+
+$('.sticky-container').on('click', '.sort-button', function (e) {
+    showSortContainer();
+});
+
+$('.sort-container').on('click', '.close-button', function (e) {
+    hideSortContainer();
+});
+
+//TODO add ability to swipe down to close sort container?
 
 function queueSongByIndex(index) {
     let song = songsDB[index];

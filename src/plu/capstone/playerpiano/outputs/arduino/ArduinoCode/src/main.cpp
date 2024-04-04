@@ -1,4 +1,3 @@
-
 //----------------SETTINGS------------------------------
 // Algorithm: ALG_NAIVE, ALG_BRESENHAM
 #define ALG_NAIVE
@@ -21,21 +20,12 @@
 #include <Arduino.h>
 #include "ServoTimer2.h"
 
-// ESP32 specific settings
-#ifdef ESP32
-#define DATA_PIN 26
-#define CLOCK_PIN 14
-#define LATCH_PIN 27
-#define SERIAL_SPEED 500000
-#else
-// Arduino UNO specific settings
 #define DATA_PIN 2
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
 #define SERIAL_SPEED 115200
 #define SERVO_PIN 6
 #define CHECKBIT_PIN 7
-#endif
 
 #include "ShiftRegisterPWM.h"
 
@@ -357,20 +347,6 @@ void debugAllPins()
   }
 }
 
-#ifdef ESP32
-
-TaskHandle_t Task1;
-
-void Task1code(void *parameter)
-{
-  while (true)
-  {
-    sr.update();
-  }
-}
-
-#endif
-
 void setup()
 {
   Serial.begin(SERIAL_SPEED); // 115200
@@ -385,18 +361,7 @@ void setup()
   sustainServo.attach(SERVO_PIN);
   sustainServo.write(SERVO_MIN); // THis is really position 0
 
-#ifdef ESP32
-  xTaskCreatePinnedToCore(
-      Task1code, /* Function to implement the task */
-      "Task1",   /* Name of the task */
-      10000,     /* Stack size in words */
-      NULL,      /* Task input parameter */
-      0,         /* Priority of the task */
-      &Task1,    /* Task handle. */
-      0);        /* Core where the task should run */
-#else
   sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
-#endif
 
   for (int i = 0; i < TOTAL_PINS; i++)
   {

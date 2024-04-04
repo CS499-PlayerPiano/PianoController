@@ -15,6 +15,7 @@ import plu.capstone.playerpiano.logger.Logger;
 import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
+import plu.capstone.playerpiano.sheetmusic.events.SustainPedalEvent;
 import plu.capstone.playerpiano.utilities.MathUtilities;
 
 /**
@@ -53,7 +54,7 @@ public class OutputArduino extends Output {
     //the 12345 is just garbage data, the arduino will ignore it.
     //Unsure if its needed but seemed flakey with one byte commands.
     private static final byte[] TURN_OFF_ALL_NOTES = {
-            'S', 1,2,3,4,5
+            'O', 1,2,3,4,5
     };
 
     /**
@@ -421,6 +422,7 @@ public class OutputArduino extends Output {
         if(!arduino.isOpen()) {return;}
 
         writeBytes(TURN_OFF_ALL_NOTES);
+        onSustainPedal(new SustainPedalEvent(false), timestamp); //weird but works.
     }
 
     @Override
@@ -428,10 +430,24 @@ public class OutputArduino extends Output {
         if(!arduino.isOpen()) {return;}
 
         writeBytes(TURN_OFF_ALL_NOTES);
+        onSustainPedal(new SustainPedalEvent(false), timestamp); //weird but works.
     }
 
     private void writeBytes(byte[] data) {
         //logger.debug("Sending " + byteArrayToStringColored(data));
         arduino.writeBytes(data, data.length);
+    }
+
+    @Override
+    public void onSustainPedal(SustainPedalEvent event, long timestamp) {
+        boolean isOn = event.isOn();
+
+        if(isOn) {
+            writeBytes(new byte[] { 'S', (byte) 255, 2, 3, 4, 5 });
+        }
+        else {
+            writeBytes(new byte[] { 'S', 0, 2, 3, 4, 5 });
+        }
+
     }
 }

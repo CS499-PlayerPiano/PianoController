@@ -20,6 +20,7 @@
 //-----------------------------------------------
 
 #include <Arduino.h>
+#include "ServoTimer2.h"
 
 // ESP32 specific settings
 #ifdef ESP32
@@ -33,6 +34,7 @@
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
 #define SERIAL_SPEED 115200
+#define SERVO_PIN 6
 #endif
 
 #include "ShiftRegisterPWM.h"
@@ -42,6 +44,10 @@ ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64); // Run out of memory?
 
 // time the key went down
 long pwmStartTime[TOTAL_PINS];
+
+ServoTimer2 sustainServo;
+#define SERVO_MIN 600
+#define SERVO_MAX 2300
 
 void setPin(int pin, int value)
 {
@@ -266,7 +272,7 @@ void parseMPacket()
     }
 }
 
-void parseSPacket()
+void parseOPacket()
 {
     // turn all the lights off
     for (int i = 0; i < TOTAL_PINS; i++)
@@ -274,6 +280,13 @@ void parseSPacket()
         setPin(i, 0);
         pwmStartTime[i] = 0;
     }
+}
+
+void parseSPacket()
+{
+  byte servoPos = Serial.read();
+  int val = map(servoPos, 0, 255, SERVO_MIN, SERVO_MAX);
+  sustainServo.write(val);
 }
 
 void processIncomingSerial()
@@ -297,16 +310,12 @@ void processIncomingSerial()
 //        {
 //            parseMPacket();
 //        }
-
-        /*
-            Turn off all the keys
-            S == Start of song
-            F == Finished playing song
-            P == Pause
-        */
-        else if (command == 'S')
+        else if (command == 'O')
         {
-            parseSPacket();
+            parseOPacket();
+        }
+        else if(command == 'S') {
+          parseSPacket();
         }
         updatePinVelocity();
     }
@@ -351,6 +360,9 @@ void setup()
     pinMode(DATA_PIN, OUTPUT);  // sr data pin
     pinMode(CLOCK_PIN, OUTPUT); // sr clock pin
     pinMode(LATCH_PIN, OUTPUT); // sr latch pin
+
+    sustainServo.attach(SERVO_PIN);
+    sustainServo.write(SERVO_MIN); //THis is really position 0
 
 #ifdef ESP32
     xTaskCreatePinnedToCore(

@@ -49,7 +49,7 @@ public class SubProgramSongDBVerification extends SubProgram {
 
     @Override
     public String getSubCommand() {
-        return "parse-midi";
+        return "songdb-verification";
     }
 
     /**

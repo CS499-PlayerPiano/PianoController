@@ -221,6 +221,7 @@ body {
     height: 50px;
     margin-right: 10px;
     overflow: hidden;
+    position:absolute;
 }
 
 .image-container img {
@@ -240,7 +241,7 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
-    width: 60%
+    width: 60%;
 }
 
 .song-title,
@@ -248,12 +249,13 @@ body {
 .length {
     font-size: 12px;
     margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     color: white;
     text-align: left;
-    max-width: 90%;
+    max-width: 50%; /* CHANGE THIS FOR MAX WIDTH*/
+    padding-left: 60px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .song-title {
@@ -263,20 +265,19 @@ body {
 .gold-text {
     font-size: 12px;
     margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
     text-align: left;
-    text-overflow: ellipsis;
-    max-width: 90%;
     color: gold;
     text-shadow: 0 0 5px gold, 0 0 10px gold, 0 0 15px gold;
 }
 
+
+
 .noteDensity {
+    position: absolute;
     font-size: 12px;
     margin-left: auto;
-    margin-right: 10px;
+    right: 10px;
 }
 
 @keyframes fadeIn {

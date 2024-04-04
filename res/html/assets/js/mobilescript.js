@@ -256,22 +256,18 @@ piano.getSongList((songs) => { // Get the list of songs from the API
     });
 });
 
-
-
-//Saveing and loading scroll position seems like a bit of a hack
-//Real fix here is most likely some CSS Magic that I am not aware of.
 let savedScrollPosition = 0;
+
 function showQueueContainer() {
-    savedScrollPosition = $(window).scrollTop(); // save scroll position
+    savedScrollPosition = $(window).scrollTop();
     $('body').css({
         'overflow': 'hidden',
         'position': 'fixed',
-        'width': '100%'
+        'width': '100%',
+        'top': -savedScrollPosition
     });
     $('.np-overlay').fadeIn();
-    $('.now-playing-container').slideDown();
-    $('.now-playing-container').addClass('active');
-    console.log("Saving scroll position", savedScrollPosition);
+    $('.now-playing-container').addClass('active').slideDown();
 }
 
 function hideQueueContainer() {
@@ -280,28 +276,24 @@ function hideQueueContainer() {
         $('body').css({
             'overflow': 'auto',
             'position': 'static',
-            'width': 'auto'
+            'width': 'auto',
+            'top': 0
         });
+        $(window).scrollTop(savedScrollPosition);
     });
     $('.now-playing-container').removeClass('active');
-    $(window).scrollTop(savedScrollPosition); // restore scroll position
-    console.log("Restoring scroll position", savedScrollPosition);
 }
-
-$('.np-overlay').on('click', function () {
-    hideQueueContainer();
-});
 
 function showSortContainer() {
     savedScrollPosition = $(window).scrollTop();
     $('body').css({
         'overflow': 'hidden',
         'position': 'fixed',
-        'width': '100%'
+        'width': '100%',
+        'top': -savedScrollPosition
     });
     $('.overlay').fadeIn();
-    $('.sort-container').slideDown();
-    $('.sort-container').addClass('active');
+    $('.sort-container').addClass('active').slideDown();
 }
 
 function hideSortContainer() {
@@ -310,12 +302,17 @@ function hideSortContainer() {
         $('body').css({
             'overflow': 'auto',
             'position': 'static',
-            'width': 'auto'
+            'width': 'auto',
+            'top': 0
         });
+        $(window).scrollTop(savedScrollPosition);
     });
     $('.sort-container').removeClass('active');
-    $(window).scrollTop(savedScrollPosition);
 }
+
+$('.np-overlay').on('click', function () {
+    hideQueueContainer();
+});
 
 $('.overlay').on('click', function (e) {
     e.preventDefault();

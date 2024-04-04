@@ -1,4 +1,3 @@
-#line 1 "C:\\Users\\eric\\Documents\\PLU\\Year 5\\Capstone\\Piano Project\\PianoController\\src\\plu\\capstone\\playerpiano\\plugins\\impl\\PluginArduinoPiano\\Arduino\\ShiftRegisterPWM.h"
 /**
  * Library for PWM control of the 74HC595 shift register.
  * Created by Timo Denk (www.timodenk.com), 2017.
@@ -77,6 +76,8 @@ int map2(unsigned x, unsigned in_max, unsigned out_max)
 class ShiftRegisterPWM
 {
 public:
+    volatile bool checkBitError = false; // set to true if an error with the check bit occurred.
+    
     enum UpdateFrequency
     {
         VerySlow, // 6,400 Hz interrupt
@@ -92,11 +93,12 @@ public:
      * @param shiftRegisterCount Number of serially connected shift registers. For a single one just 1. Maximum is 8. However, performance is likely to start causing trouble with lower values.
      * @param resolution PWM resolution, that is the number of possible PWM value. The value has to be between 2 and 255 (due to performance limitations).
      */
-    ShiftRegisterPWM(uint8_t shiftRegisterCount, uint8_t resolution)
+    ShiftRegisterPWM(uint8_t shiftRegisterCount, uint8_t resolution, uint8_t checkPin)
     {
         // set attributes
         this->shiftRegisterCount = shiftRegisterCount;
         this->resolution = resolution;
+        this->checkPin = checkPin;
 
         // init data
         // internally a two-dimensional array: first dimension time, second dimension shift register bytes
@@ -165,6 +167,10 @@ public:
      */
     void update()
     {
+        checkBit = !checkBit;   // Toggle check bit between zero and one.
+
+        shiftOutOneBit(checkBit);   // Shift out the check bit.
+      
         // higher performance for single shift register mode
         if (singleShiftRegister)
         {
@@ -182,6 +188,14 @@ public:
         if (++time == resolution)
         {
             time = 0;
+        }
+
+        // Set the check bit error flag on if there was an error. Note
+        // that we don't set the check bit error flag off here ever. The
+        // calling code should do that.
+        bool checkPinRead = (digitalRead(checkPin) == HIGH);
+        if (checkPinRead != checkBit) {
+          checkBitError = true;
         }
     };
 
@@ -288,6 +302,24 @@ private:
     uint8_t resolution = 255;
     uint8_t *data;             // data matrix [t + sr * resolution]
     volatile uint8_t time = 0; // time resolution of resolution steps
+
+    uint8_t checkBit = 0; // alternate between 0 and 1 each time.
+    uint8_t checkPin;     // set to the pin to read the check bit from.
+ 
+
+    inline void shiftOutOneBit(uint8_t bit) const
+    {
+        if (bit)
+        {
+            ShiftRegisterPWM_setDataPin();
+        }
+        else
+        {
+            ShiftRegisterPWM_clearDataPin();
+        }
+        
+        ShiftRegisterPWM_toggleClockPinTwice();
+    }
 
     /**
      * Shift out function. Performance optimized of Arduino's default shiftOut.

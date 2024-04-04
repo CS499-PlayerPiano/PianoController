@@ -4,6 +4,8 @@
  * Additional information is available at https://timodenk.com/blog/shiftregister-pwm-library/
  * Released into the public domain.
  * https://github.com/Simsso/ShiftRegister-PWM-Library
+ *
+ * Modified by: Eric Golde
  */
 
 #ifndef ShiftRegisterPWM_h

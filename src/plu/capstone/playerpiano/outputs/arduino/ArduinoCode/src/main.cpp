@@ -15,19 +15,30 @@
 // Num milliseconds we PWM on before 255
 #define MAX_PWM_ON_TIME 150
 
+// Time to report errors to the console in MS
+#define ERROR_REPORT_TIME 5000
+
+// Speed of serial
+#define SERIAL_SPEED 115200
+
 //-----------------------------------------------
 
 #include <Arduino.h>
 #include "ServoTimer2.h"
+#include "ShiftRegisterPWM.h"
 
 #define DATA_PIN 2
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
-#define SERIAL_SPEED 115200
 #define SERVO_PIN 6
 #define CHECKBIT_PIN 7
 
-#include "ShiftRegisterPWM.h"
+ServoTimer2 sustainServo;
+// Pos 0
+#define SERVO_MIN 600
+
+// Pos 180
+#define SERVO_MAX 2300
 
 const int TOTAL_PINS = SHIFT_REGISTER_COUNT * 8;
 ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64, CHECKBIT_PIN); // Run out of memory?
@@ -35,9 +46,7 @@ ShiftRegisterPWM sr(SHIFT_REGISTER_COUNT, 64, CHECKBIT_PIN); // Run out of memor
 // time the key went down
 long pwmStartTime[TOTAL_PINS];
 
-ServoTimer2 sustainServo;
-#define SERVO_MIN 600
-#define SERVO_MAX 2300
+long lastError = 0;
 
 void setPin(int pin, int value)
 {
@@ -313,8 +322,6 @@ void processIncomingSerial()
   }
 }
 
-long lastError = 0;
-#define ERROR_REPORT_TIME 5000
 void checkErrorState()
 {
   // We have an error
@@ -359,7 +366,7 @@ void setup()
   pinMode(CHECKBIT_PIN, INPUT); // input for reading check bit.
 
   sustainServo.attach(SERVO_PIN);
-  sustainServo.write(SERVO_MIN); // THis is really position 0
+  sustainServo.write(SERVO_MIN);
 
   sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
 
@@ -383,15 +390,6 @@ void loop()
   processIncomingSerial();
   updatePinVelocity();
   checkErrorState();
-
-  //    long start = micros();
-  //    for (int i = 0; i < 1000; ++i) {
-  //      sr.update();
-  //    }
-  //    long end = micros();
-  //
-  //    Serial.print("Time to update (microseconds): ");
-  //    Serial.println((end - start) / 1000);
 
   // Debugging Pins
   // debugAllPins();

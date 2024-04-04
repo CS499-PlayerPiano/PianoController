@@ -376,7 +376,8 @@ footer {
 }
 
 #progressBar {
-    width: calc(100% - 80px);
+    width: 0px;
+    max-width: calc(100% - 80px);
     height: 100%;
     background-color: hotpink;
     border-radius: 5px;

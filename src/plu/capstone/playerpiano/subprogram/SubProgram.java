@@ -12,6 +12,7 @@ import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
+import plu.capstone.playerpiano.outputs.statisticsdb.OutputStatisticsDB;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 
@@ -21,6 +22,8 @@ public abstract class SubProgram implements Callable<Integer> {
     //Special case due to sub programs needing custom functions
     protected final OutputArduino OUTPUT_ARDUINO = new OutputArduino();
 
+    protected final OutputStatisticsDB OUTPUT_STATISTICS_DB = new OutputStatisticsDB();
+
     @Getter
    private Set<Output> outputs = new HashSet<>();
     {
@@ -28,6 +31,7 @@ public abstract class SubProgram implements Callable<Integer> {
         outputs.add(new OutputSynth());
         outputs.add(new OutputVirtualPianoGui());
         outputs.add(OUTPUT_ARDUINO);
+        outputs.add(OUTPUT_STATISTICS_DB);
         //outputs.add(new OutputSynthesiaGui()); //WIP
     }
 

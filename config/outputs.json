@@ -5,6 +5,9 @@
   "Midi Synthesizer": {
     "enabled": false
   },
+  "Statistics-DB": {
+    "enabled": true
+  },
   "Virtual Piano GUI": {
     "enabled": true,
     "colorMode": "RAINBOW_GRADIENT"

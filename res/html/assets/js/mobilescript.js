@@ -328,7 +328,7 @@ $('.sort-container').on('click', '.close-button', function (e) {
     hideSortContainer();
 });
 
-//TODO add ability to swipe down to close sort container?
+//TODO maybe add ability to swipe down to close sort container?
 
 function queueSongByIndex(index) {
     let song = songsDB[index];

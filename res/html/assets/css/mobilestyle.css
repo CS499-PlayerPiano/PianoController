@@ -310,7 +310,6 @@ body {
     align-items: center;
 }
 
-
 .now-playing {
     background-color: #333;
     padding: 20px;
@@ -437,8 +436,8 @@ footer img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* 80% opacity black box */
-    z-index: 9998; /* Ensure the overlay is behind the sort container */
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 9998;
 }
 
 .np-overlay {
@@ -447,8 +446,8 @@ footer img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* 80% opacity black box */
-    z-index: 99998; /* Ensure the overlay is behind the sort container */
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 99998;
 }
 
 .sort-container {
@@ -457,7 +456,7 @@ footer img {
     left: 0;
     width: 100%;
     height: 60%;
-    background-color: rgba(40, 40, 49, 1); /* Opaque background for the sort container */
+    background-color: rgba(40, 40, 49, 1);
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -471,17 +470,13 @@ footer img {
 }
 
 .difficulty-text {
-    top: 10px; /* Adjust top position as needed */
-    left: 20px; /* Adjust left position as needed */
+    top: 10px;
+    left: 20px;
 }
 
 .close-button {
-
-    top: 20px; /* Adjust top position as needed */
-    right: 20px; /* Adjust right position as needed */
+    top: 20px;
+    right: 20px;
 }
-
-
-
 
 #debugSongs {}

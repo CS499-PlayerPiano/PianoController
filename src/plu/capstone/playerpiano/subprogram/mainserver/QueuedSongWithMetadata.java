@@ -39,4 +39,8 @@ public class QueuedSongWithMetadata {
 
         return obj;
     }
+
+    public String getName() {
+        return songDBEntry.get("name").getAsString();
+    }
 }

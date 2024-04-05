@@ -1,4 +1,4 @@
-package plu.capstone.playerpiano.outputs.statisticsdb;
+package plu.capstone.playerpiano.subprogram.mainserver.statisticsdb;
 
 import com.google.gson.JsonObject;
 import io.swagger.util.Json;
@@ -41,9 +41,10 @@ public class RawStatistics {
     public void onSongPlayed(String songName) {
         incrementTotalSongsPlayed();
         songsPlayed.put(songName, songsPlayed.getOrDefault(songName, 0) + 1);
+        saveConfig();
     }
 
-    public void read() {
+    public void loadConfig() {
         CONFIG.loadConfig();
         millisecondsPlayed = CONFIG.getLong(KEY_MILLISECONDS_PLAYED);
         totalSongsPlayed = CONFIG.getLong(KEY_TOTAL_SONGS_PLAYED);
@@ -61,7 +62,7 @@ public class RawStatistics {
         CONFIG.setMap(KEY_SONGS_PLAYED, songsPlayed); //We want to store all the songs played just incase we want to do something with them later
     }
 
-    public void write() {
+    public void saveConfig() {
         writeToConfig();
         CONFIG.saveConfig(); //save to file
     }

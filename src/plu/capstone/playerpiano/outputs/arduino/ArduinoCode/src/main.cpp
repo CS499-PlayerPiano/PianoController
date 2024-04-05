@@ -26,10 +26,12 @@
 #include <Arduino.h>
 #include "ServoTimer2.h"
 #include "ShiftRegisterPWM.h"
+#include <avr/wdt.h>
 
 #define DATA_PIN 2
 #define CLOCK_PIN 3
 #define LATCH_PIN 4
+#define RELAY_PIN 5
 #define SERVO_PIN 6
 #define CHECKBIT_PIN 7
 
@@ -322,6 +324,17 @@ void processIncomingSerial()
   }
 }
 
+// Forces watchdog timeout, resetting the chip
+void rebootArduino()
+{
+  wdt_disable();
+  wdt_enable(WDTO_15MS);
+  while (1)
+  {
+  }
+}
+
+byte numErrorsChecked = 0;
 void checkErrorState()
 {
   // We have an error
@@ -332,6 +345,24 @@ void checkErrorState()
       lastError = millis();
 
       Serial.println(F("Error bit detected!"));
+
+      if (numErrorsChecked > 4)
+      {
+        Serial.println(F("Rebooting due to numerous errors errors..."));
+        rebootArduino();
+      }
+
+      // Try and fix the error - Step 1:
+      // Turn off the 5v for a sec
+      digitalWrite(RELAY_PIN, HIGH);
+      delay(1000);
+      digitalWrite(RELAY_PIN, LOW);
+
+      numErrorsChecked++;
+    }
+    else
+    {
+      numErrorsChecked = 0;
     }
     sr.checkBitError = false; // reset the error
   }
@@ -367,6 +398,9 @@ void setup()
 
   sustainServo.attach(SERVO_PIN);
   sustainServo.write(SERVO_MIN);
+
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
 
   sr.interrupt(ShiftRegisterPWM::UpdateFrequency::VerySlow);
 

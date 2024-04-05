@@ -47,6 +47,5 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="info.picocli" level="project" />
-    <orderEntry type="library" name="xerial.sqlite.jdbc" level="project" />
   </component>
 </module>

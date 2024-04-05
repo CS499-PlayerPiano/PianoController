@@ -18,7 +18,7 @@
   },
   "Arduino": {
     "enabled": true,
-    "comPort": "COM3",
+    "comPort": "COM7",
     "baudRate": 115200,
     "printDebugOutputFromArduino": true,
     "ignoreVelocity": false,

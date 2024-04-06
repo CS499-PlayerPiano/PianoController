@@ -65,6 +65,7 @@ piano.onConnected(onConnectedEvent);
 piano.onSongFinished(onSongFinishedEvent);
 piano.onSongStarted(onSongStartedEvent);
 piano.onTimestampUpdated(onTimestampUpdatedEvent);
+piano.onStatisticsChanged(onStatisticsChanged);
 //If running locally, uncomment this line!
 //piano.overrideAPI('wss://piano.ericshome.xyz/ws', 'https://piano.ericshome.xyz/api/')
 piano.init(); // Initialize the piano, should be called on BODY load, not HEAD load.
@@ -522,3 +523,16 @@ $(document).mouseup(function (e) {
         container.hide();
     }
 });
+
+
+// let odometerTotalNotesPlayed = new Odometer({
+//     el: document.querySelector('#counter-totalNotesPlayed'),
+//     value: 0,
+//     format: '(,ddd)',
+//     theme: 'default'
+// });
+function onStatisticsChanged(data) {
+    //odometerTotalNotesPlayed.update(data.totalNotesPlayed);
+    document.querySelector('#counter-totalNotesPlayed').innerHTML = data.totalNotesPlayed;
+    console.log("Statistics changed event!", data)
+}

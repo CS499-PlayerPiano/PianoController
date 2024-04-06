@@ -447,15 +447,16 @@ public class JsonConfigWrapper {
 
     public <KEY, VALUE> Map<KEY, VALUE> getMap(String jsonKey, Class<KEY> keyClass, Class<VALUE> valueClass) {
         Type typeOfHashMap = new TypeToken<Map<KEY, VALUE>>() { }.getType();
-        Map<KEY, VALUE> newMap = GSON.fromJson(underlyingConfig.get(jsonKey), typeOfHashMap);
+        Map<KEY, VALUE> newMap = (Map<KEY, VALUE>) GSON.fromJson(underlyingConfig.get(jsonKey), typeOfHashMap);
         return newMap;
     }
 
-    public void setMap(String jsonKey, Map<?, ?> map) {
+    public <KEY, VALUE> void setMap(String jsonKey, Map<KEY, VALUE> map, Class<KEY> keyClass, Class<VALUE> valueClass) {
         if(map == null) {
             map = new HashMap<>(); //EMpty map
         }
-        underlyingConfig.add(jsonKey, GSON.toJsonTree(map));
+        Type typeOfHashMap = new TypeToken<Map<KEY, VALUE>>() { }.getType();
+        underlyingConfig.add(jsonKey, GSON.toJsonTree(map, typeOfHashMap));
     }
 
     /**
@@ -501,9 +502,6 @@ public class JsonConfigWrapper {
             }
             else if(obj instanceof Enum) {
                 this.setEnum(key, (Enum) obj);
-            }
-            else if(obj instanceof Map) {
-                this.setMap(key, (Map<?, ?>) obj);
             }
             else if(obj == null) {
                 underlyingConfig.addProperty(key, (String)null);

@@ -3,9 +3,6 @@
     "enabled": true
   },
   "Midi Synthesizer": {
-    "enabled": false
-  },
-  "Statistics-DB": {
     "enabled": true
   },
   "Virtual Piano GUI": {

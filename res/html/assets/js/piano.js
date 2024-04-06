@@ -9,6 +9,7 @@ class Piano {
     #onQueueUpdatedCallback;
     #onSongPausedUnpausedCallback;
     #onConnectedCallback;
+    #onStatisticsChangedCallback;
 
     #wsURL;
     #apiURL;
@@ -25,6 +26,7 @@ class Piano {
         this.#onQueueUpdatedCallback = null;
         this.#onSongPausedUnpausedCallback = null;
         this.#onConnectedCallback = null;
+        this.#onStatisticsChangedCallback = null;
 
         // Connectection URLs
         let host = window.location.host;
@@ -168,6 +170,13 @@ class Piano {
             }
         }
 
+        // Statistics changed event
+        else if (pkt.packetId == "statistics") {
+            if (this.#onStatisticsChangedCallback != null) {
+                this.#onStatisticsChangedCallback(pkt.data);
+            }
+        }
+
         // Connected event
         else if (pkt.packetId == "connected") {
             if (this.#onConnectedCallback != null) {
@@ -308,6 +317,11 @@ class Piano {
     // Callback setter for connected event
     onConnected(callback) {
         this.#onConnectedCallback = callback;
+    }
+
+    // Callback setter for statistics changed event
+    onStatisticsChanged(callback) {
+        this.#onStatisticsChangedCallback = callback;
     }
 
 }   

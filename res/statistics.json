@@ -1,9 +1,12 @@
 {
   "millisecondsPlayed": 128563411548410,
-  "totalSongsPlayed": 1,
-  "totalNotesPlayed": 301,
-  "totalSustainPedalPressed": 4,
+  "totalSongsPlayed": 10,
+  "totalNotesPlayed": 557,
+  "totalSustainPedalPressed": 6,
   "songsPlayed": {
-    "12th Street Rag": 1.0
+    "abcdefu": 3,
+    "Believer": 1,
+    "12th Street Rag": 1,
+    "Ashes": 3
   }
 }

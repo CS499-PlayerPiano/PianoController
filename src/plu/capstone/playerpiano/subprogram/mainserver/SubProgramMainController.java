@@ -15,8 +15,8 @@ public class SubProgramMainController extends SubProgram {
 
     private final Logger logger = new Logger(this);
 
-    private QueueManager queueManager = new QueueManager(this);
-    @Getter private JavalinWebServerOutput webServerOutput = new JavalinWebServerOutput(queueManager);
+    @Getter private QueueManager queueManager = new QueueManager(this);
+    @Getter private JavalinWebServerOutput webServerOutput = new JavalinWebServerOutput(this);
     @Getter private RawStatistics statistics = new RawStatistics();
     private OutputStatisticsDB outputStatistics = new OutputStatisticsDB(this);
 

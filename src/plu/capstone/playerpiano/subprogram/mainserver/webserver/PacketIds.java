@@ -14,6 +14,7 @@ public enum PacketIds {
     SONG_START("songStarted"),
     QUEUE_UPDATED("queueUpdated"),
     SONG_PAUSED("songPaused"),
+    STATISTICS("statistics"),
 
     ;
 

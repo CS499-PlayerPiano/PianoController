@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import javax.swing.plaf.nimbus.State;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import plu.capstone.playerpiano.JsonConfigWrapper;
 import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 
@@ -36,16 +37,32 @@ public class RawStatistics {
     private long totalNotesPlayed;
     private long totalSustainPedalPressed;
 
+    @Setter
+    private Runnable callback = () -> {}; //empty callback unless its set
+
     private Map<String, Integer> songsPlayed = new HashMap<>();
 
-    public void incrementTotalNotesPlayed() {totalNotesPlayed ++;}
-    private void incrementTotalSongsPlayed() {totalSongsPlayed ++;}
-    public void incrementTotalSustainPedalPressed() {totalSustainPedalPressed ++;}
-    public void incrementMillisecondsPlayed(long milliseconds) {millisecondsPlayed += milliseconds;}
+    public void incrementTotalNotesPlayed() {
+        totalNotesPlayed ++;
+        callback.run();
+    }
+    private void incrementTotalSongsPlayed() {
+        totalSongsPlayed ++;
+        callback.run();
+    }
+    public void incrementTotalSustainPedalPressed() {
+        totalSustainPedalPressed ++;
+        callback.run();
+    }
+
+    public void incrementMillisecondsPlayed(long milliseconds) {
+        millisecondsPlayed += milliseconds;
+        callback.run();
+    }
 
     public void onSongPlayed(String songName) {
-        incrementTotalSongsPlayed();
         songsPlayed.put(songName, songsPlayed.getOrDefault(songName, 0) + 1);
+        incrementTotalSongsPlayed();
         saveConfig();
     }
 

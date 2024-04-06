@@ -307,6 +307,11 @@ body {
     padding: 20px;
 }
 
+.leftAlign {
+    text-align: left;
+
+}
+
 .info-button:hover {
     background-color: #555;
 }

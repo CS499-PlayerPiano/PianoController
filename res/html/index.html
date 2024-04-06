@@ -17,7 +17,6 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="assets/css/iziToast.min.css">
-    <link rel="stylesheet" href="assets/css/odometer-theme-default.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
@@ -76,7 +75,21 @@
         <p>----------------------------------------------------</p>
 
         <h2>Stats for nerds</h2>
-        <p>Total Notes Played: <span id="counter-totalNotesPlayed">00000</span></p>
+        <div id="statsForNerds" class="leftAlign">
+            <p>Total Notes Played: <span id="counter-totalNotesPlayed">00000</span></p>
+            <p>Total Songs Played: <span id="counter-totalSongsPlayed">00000</span></p>
+            <p>Total Sustain Pedal Presses: <span id="counter-totalSustainPedalPressed">00000</span></p>
+        </div>
+        <!-- List of top 10 songs -->
+        <h3>Top 10 Songs</h3>
+        <div id="topSongs" class="leftAlign">
+            <p>1. Song Name - 000 Plays</p>
+            <p>1. Song Name longer - 000 Plays</p>
+            <p>1. Song Name - 000 Plays</p>
+            <p>1. Song Name - 000 Plays</p>
+            <!-- <li>1. Song Name - 00000 plays</li> -->
+        </div>
+
         <button class="info-close-button">Close</button>
     </div>
 
@@ -101,7 +114,6 @@
     <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script src="assets/js/isotope.pkgd.min.js"></script>
     <script src="assets/js/iziToast.min.js"></script>
-    <script src="assets/js/odometer.min.js"></script>
     <script src="assets/js/piano.js"></script>
     <script src="assets/js/script.js"></script>
 </body>

@@ -10,6 +10,7 @@ import plu.capstone.playerpiano.subprogram.mainserver.statisticsdb.OutputStatist
 import plu.capstone.playerpiano.subprogram.SubProgram;
 import plu.capstone.playerpiano.subprogram.mainserver.statisticsdb.RawStatistics;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.JavalinWebServerOutput;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.PacketIds;
 
 public class SubProgramMainController extends SubProgram {
 
@@ -51,6 +52,10 @@ public class SubProgramMainController extends SubProgram {
                 statistics.saveConfig();
             }
         }, SAVE_INTERVAL, SAVE_INTERVAL);
+
+        statistics.setCallback(() -> {
+            webServerOutput.sendWSPacket(PacketIds.STATISTICS, statistics.toJson());
+        });
 
         queueManager.start();
 

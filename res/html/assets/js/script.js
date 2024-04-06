@@ -525,14 +525,23 @@ $(document).mouseup(function (e) {
 });
 
 
-// let odometerTotalNotesPlayed = new Odometer({
-//     el: document.querySelector('#counter-totalNotesPlayed'),
-//     value: 0,
-//     format: '(,ddd)',
-//     theme: 'default'
-// });
 function onStatisticsChanged(data) {
-    //odometerTotalNotesPlayed.update(data.totalNotesPlayed);
+
+    //Set counters
     document.querySelector('#counter-totalNotesPlayed').innerHTML = data.totalNotesPlayed;
-    console.log("Statistics changed event!", data)
+    document.querySelector('#counter-totalSongsPlayed').innerHTML = data.totalSongsPlayed;
+    document.querySelector('#counter-totalSustainPedalPressed').innerHTML = data.totalSustainPedalPressed;
+
+    //Set top songs
+    let topSongs = data.songsPlayed;
+    let topSongsElement = document.querySelector('#topSongs');
+    topSongsElement.innerHTML = '';
+    for (let i = 0; i < topSongs.length; i++) {
+        let song = topSongs[i];
+        let songName = song.name;
+        let count = song.count;
+        let songElement = document.createElement('p');
+        songElement.innerHTML = (i + 1) + ` ${songName} - ${count} plays`;
+        topSongsElement.appendChild(songElement);
+    }
 }

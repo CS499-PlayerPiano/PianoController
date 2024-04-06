@@ -87,18 +87,10 @@ public class JavalinWebServerOutput extends Output {
     protected void onEnable() {
         PORT = getConfig().getInteger("port", PORT);
         TIMESTAMP_INTERVAL = getConfig().getInteger("timestampInterval", TIMESTAMP_INTERVAL);
-        STATISTICS_INTERVAL = getConfig().getInteger("statisticsInterval", STATISTICS_INTERVAL);
         start();
     }
 
     private void start() {
-
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                sendWSPacket(PacketIds.STATISTICS, program.getStatistics().toJson());
-            }
-        }, STATISTICS_INTERVAL, STATISTICS_INTERVAL);
 
         Gson gson = new GsonBuilder().create();
         JsonMapper gsonMapper = new JsonMapper() {

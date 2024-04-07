@@ -3,7 +3,7 @@
     "enabled": true
   },
   "Midi Synthesizer": {
-    "enabled": false
+    "enabled": true
   },
   "Virtual Piano GUI": {
     "enabled": true,

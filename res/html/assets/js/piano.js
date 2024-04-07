@@ -9,10 +9,13 @@ class Piano {
     #onQueueUpdatedCallback;
     #onSongPausedUnpausedCallback;
     #onConnectedCallback;
+    #onStatisticsChangedCallback;
 
     #wsURL;
     #apiURL;
     #urlsHaveBeenOverridden;
+
+    #statistics;
 
     // Declare public fields & initialize public / private fields
     constructor() {
@@ -25,6 +28,9 @@ class Piano {
         this.#onQueueUpdatedCallback = null;
         this.#onSongPausedUnpausedCallback = null;
         this.#onConnectedCallback = null;
+        this.#onStatisticsChangedCallback = null;
+
+        this.#statistics = {};
 
         // Connectection URLs
         let host = window.location.host;
@@ -55,6 +61,7 @@ class Piano {
         this.#connect();
         this.#getOrCreatePersistentSession();
         this.#getInitialQueue();
+        this.#populateInitialStats();
     }
 
     // Connect to the server, reconnect when the connection is closed
@@ -94,6 +101,18 @@ class Piano {
         this.#websocket.onmessage = (event) => {
             this.#parseWebsocketMessage(event);
         };
+    }
+
+    #populateInitialStats() {
+        this.#sendGetRequest("statistics", (intResp) => {
+            if (intResp.status == 200) {
+                console.log('[Piano - API] Initial statistics:', intResp.response);
+                this.#setStatistics(intResp.response);
+            }
+            else {
+                console.error('[Piano - API] Error getting initial statistics:', intResp);
+            }
+        });
     }
 
     #getInitialQueue() {
@@ -168,6 +187,11 @@ class Piano {
             }
         }
 
+        // Statistics changed event
+        else if (pkt.packetId == "statistics") {
+            this.#setStatistics(pkt.data);
+        }
+
         // Connected event
         else if (pkt.packetId == "connected") {
             if (this.#onConnectedCallback != null) {
@@ -178,6 +202,13 @@ class Piano {
         }
         else {
             console.error('[Piano - WS] Unknown packetId: "' + pkt.packetId + '" with data:', pkt.data);
+        }
+    }
+
+    #setStatistics(stats) {
+        this.#statistics = stats;
+        if (this.#onStatisticsChangedCallback != null) {
+            this.#onStatisticsChangedCallback(this.#statistics);
         }
     }
 
@@ -308,6 +339,16 @@ class Piano {
     // Callback setter for connected event
     onConnected(callback) {
         this.#onConnectedCallback = callback;
+    }
+
+    // Callback setter for statistics changed event
+    onStatisticsChanged(callback) {
+        this.#onStatisticsChangedCallback = callback;
+    }
+
+    // Getter for statistics
+    getStatistics() {
+        return this.#statistics;
     }
 
 }   

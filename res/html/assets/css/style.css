@@ -292,18 +292,24 @@ body {
 }
 
 .info-popup {
+    line-height: 0.1;
     position: fixed;
     justify-content: center;
     align-items: center;
-    top: 0;
-    left: 0;
-    width: 40%;
-    height: 40%;
+    top: 10%;
+    left: 10%;
+    width: 70%;
+    height: 70%;
     background-color: rgba(40, 40, 49, 1);
     z-index: 9999;
     display: flex;
     flex-direction: column;
     padding: 20px;
+}
+
+.leftAlign {
+    text-align: left;
+
 }
 
 .info-button:hover {
@@ -413,6 +419,7 @@ footer img {
     overflow: hidden;
     position: absolute;
 }
+
 .ribbon::before,
 .ribbon::after {
     position: absolute;
@@ -421,15 +428,16 @@ footer img {
     display: block;
     border: 5px solid #2980b9;
 }
+
 .ribbon span {
     position: absolute;
     display: block;
     width: 225px;
     padding: 5px 0;
     background-color: gold;
-    box-shadow: 0 5px 10px rgba(0,0,0,.1);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, .1);
     color: #fff;
-    text-shadow: 0 1px 1px rgba(0,0,0,.2);
+    text-shadow: 0 1px 1px rgba(0, 0, 0, .2);
     text-align: center;
     font-weight: bold;
     padding-left: 10px;
@@ -439,19 +447,23 @@ footer img {
     top: -10px;
     right: -10px;
 }
+
 .ribbon-top-right::before,
 .ribbon-top-right::after {
     border-top-color: transparent;
     border-right-color: transparent;
 }
+
 .ribbon-top-right::before {
     top: 0;
     left: 0;
 }
+
 .ribbon-top-right::after {
     bottom: 0;
     right: 0;
 }
+
 .ribbon-top-right span {
     left: -20px;
     top: 30px;

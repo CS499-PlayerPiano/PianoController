@@ -4,10 +4,15 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.lang.reflect.Type;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
+import org.checkerframework.checker.units.qual.A;
 import plu.capstone.playerpiano.logger.Logger;
 
 public class JsonConfigWrapper {
@@ -58,18 +63,18 @@ public class JsonConfigWrapper {
     /**
      * Saves the config to the config file.
      */
-//    public void saveConfig() {
-//        if(!CONFIG_FILE.exists()) {
-//            CONFIG_FILE.getParentFile().mkdirs();
-//        }
-//        String jsonString = GSON.toJson(underlyingConfig);
-//        try {
-//            Files.write(CONFIG_FILE.toPath(), jsonString.getBytes());
-//        }
-//        catch(Exception e) {
-//            logger.error("Failed to save config file!", e);
-//        }
-//    }
+    public void saveConfig() {
+        if(!CONFIG_FILE.exists()) {
+            CONFIG_FILE.getParentFile().mkdirs();
+        }
+        String jsonString = GSON.toJson(underlyingConfig);
+        try {
+            Files.write(CONFIG_FILE.toPath(), jsonString.getBytes());
+        }
+        catch(Exception e) {
+            logger.error("Failed to save config file!", e);
+        }
+    }
 
     /**
      * Small helper method to get an element from the config, or return null if it doesn't exist.
@@ -194,6 +199,63 @@ public class JsonConfigWrapper {
         if(defaultValue == null) {defaultValue = new int[0];}
         checkOrSetDefault(key, defaultValue);
         return GSON.fromJson(underlyingConfig.get(key), int[].class);
+    }
+
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
+    public void setLong(String key, long value) {
+        underlyingConfig.addProperty(key, value);
+    }
+
+    /**
+     * Gets the value for the given key, or 0 if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or 0 if it doesn't exist.
+     */
+    public long getLong(String key) {return getLong(key, 0);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
+    public long getLong(String key, long defaultValue) {
+        checkOrSetDefault(key, defaultValue);
+        JsonElement element = getElementOrReturnNull(key);
+        if(element == null) {return 0;}
+        return element.getAsLong();
+    }
+
+    /**
+     * Sets the given key to the given value.
+     * @param key The key to set.
+     * @param value The value to set.
+     */
+    public void setLongList(String key, long... value) {
+        underlyingConfig.add(key, GSON.toJsonTree(value));
+    }
+
+    /**
+     * Gets the value for the given key, or an empty array if it doesn't exist.
+     * @param key The key to get the value for.
+     * @return The value, or an empty array if it doesn't exist.
+     */
+    public long[] getLongList(String key) {return getLongList(key, null);}
+
+    /**
+     * Gets the value for the given key, or the given default value if it doesn't exist.
+     * @param key The key to get the value for.
+     * @param defaultValue The default value to return if the key doesn't exist.
+     * @return The value, or the default value if it doesn't exist.
+     */
+    public long[] getLongList(String key, long... defaultValue) {
+        if(defaultValue == null) {defaultValue = new long[0];}
+        checkOrSetDefault(key, defaultValue);
+        return GSON.fromJson(underlyingConfig.get(key), long[].class);
     }
 
     /**
@@ -383,6 +445,20 @@ public class JsonConfigWrapper {
         }
     }
 
+    public <KEY, VALUE> Map<KEY, VALUE> getMap(String jsonKey, Class<KEY> keyClass, Class<VALUE> valueClass) {
+        Type typeOfHashMap = new TypeToken<Map<KEY, VALUE>>() { }.getType();
+        Map<KEY, VALUE> newMap = (Map<KEY, VALUE>) GSON.fromJson(underlyingConfig.get(jsonKey), typeOfHashMap);
+        return newMap;
+    }
+
+    public <KEY, VALUE> void setMap(String jsonKey, Map<KEY, VALUE> map, Class<KEY> keyClass, Class<VALUE> valueClass) {
+        if(map == null) {
+            map = new HashMap<>(); //EMpty map
+        }
+        Type typeOfHashMap = new TypeToken<Map<KEY, VALUE>>() { }.getType();
+        underlyingConfig.add(jsonKey, GSON.toJsonTree(map, typeOfHashMap));
+    }
+
     /**
      * Checks if the given key exists in the config. If it doesn't, it sets it to the given default value.
      * @param key The key to check.
@@ -402,6 +478,12 @@ public class JsonConfigWrapper {
             }
             else if(obj instanceof int[]) {
                 this.setIntegerList(key, (int[]) obj);
+            }
+            else if(obj instanceof Long) {
+                this.setLong(key, (long) obj);
+            }
+            else if(obj instanceof long[]) {
+                this.setLongList(key, (long[]) obj);
             }
             else if(obj instanceof Double) {
                 this.setDouble(key, (double) obj);
@@ -440,4 +522,9 @@ public class JsonConfigWrapper {
     public String toString() {
         return underlyingConfig.toString();
     }
+
+    public JsonObject toJsonObject() {
+        return underlyingConfig;
+    }
+
 }

@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import lombok.Getter;
 import org.eclipse.jetty.server.session.DefaultSessionCache;
 import org.eclipse.jetty.server.session.FileSessionDataStore;
@@ -28,10 +30,12 @@ import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
 import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.mainserver.QueueManager;
+import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.Endpoint;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointGetSongData;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointStaticRedirects;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointStatistics;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointsUser;
 
 public class JavalinWebServerOutput extends Output {
@@ -51,21 +55,27 @@ public class JavalinWebServerOutput extends Output {
             new EndpointGetSongData(),
             new EndpointControlPiano(),
             new EndpointsUser(),
-            new EndpointStaticRedirects()
+            new EndpointStaticRedirects(),
+            new EndpointStatistics()
     );
 
     private static final String API_DOCS_JSON = "/api/openapi.json";
     private static final String API_DOCS_SWAGGER_PATH = "/docs";
 
-    //TODO: Make these config options
     private int PORT = 8898;
     private int TIMESTAMP_INTERVAL = 500;
+    private int STATISTICS_INTERVAL = 1000;
 
     @Getter
     private final QueueManager queueManager;
-    public JavalinWebServerOutput(QueueManager queueManager) {
+
+    @Getter
+    private SubProgramMainController program;
+
+    public JavalinWebServerOutput(SubProgramMainController program) {
         super();
-        this.queueManager = queueManager;
+        this.queueManager = program.getQueueManager();
+        this.program = program;
     }
 
     @Override

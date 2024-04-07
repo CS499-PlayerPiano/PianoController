@@ -78,12 +78,21 @@ public class Logger {
         this.print(ConsoleColors.BLACK_BRIGHT, "Debug", ConsoleColors.BLACK_BRIGHT, msg, false);
     }
 
+    public void debug(String msg, Throwable t) {
+        if(!debugEnabled) {return;}
+        this.print(ConsoleColors.BLACK_BRIGHT, "Debug", ConsoleColors.BLACK_BRIGHT, msg, false);
+        this.print(ConsoleColors.BLACK_BRIGHT, "Debug", ConsoleColors.BLACK_BRIGHT, fromThrowable(t), false);
+    }
+
     /**
      * Prints an info message to the console
      * @param msg the message to print
      */
-    public void info(String msg) {
+    public void info(String msg) {this.print(ConsoleColors.GREEN_BRIGHT, "Info", ConsoleColors.RESET, msg, false);}
+
+    public void info(String msg, Throwable t) {
         this.print(ConsoleColors.GREEN_BRIGHT, "Info", ConsoleColors.RESET, msg, false);
+        this.print(ConsoleColors.GREEN_BRIGHT, "Info", ConsoleColors.RESET, fromThrowable(t), false);
     }
 
 
@@ -91,8 +100,11 @@ public class Logger {
      * Prints a warning message to the console
      * @param msg the message to print
      */
-    public void warning(String msg) {
+    public void warning(String msg) {this.print(ConsoleColors.YELLOW_BRIGHT, "Warning", ConsoleColors.YELLOW_BRIGHT, msg, false);}
+
+    public void warning(String msg, Throwable t) {
         this.print(ConsoleColors.YELLOW_BRIGHT, "Warning", ConsoleColors.YELLOW_BRIGHT, msg, false);
+        this.print(ConsoleColors.YELLOW_BRIGHT, "Warning", ConsoleColors.YELLOW_BRIGHT, fromThrowable(t), false);
     }
 
     /**

@@ -97,6 +97,9 @@ public class QueueManager {
                 currentSheetMusic.getSheetMusic().addCallback(callbacks);
             }
 
+            //We want to track the song that was played in the DB
+            controller.getStatistics().onSongPlayed(currentSheetMusic.getName());
+
             // We use a new thread for this, so we don't hang the main thread
             new Thread(() -> {
                 if(currentSheetMusic == null || currentSheetMusic.getSheetMusic() == null) {

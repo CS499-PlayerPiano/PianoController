@@ -531,6 +531,7 @@ function onStatisticsChanged(data) {
     document.querySelector('#counter-totalNotesPlayed').innerHTML = data.totalNotesPlayed;
     document.querySelector('#counter-totalSongsPlayed').innerHTML = data.totalSongsPlayed;
     document.querySelector('#counter-totalSustainPedalPressed').innerHTML = data.totalSustainPedalPressed;
+    document.querySelector('#counter-pianoUptime').innerHTML = formatUptime(data.uptime);
 
     //Set top songs
     let topSongs = data.songsPlayed;
@@ -541,7 +542,35 @@ function onStatisticsChanged(data) {
         let songName = song.name;
         let count = song.count;
         let songElement = document.createElement('p');
-        songElement.innerHTML = (i + 1) + ` ${songName} - ${count} plays`;
+        songElement.innerHTML = (i + 1) + `. ${songName} - ${count} play(s)`;
         topSongsElement.appendChild(songElement);
     }
+}
+
+function formatUptime(milliseconds) {
+    // Convert milliseconds to seconds
+    let totalSeconds = Math.floor(milliseconds / 1000);
+
+    // Calculate days, hours, minutes, and remaining seconds
+    let days = Math.floor(totalSeconds / (24 * 3600));
+    let hours = Math.floor((totalSeconds % (24 * 3600)) / 3600);
+    let minutes = Math.floor((totalSeconds % 3600) / 60);
+    let seconds = totalSeconds % 60;
+
+    // Format the time string
+    let timeString = '';
+    if (days > 0) {
+        timeString += days + 'd ';
+    }
+    if (hours > 0) {
+        timeString += hours + 'h ';
+    }
+    if (minutes > 0) {
+        timeString += minutes + 'm ';
+    }
+    if (seconds > 0) {
+        timeString += seconds + 's';
+    }
+
+    return timeString;
 }

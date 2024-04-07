@@ -1,14 +1,19 @@
 {
-  "millisecondsPlayed": 128563411548410,
-  "totalSongsPlayed": 15,
-  "totalNotesPlayed": 4922,
-  "totalSustainPedalPressed": 78,
+  "saveTime": 1712450684219,
+  "totalSongsPlayed": 20,
+  "totalNotesPlayed": 5127,
+  "totalSustainPedalPressed": 81,
   "songsPlayed": {
+    "Levan Polkka": 1,
+    "Ludicrous Speed": 1,
     "Bad Apple!!": 1,
+    "Fur Elise": 1,
     "abcdefu": 3,
     "Believer": 1,
     "12th Street Rag": 3,
     "Ashes": 4,
-    "Angry Birds Theme": 1
+    "Angry Birds Theme": 1,
+    "Kids": 1,
+    "Canon in D": 1
   }
 }

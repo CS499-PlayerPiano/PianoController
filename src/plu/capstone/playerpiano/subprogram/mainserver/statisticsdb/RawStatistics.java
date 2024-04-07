@@ -23,7 +23,7 @@ import plu.capstone.playerpiano.sheetmusic.SheetMusicCallback;
 public class RawStatistics {
 
     private final JsonConfigWrapper CONFIG = new JsonConfigWrapper(new File("res/statistics.json"));
-    private static final String KEY_MILLISECONDS_PLAYED = "millisecondsPlayed";
+    private static final String KEY_RUNTIME = "saveTime";
     private static final String KEY_TOTAL_SONGS_PLAYED = "totalSongsPlayed";
     private static final String KEY_TOTAL_NOTES_PLAYED = "totalNotesPlayed";
     private static final String KEY_TOTAL_SUSTAIN_PEDAL_PRESSED = "totalSustainPedalPressed";
@@ -32,7 +32,9 @@ public class RawStatistics {
     //TODO: Config
     private static final int MAX_SONGS_PLAYED = 10;
 
-    private long millisecondsPlayed;
+    //DON'T SAVE THIS TO THE CONFIG
+    private long startTime = 0;
+
     private long totalSongsPlayed;
     private long totalNotesPlayed;
     private long totalSustainPedalPressed;
@@ -55,11 +57,6 @@ public class RawStatistics {
         callback.run();
     }
 
-    public void incrementMillisecondsPlayed(long milliseconds) {
-        millisecondsPlayed += milliseconds;
-        callback.run();
-    }
-
     public void onSongPlayed(String songName) {
         songsPlayed.put(songName, songsPlayed.getOrDefault(songName, 0) + 1);
         incrementTotalSongsPlayed();
@@ -68,7 +65,7 @@ public class RawStatistics {
 
     public void loadConfig() {
         CONFIG.loadConfig();
-        millisecondsPlayed = CONFIG.getLong(KEY_MILLISECONDS_PLAYED);
+        startTime = CONFIG.getLong(KEY_RUNTIME);
         totalSongsPlayed = CONFIG.getLong(KEY_TOTAL_SONGS_PLAYED);
         totalNotesPlayed = CONFIG.getLong(KEY_TOTAL_NOTES_PLAYED);
         totalSustainPedalPressed = CONFIG.getLong(KEY_TOTAL_SUSTAIN_PEDAL_PRESSED);
@@ -79,7 +76,7 @@ public class RawStatistics {
     }
 
     private void writeToConfig() {
-        CONFIG.setLong(KEY_MILLISECONDS_PLAYED, millisecondsPlayed);
+        CONFIG.setLong(KEY_RUNTIME, System.currentTimeMillis()); //we want to store the current time of the save
         CONFIG.setLong(KEY_TOTAL_SONGS_PLAYED, totalSongsPlayed);
         CONFIG.setLong(KEY_TOTAL_NOTES_PLAYED, totalNotesPlayed);
         CONFIG.setLong(KEY_TOTAL_SUSTAIN_PEDAL_PRESSED, totalSustainPedalPressed);
@@ -96,6 +93,14 @@ public class RawStatistics {
         writeToConfig();
         //Copy the object so that the original is not modified
         final JsonObject json = CONFIG.toJsonObject().deepCopy();
+
+        //add the piano uptime
+        long currentTime = System.currentTimeMillis();
+        long totalRuntime = startTime > 0 ? (currentTime - startTime) : 0;
+        json.addProperty("uptime", totalRuntime);
+
+        //Remove the runtime key
+        json.remove(KEY_RUNTIME);
 
         JsonArray songsPlayedJson = new JsonArray();
 

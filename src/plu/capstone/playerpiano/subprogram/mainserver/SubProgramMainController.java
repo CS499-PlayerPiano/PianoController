@@ -23,7 +23,7 @@ public class SubProgramMainController extends SubProgram {
 
     //TODO: Make settings file
     private static final long SAVE_INTERVAL = 1000 * 60 * 1; // 1 MINUTE
-    private static final int SEND_TO_WEBSITE_INTERVAL = 100; //milliseconds
+    private static final int SEND_TO_WEBSITE_INTERVAL = 500; //milliseconds
 
     @Override
     public String getSubCommand() {
@@ -52,6 +52,13 @@ public class SubProgramMainController extends SubProgram {
                 statistics.saveConfig();
             }
         }, SAVE_INTERVAL, SAVE_INTERVAL);
+
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                webServerOutput.sendWSPacket(PacketIds.STATISTICS, statistics.toJson());
+            }
+        }, SEND_TO_WEBSITE_INTERVAL, SEND_TO_WEBSITE_INTERVAL);
 
         statistics.setCallback(() -> {
             webServerOutput.sendWSPacket(PacketIds.STATISTICS, statistics.toJson());

@@ -193,8 +193,9 @@ public class ComponentPiano extends JComponent {
 
 //                final int midiNote = Note.fromPianoKeyIndexToMidiNote(i);
                 int moveAmt = (i > 10) ? 6 : 12;
+                int midiNote = (i + 21);
                 g.setColor(Color.RED);
-                g.drawString(Integer.toString(i), bounds.x + 0, bounds.y + bounds.height - 20);
+                g.drawString(Integer.toString(midiNote), bounds.x + 0, bounds.y + bounds.height - 20);
 //
 //                NoteDetails noteDetails = NoteDetails.from(i);
 //                g.setColor(Color.YELLOW.darker());
@@ -215,10 +216,11 @@ public class ComponentPiano extends JComponent {
 
                 //Draw red text on white keys
                 int moveAmt = (i > 10) ? 6 : 12;
-                g.setColor(Color.RED);
-                g.drawString(Integer.toString(i), bounds.x + moveAmt, bounds.y + bounds.height - 20);
-
                 int midiNote = (i + 21);
+                g.setColor(Color.RED);
+                g.drawString(Integer.toString(midiNote), bounds.x + moveAmt, bounds.y + bounds.height - 20);
+
+
                 //NoteDetails noteDetails = NoteDetails.from(i);
                 //g.setColor(Color.YELLOW.darker());
                 // g.drawString(noteDetails.getNoteName(), bounds.x + moveAmt, bounds.y + bounds.height - 40);

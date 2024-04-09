@@ -22,6 +22,13 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     // and we need to be able to temporarily store it in the same data structure as the notes.
     private static final int SUSTAIN_PEDAL_CUSTOM_ID = -1;
 
+    private static final Map<Integer, Integer> MIDI_ID_TO_HIT_TIME = new HashMap<>();
+
+    static {
+        //NOTE -> HIT TIME
+        MIDI_ID_TO_HIT_TIME.put(21, 50);
+    }
+
     @Override
     public String getName() {
         return "Offset note times";
@@ -228,6 +235,11 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             return 450;
         }
 
+        if(event instanceof NoteEvent) {
+            NoteEvent note = (NoteEvent) event;
+            return MIDI_ID_TO_HIT_TIME.getOrDefault(note.getKeyNumber(), 50);
+        }
+
         return 100;
     }
 
@@ -239,7 +251,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
             return 450;
         }
 
-        return 100;
+        return 0;
     }
 
     private SheetMusic fromNewFormatToSheetMusic(Map<Integer, List<TimeAndNote>> newSheetMusic) {

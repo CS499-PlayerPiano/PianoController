@@ -1,6 +1,7 @@
 package plu.capstone.playerpiano.subprogram;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -101,7 +102,8 @@ public abstract class SubProgram implements Callable<Integer> {
 
     public void playNote(NoteEvent note) {
         for(Output output : outputs) {
-            output.onNotePlayed(note, -1);
+            output.onEventsPlayed(new ArrayList<>(Set.of(note)), -1);
+           // output.onNotePlayed(note, -1);
         }
     }
 

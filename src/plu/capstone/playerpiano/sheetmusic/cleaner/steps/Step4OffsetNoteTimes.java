@@ -27,6 +27,70 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
     static {
         //NOTE -> HIT TIME
         MIDI_ID_TO_HIT_TIME.put(21, 50);
+        MIDI_ID_TO_HIT_TIME.put(22, 50);
+        MIDI_ID_TO_HIT_TIME.put(23, 50);
+        MIDI_ID_TO_HIT_TIME.put(24, 50);
+        MIDI_ID_TO_HIT_TIME.put(25, 60);
+        MIDI_ID_TO_HIT_TIME.put(26, 50);
+        MIDI_ID_TO_HIT_TIME.put(27, 50);
+        MIDI_ID_TO_HIT_TIME.put(28, 50);
+        MIDI_ID_TO_HIT_TIME.put(29, 30);
+        MIDI_ID_TO_HIT_TIME.put(30, 30);
+        MIDI_ID_TO_HIT_TIME.put(31, 50);
+        MIDI_ID_TO_HIT_TIME.put(32, 30);
+        MIDI_ID_TO_HIT_TIME.put(33, 30);
+        MIDI_ID_TO_HIT_TIME.put(33, 30);
+        MIDI_ID_TO_HIT_TIME.put(34, 80);
+        MIDI_ID_TO_HIT_TIME.put(35, 50);
+        MIDI_ID_TO_HIT_TIME.put(36, 70);
+        MIDI_ID_TO_HIT_TIME.put(37, 100); // weird
+        MIDI_ID_TO_HIT_TIME.put(38, 50);
+        MIDI_ID_TO_HIT_TIME.put(39, 30);
+        MIDI_ID_TO_HIT_TIME.put(40, 40);
+        MIDI_ID_TO_HIT_TIME.put(41, 50);
+        MIDI_ID_TO_HIT_TIME.put(42, 45);
+        MIDI_ID_TO_HIT_TIME.put(43, 50);
+        MIDI_ID_TO_HIT_TIME.put(44, 30);
+        MIDI_ID_TO_HIT_TIME.put(45, 30);
+        MIDI_ID_TO_HIT_TIME.put(46, 30);
+        MIDI_ID_TO_HIT_TIME.put(47, 30);
+
+        // TODO: add notes 48 - 78
+
+
+
+
+        MIDI_ID_TO_HIT_TIME.put(79, 75);
+        MIDI_ID_TO_HIT_TIME.put(80, 80);
+        MIDI_ID_TO_HIT_TIME.put(81, 30);
+        MIDI_ID_TO_HIT_TIME.put(82, 40);
+        MIDI_ID_TO_HIT_TIME.put(83, 40);
+        MIDI_ID_TO_HIT_TIME.put(84, 45);
+        MIDI_ID_TO_HIT_TIME.put(85, 50);
+        MIDI_ID_TO_HIT_TIME.put(86, 30);
+        MIDI_ID_TO_HIT_TIME.put(87, 30);
+        MIDI_ID_TO_HIT_TIME.put(88, 25);
+        MIDI_ID_TO_HIT_TIME.put(89, 75); // weird
+        MIDI_ID_TO_HIT_TIME.put(90, 40);
+        MIDI_ID_TO_HIT_TIME.put(91, 50);
+        MIDI_ID_TO_HIT_TIME.put(92, 50);
+        MIDI_ID_TO_HIT_TIME.put(93, 60);
+        MIDI_ID_TO_HIT_TIME.put(94, 60);
+        MIDI_ID_TO_HIT_TIME.put(95, 40);
+        MIDI_ID_TO_HIT_TIME.put(96, 40);
+        MIDI_ID_TO_HIT_TIME.put(97, 30);
+        MIDI_ID_TO_HIT_TIME.put(98, 40);
+        MIDI_ID_TO_HIT_TIME.put(99, 30);
+        MIDI_ID_TO_HIT_TIME.put(100, 40);
+        MIDI_ID_TO_HIT_TIME.put(101, 40);
+        MIDI_ID_TO_HIT_TIME.put(102, 50);
+        MIDI_ID_TO_HIT_TIME.put(103, 50);
+        MIDI_ID_TO_HIT_TIME.put(104, 40);
+        MIDI_ID_TO_HIT_TIME.put(105, 40);
+        MIDI_ID_TO_HIT_TIME.put(106, 40);
+        MIDI_ID_TO_HIT_TIME.put(107, 40);
+        MIDI_ID_TO_HIT_TIME.put(108, 40); // does not work
+
     }
 
     @Override

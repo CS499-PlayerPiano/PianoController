@@ -54,12 +54,37 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         MIDI_ID_TO_HIT_TIME.put(45, 30);
         MIDI_ID_TO_HIT_TIME.put(46, 30);
         MIDI_ID_TO_HIT_TIME.put(47, 30);
-
-        // TODO: add notes 48 - 78
-
-
-
-
+        MIDI_ID_TO_HIT_TIME.put(48, 35);
+        MIDI_ID_TO_HIT_TIME.put(49, 90); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(50, 30);
+        MIDI_ID_TO_HIT_TIME.put(51, 70);
+        MIDI_ID_TO_HIT_TIME.put(52, 150); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(53, 130); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(54, 90);
+        MIDI_ID_TO_HIT_TIME.put(55, 30);
+        MIDI_ID_TO_HIT_TIME.put(56, 60);
+        MIDI_ID_TO_HIT_TIME.put(57, 130); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(58, 50);
+        MIDI_ID_TO_HIT_TIME.put(59, 110); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(60, 50);
+        MIDI_ID_TO_HIT_TIME.put(61, 120); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(62, 130); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(63, 100);
+        MIDI_ID_TO_HIT_TIME.put(64, 100);
+        MIDI_ID_TO_HIT_TIME.put(65, 110); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(66, 80);
+        MIDI_ID_TO_HIT_TIME.put(67, 100);
+        MIDI_ID_TO_HIT_TIME.put(68, 130); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(69, 80);
+        MIDI_ID_TO_HIT_TIME.put(70, 110); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(71, 100);
+        MIDI_ID_TO_HIT_TIME.put(72, 100);
+        MIDI_ID_TO_HIT_TIME.put(73, 50);
+        MIDI_ID_TO_HIT_TIME.put(74, 100); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(75, 110); // May need to physically tighten the key
+        MIDI_ID_TO_HIT_TIME.put(76, 40);
+        MIDI_ID_TO_HIT_TIME.put(77, 70);
+        MIDI_ID_TO_HIT_TIME.put(78, 90); // May need to physically tighten the key
         MIDI_ID_TO_HIT_TIME.put(79, 75);
         MIDI_ID_TO_HIT_TIME.put(80, 80);
         MIDI_ID_TO_HIT_TIME.put(81, 30);
@@ -298,12 +323,12 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         if(event instanceof SustainPedalEvent) {
             return 450;
         }
-
-        if(event instanceof NoteEvent) {
+        else if(event instanceof NoteEvent) {
             NoteEvent note = (NoteEvent) event;
             return MIDI_ID_TO_HIT_TIME.getOrDefault(note.getKeyNumber(), 50);
         }
 
+        // Should never happen, but 100 is a safe default
         return 100;
     }
 
@@ -314,8 +339,13 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
         if(event instanceof SustainPedalEvent) {
             return 450;
         }
+        else if (event instanceof NoteEvent) {
+            NoteEvent note = (NoteEvent) event;
+            return 0;
+        }
 
-        return 0;
+        // Should never happen, but 100 is a safe default
+        return 100;
     }
 
     private SheetMusic fromNewFormatToSheetMusic(Map<Integer, List<TimeAndNote>> newSheetMusic) {

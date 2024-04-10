@@ -12,9 +12,9 @@ public class JTextNumericField extends JTextField {
 
     public JTextNumericField(int min, int max, int defaultValue) {
         super();
-        PlainDocument doc = (PlainDocument) this.getDocument();
-        doc.setDocumentFilter(new MyIntFilter(min, max));
-
+//        PlainDocument doc = (PlainDocument) this.getDocument();
+//        doc.setDocumentFilter(new MyIntFilter(min, max));
+//
         this.setText(String.valueOf(defaultValue));
     }
 

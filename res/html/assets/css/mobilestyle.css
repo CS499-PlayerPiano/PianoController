@@ -113,8 +113,10 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.sort-dropdown {
+.sort-dropdown { /* TODO */
+    position: absolute;
     width: 100px;
+    top: 170px;
     padding: 8px;
     border: none;
     border-radius: 5px;
@@ -158,10 +160,15 @@ body {
 
 .emojis-container {
     position: absolute;
-    top: 35px;
-    right: 35px;
-    font-size: 24px;
+    font-size: 36px;
     text-align: center;
+    left: 30px;
+    right: 30px;
+    width: calc(100vw - 60px);
+    top: 65px;
+    justify-content: space-evenly;
+    display: flex;
+    align-items: center;
 }
 
 .moon {
@@ -439,6 +446,7 @@ footer img {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 9998;
+    backdrop-filter: blur(2px);
 }
 
 .np-overlay {
@@ -449,6 +457,7 @@ footer img {
     height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 99998;
+    backdrop-filter: blur(2px);
 }
 
 .sort-container {
@@ -465,19 +474,31 @@ footer img {
     padding: 20px;
 }
 
-.difficulty-container {
-    display: flex;
-    align-items: center;
+.difficulty-text {
+    position: absolute;
+    top: 12px;
+    left: 20px;
 }
 
-.difficulty-text {
-    top: 10px;
+.sort-text {
+    position: absolute;
+    top: 120px;
     left: 20px;
 }
 
 .close-button {
+    position: absolute;
     top: 20px;
-    right: 20px;
+    right: 50px;
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: bottom 0.3s ease;
 }
 
 #debugSongs {}

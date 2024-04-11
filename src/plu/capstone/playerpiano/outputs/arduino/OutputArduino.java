@@ -51,10 +51,8 @@ public class OutputArduino extends Output {
     private int velocityMappingMax = 255;
     private boolean ignoreVelocity = false;
 
-    //the 12345 is just garbage data, the arduino will ignore it.
-    //Unsure if its needed but seemed flakey with one byte commands.
     private static final byte[] TURN_OFF_ALL_NOTES = {
-            'O', 1,2,3,4,5
+            'O'
     };
 
     /**
@@ -164,46 +162,43 @@ public class OutputArduino extends Output {
      * @param timestamp timestamp of the event in milliseconds. If this is a live event, this will be {@link #LIVE_TIMESTAMP}
      *                  and the timestamp will be the time since the song started.
      */
-    int totalBytes = 0;
     @Override
     public void onNotesPlayed(List<NoteEvent> notes, long timestamp) {
 
         if(!arduino.isOpen()) {return;}
 
+        //We don't want to send a packet if there are no notes to play.
+        if(notes.size() == 0) {
+            return;
+        }
+
         //We have two different packets we can send to the arduino, a note packet and a batch note packet.
         //Depending on the size of the packet, we will send the smaller one.
         //It just depends how many notes and the type are hit.
+        String whichPacket = "N";
         final byte[] nPacket = noteArrayToNPacket(notes);
-//        totalBytes += nPacket.length;
-//        System.out.println("Total Bytes: " + totalBytes);
-//        final byte[] bPacket = noteArrayToBPacket(notes);
-//        final byte[] mPacket = noteArrayToMPacket(notes);
-//
-//        System.out.println("nPacket: " + nPacket.length);
-//        System.out.println("bPacket: " + bPacket.length);
-//        if(mPacket != null) {
-//            System.out.println("mPacket: " + mPacket.length);
-//        }
-//        else {
-//            System.out.println("mPacket: null");
-//        }
-//        System.out.println();
-//
-//        //Write the smaller packet to the arduino.
-//        //If they are equal, we use the N packet
-//
-//        byte[] dataToBeWritten = nPacket;
+        final byte[] bPacket = noteArrayToBPacket(notes);
+        final byte[] mPacket = noteArrayToMPacket(notes);
+
+        //Write the smaller packet to the arduino.
+        //If they are equal, we use the N packet
+
+        byte[] dataToBeWritten = nPacket;
 //        if(bPacket.length < nPacket.length) {
 //            dataToBeWritten = bPacket;
-//            System.out.println("Using B Packet");
-//        }
-//
-//        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
-//            dataToBeWritten = mPacket;
-//            System.out.println("Using M Packet");
+//            whichPacket = "B";
 //        }
 
-        writeBytes(nPacket);
+        if(mPacket != null /*&& mPacket.length < dataToBeWritten.length*/) {
+            dataToBeWritten = mPacket;
+            whichPacket = "M";
+            logger.debug("N: " + byteArrayToStringColored(nPacket));
+            logger.debug("M: " + byteArrayToStringColored(mPacket));
+        }
+
+//        logger.debug("Sending " + whichPacket + " packet: len=" + dataToBeWritten.length);
+
+        writeBytes(dataToBeWritten);
 
     }
 
@@ -212,7 +207,8 @@ public class OutputArduino extends Output {
         B - Packet to tell the arduino we are sending a batch change of notes
         Number of batches
         Array of batches:
-            Key
+            contiguous
+            startingKey
             Velocity
     */
     private byte[] noteArrayToBPacket(List<NoteEvent> notes) {
@@ -290,9 +286,11 @@ public class OutputArduino extends Output {
     private byte[] noteArrayToMPacket(List<NoteEvent> notes) {
 
         //sort the notes by key number
-//        notes.sort(Comparator.comparingInt(Note::getKeyNumber));
+        notes.sort(Comparator.comparingInt(NoteEvent::getKeyNumber));
 
-        int velocity = notes.get(0).getVelocity();
+        final NoteEvent firstNote = notes.get(0);
+
+        int velocity = firstNote.getVelocity();
         for(NoteEvent note : notes) {
             if(note.getVelocity() != velocity) {
                 return null;
@@ -302,13 +300,25 @@ public class OutputArduino extends Output {
         ByteBuffer buffer = ByteBuffer.allocate(3 + notes.size());
         buffer.put((byte) 'M');
         buffer.put((byte) notes.size());
+
+        if(firstNote.isNoteOn()) {
+            if (ignoreVelocity) {
+                velocity = (byte) velocityMappingMax;
+            } else {
+                velocity = (byte) MathUtilities.map(firstNote.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
+            }
+        }
+        else {
+            velocity = 0;
+        }
+
         buffer.put((byte) velocity);
 
         for(NoteEvent note : notes) {
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + note.getKeyNumber());
-                continue;
+                keyIndex = 0; // Default to 0 i guess, that way we are never reading out of bounds
             }
             buffer.put((byte) (int)keyIndex);
         }
@@ -334,11 +344,10 @@ public class OutputArduino extends Output {
         buffer.put((byte) notes.size());
 
         for(NoteEvent note : notes) {
-            //TODO: WE NEVER UPDATE NOTES.SIZE()
             Integer keyIndex = noteMapping.get(note.getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + note.getKeyNumber());
-                continue;
+                keyIndex = 0; // Default to 0 i guess, that way we are never reading out of bounds
             }
             buffer.put((byte) (int)keyIndex);
 
@@ -454,10 +463,10 @@ public class OutputArduino extends Output {
         boolean isOn = event.isOn();
 
         if(isOn) {
-            writeBytes(new byte[] { 'S', (byte) 255, 2, 3, 4, 5 });
+            writeBytes(new byte[] { 'S', (byte) 255});
         }
         else {
-            writeBytes(new byte[] { 'S', 0, 2, 3, 4, 5 });
+            writeBytes(new byte[] { 'S', 0});
         }
 
     }

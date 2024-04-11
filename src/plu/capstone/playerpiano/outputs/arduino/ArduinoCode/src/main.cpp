@@ -1,10 +1,16 @@
+// NOTE TO FUTURE:
+/*
+Serial.read() DOES NOT WAIT FOR DATA TO BE AVAILABLE. It will return 255 if there is no data available.
+Serial.readBytes() WILL WAIT FOR DATA TO BE AVAILABLE. It will return the number of bytes read.
+*/
+
 //----------------SETTINGS------------------------------
 // Algorithm: ALG_NAIVE, ALG_BRESENHAM
 #define ALG_NAIVE
 // #define ALG_BRESENHAM
 
 // Print debugging over serial port
-// #define DEBUG_SERIAL
+#define DEBUG_SERIAL
 
 // Amount of boards we have hooked up
 #define SHIFT_REGISTER_COUNT 11
@@ -99,7 +105,8 @@ Protocol:
 
 void parseNPacket()
 {
-  byte howManyNotes = Serial.read();
+  byte howManyNotes;
+  Serial.readBytes(&howManyNotes, 1);
 
   // SANITY CHECK
   if (howManyNotes > 88)
@@ -117,24 +124,24 @@ void parseNPacket()
 
   if (read != howManyBytes)
   {
-#ifdef DEBUG_SERIAL
-    Serial.print(F("Error reading NPacket note data. Expected "));
-    Serial.print(howManyBytes);
-    Serial.print(F(" bytes but got "));
-    Serial.print(read);
-    Serial.print(F(". Tried to read "));
-    Serial.print(howManyNotes);
-    Serial.println(F(" notes."));
-#endif
+    // #ifdef DEBUG_SERIAL
+    //     Serial.print(F("Error reading NPacket note data. Expected "));
+    //     Serial.print(howManyBytes);
+    //     Serial.print(F(" bytes but got "));
+    //     Serial.print(read);
+    //     Serial.print(F(". Tried to read "));
+    //     Serial.print(howManyNotes);
+    //     Serial.println(F(" notes."));
+    // #endif
 
     return;
   }
 
-#ifdef DEBUG_SERIAL
-  Serial.print(F("Recieved "));
-  Serial.print(howManyNotes);
-  Serial.println(F(" notes."));
-#endif
+  // #ifdef DEBUG_SERIAL
+  //   Serial.print(F("Recieved "));
+  //   Serial.print(howManyNotes);
+  //   Serial.println(F(" notes."));
+  // #endif
 
   for (int i = 0; i < howManyNotes; i++)
   {
@@ -162,7 +169,8 @@ void parseNPacket()
 
 void parseBPacket()
 {
-  byte numOfBatches = Serial.read();
+  byte numOfBatches;
+  Serial.readBytes(&numOfBatches, 1);
   int howManyBytes = numOfBatches * 3;
 
   // read the note data
@@ -219,10 +227,26 @@ void parseBPacket()
   }
 }
 
+/**
+ * M Packet
+ * Number of notes
+ * Velocity
+ * Array:
+ *  Note number
+ *
+ */
 void parseMPacket()
 {
-  byte numberOfNotes = Serial.read();
-  byte velocity = Serial.read();
+  byte numberOfNotes;
+  Serial.readBytes(&numberOfNotes, 1);
+
+  if (numberOfNotes > 88)
+  {
+    return;
+  }
+
+  byte velocity;
+  Serial.readBytes(&velocity, 1);
 
   int howManyBytes = numberOfNotes;
 
@@ -238,9 +262,7 @@ void parseMPacket()
     Serial.print(howManyBytes);
     Serial.print(F(" bytes but got "));
     Serial.print(read);
-    Serial.print(F(". Tried to read "));
-    Serial.print(numOfBatches);
-    Serial.println(F(" notes."));
+    Serial.println(F("."));
 #endif
 
     return;
@@ -248,7 +270,7 @@ void parseMPacket()
 
 #ifdef DEBUG_SERIAL
   Serial.print(F("Recieved "));
-  Serial.print(numOfBatches);
+  Serial.print(numberOfNotes);
   Serial.println(F(" notes."));
 #endif
 
@@ -271,6 +293,12 @@ void parseMPacket()
     }
 
     setPin(note, velocity);
+#ifdef DEBUG_SERIAL
+    Serial.print(F("N: "));
+    Serial.print(note);
+    Serial.print(F(" V: "));
+    Serial.println(velocity);
+#endif
   }
 }
 
@@ -286,7 +314,8 @@ void parseOPacket()
 
 void parseSPacket()
 {
-  byte servoPos = Serial.read();
+  byte servoPos;
+  Serial.readBytes(&servoPos, 1);
   int val = map(servoPos, 0, 255, SERVO_MIN, SERVO_MAX);
   sustainServo.write(val);
 }
@@ -294,7 +323,7 @@ void parseSPacket()
 void processIncomingSerial()
 {
   // Read the midi data from the serial port
-  while (Serial.available() >= 2)
+  while (Serial.available() >= 1)
   {
 
     // Read the first character as the type of command
@@ -304,14 +333,14 @@ void processIncomingSerial()
     {
       parseNPacket();
     }
-    //        else if (command == 'B')
-    //        {
-    //            parseBPacket();
-    //        }
-    //        else if (command == 'M')
-    //        {
-    //            parseMPacket();
-    //        }
+    else if (command == 'B')
+    {
+      parseBPacket();
+    }
+    else if (command == 'M')
+    {
+      parseMPacket();
+    }
     else if (command == 'O')
     {
       parseOPacket();

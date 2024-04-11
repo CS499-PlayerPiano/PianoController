@@ -73,6 +73,20 @@ public class NoteEvent implements SheetMusicEvent, Cloneable {
             throw new IllegalArgumentException("Invalid key number: " + keyNumber);
         }
 
+        if(velocity < MIN_VELOCITY || velocity > MAX_VELOCITY) {
+            throw new IllegalArgumentException("Invalid velocity: " + velocity);
+        }
+
+        if(!noteOn && velocity != 0) {
+           System.out.println("Note off with non-zero velocity: " + velocity);
+           velocity = 0;
+        }
+
+        if(noteOn && velocity == 0) {
+            System.out.println("Note on with zero velocity: " + velocity);
+            noteOn = false;
+        }
+
         this.keyNumber = keyNumber;
 
         final NoteDetails noteDetails = NoteDetails.from(keyNumber);

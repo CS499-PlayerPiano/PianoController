@@ -142,7 +142,7 @@ function setNowPlayingInfo(currentSong) {
         artwork = currentSong.artwork;
     }
 
-    artwork = currentUrl + "/api/album-art/" + artwork;
+    artwork = currentUrl + "api/album-art/" + artwork;
 
     $('#npArtwork').attr('src', artwork);
     $('#npTitle').text(name);
@@ -271,7 +271,7 @@ function showQueueContainer() {
 
 function hideQueueContainer() {
     $('.now-playing-container').slideUp();
-    $('.np-overlay').fadeOut(function() {
+    $('.np-overlay').fadeOut(function () {
         $('body').css({
             'overflow': 'auto',
             'position': 'static',
@@ -297,7 +297,7 @@ function showSortContainer() {
 
 function hideSortContainer() {
     $('.sort-container').slideUp();
-    $('.overlay').fadeOut(function() {
+    $('.overlay').fadeOut(function () {
         $('body').css({
             'overflow': 'auto',
             'position': 'static',

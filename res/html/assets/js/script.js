@@ -125,7 +125,7 @@ function setNowPlayingInfo(currentSong) {
         artwork = currentSong.artwork;
     }
 
-    artwork = "https://piano.ericshome.xyz/api/album-art/api/album-art/" + artwork;
+    artwork = currentUrl + "api/album-art/" + artwork;
 
     $('#npArtwork').attr('src', artwork);
     $('#npTitle').text(name);

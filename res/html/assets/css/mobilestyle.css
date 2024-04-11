@@ -165,7 +165,7 @@ body {
     left: 30px;
     right: 30px;
     width: calc(100vw - 60px);
-    top: 70px;
+    top: 65px;
     justify-content: space-evenly;
     display: flex;
     align-items: center;
@@ -474,10 +474,9 @@ footer img {
     padding: 20px;
 }
 
-
-
 .difficulty-text {
-    top: 0px;
+    position: absolute;
+    top: 12px;
     left: 20px;
 }
 

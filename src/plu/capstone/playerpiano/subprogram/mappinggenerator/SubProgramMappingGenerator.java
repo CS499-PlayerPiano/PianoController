@@ -20,8 +20,8 @@ import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
 
 public class SubProgramMappingGenerator extends SubProgram {
 
-    final JFrame frame = new JFrame("PianoPattern");
-    final ComponentPiano piano = new ComponentPiano();
+    private JFrame frame;
+    private ComponentPiano piano;
 
     int hasPickedKey = -1;
 
@@ -36,6 +36,10 @@ public class SubProgramMappingGenerator extends SubProgram {
 
     @Override
     public void run() throws Exception {
+
+        frame = new JFrame("PianoPattern");
+        piano = new ComponentPiano();
+
         System.out.println("Config generator for the Arduino Piano Plugin");
 
         File file = new File("tmp/cfg-physicalPianoMapping.json");

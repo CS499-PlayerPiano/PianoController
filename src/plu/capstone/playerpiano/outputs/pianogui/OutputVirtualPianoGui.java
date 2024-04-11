@@ -16,8 +16,8 @@ import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
  */
 public class OutputVirtualPianoGui extends OutputStateKeeper {
 
-    private final JFrame frame = new JFrame("Virtual Piano Viewer");
-    private final ComponentPiano piano = new ComponentPiano();
+    private JFrame frame;
+    private ComponentPiano piano;
 
     private ColorMode colorMode;
 
@@ -33,6 +33,9 @@ public class OutputVirtualPianoGui extends OutputStateKeeper {
 
     @Override
     public void onEnable() {
+
+        frame = new JFrame("Virtual Piano Viewer");
+        piano = new ComponentPiano();
 
         piano.setBackgroundColor(Color.BLUE);
         frame.add(new JScrollPane(piano));

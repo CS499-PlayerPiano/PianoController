@@ -23,8 +23,8 @@ import plu.capstone.playerpiano.utilities.graphics.piano.ComponentPiano;
  */
 public class SubProgramKeyDebug extends SubProgram {
 
-    private final JFrame frame = new JFrame("PianoPattern");
-    private final ComponentPiano piano = new ComponentPiano();
+    private JFrame frame;
+    private ComponentPiano piano;
 
     private int theKey;
     private boolean started = false;
@@ -42,6 +42,10 @@ public class SubProgramKeyDebug extends SubProgram {
 
     @Override
     public void run() throws Exception {
+
+        frame = new JFrame("PianoPattern");
+        piano = new ComponentPiano();
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(500, 500);
 

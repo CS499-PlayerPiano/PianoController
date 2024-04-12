@@ -10,7 +10,7 @@ Serial.readBytes() WILL WAIT FOR DATA TO BE AVAILABLE. It will return the number
 // #define ALG_BRESENHAM
 
 // Print debugging over serial port
-#define DEBUG_SERIAL
+//#define DEBUG_SERIAL
 
 // Amount of boards we have hooked up
 #define SHIFT_REGISTER_COUNT 11

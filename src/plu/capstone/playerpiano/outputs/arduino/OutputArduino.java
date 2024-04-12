@@ -21,16 +21,7 @@ import plu.capstone.playerpiano.utilities.MathUtilities;
 /**
  * Plugin to communicate with an Arduino to play notes on a real piano.
  *
- * Packets:
- *  Start Song: 'S'
- *  End Song: 'F'
- *  Note List: 'N'
- *      (byte) Number of notes
- *      Array of notes:
- *          (byte) Key
- *          (byte) IsOn
- *          (byte) Velocity
- */
+*/
 public class OutputArduino extends Output {
 
     private final Logger loggerArduino = new Logger(logger, "Arduino");
@@ -184,16 +175,14 @@ public class OutputArduino extends Output {
         //If they are equal, we use the N packet
 
         byte[] dataToBeWritten = nPacket;
-//        if(bPacket.length < nPacket.length) {
-//            dataToBeWritten = bPacket;
-//            whichPacket = "B";
-//        }
+        if(bPacket.length < nPacket.length) {
+            dataToBeWritten = bPacket;
+            whichPacket = "B";
+        }
 
-        if(mPacket != null /*&& mPacket.length < dataToBeWritten.length*/) {
+        if(mPacket != null && mPacket.length < dataToBeWritten.length) {
             dataToBeWritten = mPacket;
             whichPacket = "M";
-            logger.debug("N: " + byteArrayToStringColored(nPacket));
-            logger.debug("M: " + byteArrayToStringColored(mPacket));
         }
 
 //        logger.debug("Sending " + whichPacket + " packet: len=" + dataToBeWritten.length);
@@ -258,11 +247,18 @@ public class OutputArduino extends Output {
             Integer keyIndex = noteMapping.get(batch.get(0).getKeyNumber());
             if(keyIndex == null) {
                 logger.error("Failed to find key index for note " + batch.get(0).getKeyNumber());
-                continue;
+                keyIndex = 0; // Default to 0 i guess, that way we are never reading out of bounds
             }
 
             byte startingKey = (byte) (int)keyIndex;
             byte velocity = (byte) batch.get(0).getVelocity();
+
+            if(batch.get(0).isNoteOn()) {
+                velocity = mapVelocity(velocity);
+            }
+            else {
+                velocity = 0;
+            }
 
             buffer.put(contiguous);
             buffer.put(startingKey);
@@ -302,11 +298,7 @@ public class OutputArduino extends Output {
         buffer.put((byte) notes.size());
 
         if(firstNote.isNoteOn()) {
-            if (ignoreVelocity) {
-                velocity = (byte) velocityMappingMax;
-            } else {
-                velocity = (byte) MathUtilities.map(firstNote.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
-            }
+            velocity = mapVelocity(velocity);
         }
         else {
             velocity = 0;
@@ -325,6 +317,13 @@ public class OutputArduino extends Output {
 
         return buffer.array();
 
+    }
+
+    private final byte mapVelocity(int velocity) {
+        if(ignoreVelocity) {
+            return (byte) velocityMappingMax;
+        }
+        return (byte) MathUtilities.map(velocity, 0, 127, velocityMappingMin, velocityMappingMax);
     }
 
     /*
@@ -355,13 +354,7 @@ public class OutputArduino extends Output {
             byte velocity = 0;
 
             if(note.isNoteOn()){
-                // Map the velocity from 0-127 to 106-235
-                if(ignoreVelocity) {
-                    velocity = (byte) velocityMappingMax;
-                }
-                else {
-                    velocity = (byte) MathUtilities.map(note.getVelocity(), 0, 127, velocityMappingMin, velocityMappingMax);
-                }
+                velocity = (byte) mapVelocity(note.getVelocity());
             }
             else {
                 velocity = 0;
@@ -405,22 +398,61 @@ public class OutputArduino extends Output {
             byte b = arr[i];
 
 
+            String clr = null;
             if (i == 0) {
-                sb.append(ConsoleColors.RED);
-            }
-            if(arr[0] == 'N') {
-                if (i == 1) {
-                    sb.append(ConsoleColors.YELLOW);
-                } else if ((i - 2) % 3 == 0) {
-                    sb.append(ConsoleColors.GREEN);
-                } else if ((i - 2) % 3 == 1) {
-                    sb.append(ConsoleColors.BLUE);
-                } else if ((i - 2) % 3 == 2) {
-                    sb.append(ConsoleColors.PURPLE);
-                }
+                clr = ConsoleColors.RED;
             }
 
-            sb.append(b & 0xFF);
+            if(arr[0] == 'N' && clr == null) {
+                if (i == 1) {
+                    clr = ConsoleColors.YELLOW;
+                } else if ((i - 2) % 2 == 0) {
+                    clr = ConsoleColors.GREEN;
+                } else if ((i - 2) % 2 == 1) {
+                    clr = ConsoleColors.BLUE;
+                }
+
+            }
+            else if(arr[0] == 'M' && clr == null) {
+                if(i == 1) {
+                    clr = ConsoleColors.YELLOW;
+                } else if (i == 2) {
+                    clr = ConsoleColors.BLUE;
+                } else {
+                    clr = ConsoleColors.GREEN;
+                }
+            }
+            else if(arr[0] == 'B' && clr == null) {
+                if(i == 1) {
+                    clr = ConsoleColors.YELLOW;
+                }
+                else if((i - 2) % 4 == 0) {
+                    clr = ConsoleColors.GREEN;
+                }
+                else if((i - 2) % 4 == 1) {
+                    clr = ConsoleColors.GREEN;
+                }
+                else if((i - 2) % 4 == 2) {
+                    clr = ConsoleColors.BLUE;
+                }
+                else if((i - 2) % 4 == 2) {
+                    clr = ConsoleColors.PURPLE;
+                }
+            }
+            else if(arr[0] == 'S' && clr == null) {
+                clr = ConsoleColors.PURPLE;
+            }
+
+            if(clr != null) {
+                sb.append(clr);
+            }
+
+            if(i == 0) {
+                sb.append((char) b);
+            }
+            else {
+                sb.append(b & 0xFF);
+            }
 
             sb.append(ConsoleColors.BLACK_BRIGHT);
 
@@ -454,7 +486,7 @@ public class OutputArduino extends Output {
     }
 
     private void writeBytes(byte[] data) {
-        //logger.debug("Sending " + byteArrayToStringColored(data));
+        logger.debug("Sending " + byteArrayToStringColored(data));
         arduino.writeBytes(data, data.length);
     }
 

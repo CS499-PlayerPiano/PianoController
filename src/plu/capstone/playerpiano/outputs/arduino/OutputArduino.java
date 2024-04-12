@@ -486,7 +486,7 @@ public class OutputArduino extends Output {
     }
 
     private void writeBytes(byte[] data) {
-        logger.debug("Sending " + byteArrayToStringColored(data));
+        //logger.debug("Sending " + byteArrayToStringColored(data));
         arduino.writeBytes(data, data.length);
     }
 

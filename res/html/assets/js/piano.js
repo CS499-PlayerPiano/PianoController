@@ -351,4 +351,8 @@ class Piano {
         return this.#statistics;
     }
 
+    getAPIURL() {
+        return this.#apiURL;
+    }
+
 }   

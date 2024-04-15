@@ -114,7 +114,6 @@ function setProgressBarUI(percentage) {
 
 function setNowPlayingInfo(currentSong) {
 
-    let currentUrl = location.href;
     let name = "Nothing Playing";
     let artist = "";
     let artwork = "NOTHING_PLAYING.png";
@@ -125,7 +124,7 @@ function setNowPlayingInfo(currentSong) {
         artwork = currentSong.artwork;
     }
 
-    artwork = currentUrl + "api/album-art/" + artwork;
+    artwork = piano.getAPIURL() + "album-art/" + artwork;
 
     $('#npArtwork').attr('src', artwork);
     $('#npTitle').text(name);

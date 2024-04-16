@@ -1,0 +1,76 @@
+body {
+    background-color: #111;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Full viewport height */
+}
+
+.artwork-container {
+    margin-top: 20px;
+    width: 600px;
+    height: 600px;
+    overflow: hidden;
+    /* Ensure that the image doesn't overflow */
+}
+
+#npArtwork {
+    width: 100%;
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+.progress-container {
+    position: relative;
+    /* Set position to relative */
+    width: 50%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.progress-container span {
+    position: absolute;
+    /* Set position to absolute */
+}
+
+#currentTime {
+    left: 0;
+    margin-left: -100px;
+    /* Align to the left */
+}
+
+#songLength {
+    right: 0;
+    margin-right: -100px;
+}
+
+#progressBar {
+    position: absolute;
+    /* Set position to absolute */
+    left: 0;
+    /* Align to the left */
+    width: 0%;
+    /* Start with 0% width */
+    height: 20px;
+    background-color: hotpink;
+    border-radius: 5px;
+    transition: width 0.1s ease;
+    /* Smooth transition effect */
+}
+
+.timeText {
+    font-size: 25px;
+    font-weight: bold;
+    /*bold text*/
+}

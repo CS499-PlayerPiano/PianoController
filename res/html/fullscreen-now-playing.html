@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Website</title>
+    <meta name="description" content="Controller for the player piano">
+    <meta name="author" content="Camden Hunt & Eric Golde">
+    <meta name="keywords" content="cs499, player piano, PLU">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <link rel="stylesheet" href="assets/css/fullscreen-now-playing.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <h1 id="songTitle">Song Title</h1>
+        <span id="byText">by</span>
+        <h2 id="artistName">Artist Name</h2>
+        <div class="artwork-container">
+            <img loading="lazy" id="npArtwork" src="https://piano.ericshome.xyz/api/album-art/null" alt="Album Art">
+        </div>
+        <div class="progress-container">
+            <span id="currentTime" class="timeText">0:00</span>
+            <div id="progressBar"></div>
+            <span id="songLength" class="timeText">0:00</span>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/piano.js"></script>
+    <script src="assets/js/fullscreen-now-playing.js"></script>
+</body>
+
+</html>

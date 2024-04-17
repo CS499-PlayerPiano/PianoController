@@ -74,12 +74,12 @@ body {
 
 .sticky-container {
     position: sticky;
-    height: 70px;
+    height: 100px;
     top: 0;
     background-color: #111;
     z-index: 1000;
     display: flex;
-    align-items: center;
+    flex-direction: column;
 }
 
 .sticky-container p,
@@ -93,6 +93,39 @@ body {
 
 .sticky-container .text {
     margin-left: 10px;
+}
+
+.search-sort {
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.guide-text {
+    display: inline-flex;
+    flex-direction: row;
+    width: 100%;
+    font-size: 14px;
+    padding-top: 10px;
+}
+
+.song-info-text {
+    text-align: left;
+}
+
+.difficulty-info-text {
+    text-align: right;
+}
+
+.song-info-text p {
+    margin: 0;
+    margin-left: 70px;
+}
+
+.difficulty-info-text p {
+    margin: 0;
+    margin-right: 10px;
+    margin-left: calc(100vw - 200px);
 }
 
 #quicksearch {
@@ -148,6 +181,7 @@ body {
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
     margin-right: 10px;
+    margin-left: auto;
 }
 
 .container {

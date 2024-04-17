@@ -18,17 +18,23 @@
 
 <body>
 <div class="sticky-container">
-    <p><input type="text" id="quicksearch" placeholder="Search..." /></p>
-    <div class="text">
-        <button id="sort-button" class="sort-button">Sort</button>
+    <div class="search-sort">
+        <p><input type="text" id="quicksearch" placeholder="Search..." /></p>
+        <div class="text">
+            <button id="sort-button" class="sort-button">Sort</button>
+        </div>
+    </div>
+    <div class="guide-text" style="width: 100%;">
+        <div class="song-info-text">
+            <p>Song</p>
+        </div>
+        <div class="difficulty-info-text">
+            <p>Difficulty</p>
+        </div>
     </div>
 </div>
 
 <div class="container">
-    <div style="display: flex; justify-content: space-between;">
-        <p style="text-align: left; margin-left: 70px; font-size: 14px;">Song</p>
-        <p style="text-align: right; margin-right: 10px; font-size: 14px;">Difficulty</p>
-    </div>
     <div class="grid">
         <!-- Song elements will be added here -->
     </div>

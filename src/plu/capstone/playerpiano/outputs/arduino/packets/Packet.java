@@ -23,11 +23,16 @@ public abstract class Packet {
     }
 
     public final byte[] getBytes() {
+        processPacket();
+        return buffer.array();
+    }
+
+    protected void processPacket() {
         if(buffer == null) {
             writeBytes();
         }
-        return buffer.array();
     }
+
     public final int size() { return getBytes().length; }
 
 }

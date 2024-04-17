@@ -20,7 +20,6 @@ public class PacketNotes_M extends PacketNotes {
 
     private static final Logger logger = new Logger(PacketNotes_M.class);
 
-    @Getter
     private boolean isValid = true;
 
     public PacketNotes_M(List<NoteEvent> notes, Map<Integer, Integer> noteMapping, int velocityMappingMin, int velocityMappingMax, boolean ignoreVelocity) {
@@ -61,5 +60,10 @@ public class PacketNotes_M extends PacketNotes {
             }
             write(keyIndex);
         }
+    }
+
+    public boolean isValid() {
+        processPacket();
+        return isValid;
     }
 }

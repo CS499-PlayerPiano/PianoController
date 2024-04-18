@@ -10,7 +10,7 @@ Serial.readBytes() WILL WAIT FOR DATA TO BE AVAILABLE. It will return the number
 // #define ALG_BRESENHAM
 
 // Print debugging over serial port
-//#define DEBUG_SERIAL
+// #define DEBUG_SERIAL
 
 // Amount of boards we have hooked up
 #define SHIFT_REGISTER_COUNT 11
@@ -320,6 +320,21 @@ void parseSPacket()
   sustainServo.write(val);
 }
 
+void reset5VPower(int del)
+{
+  // Turn off the 5v for a sec
+  digitalWrite(RELAY_PIN, HIGH);
+  delay(del);
+  digitalWrite(RELAY_PIN, LOW);
+}
+
+bool ignoreErrorChecker = false;
+void parsePPacket()
+{
+  ignoreErrorChecker = true;
+  reset5VPower(500);
+}
+
 void processIncomingSerial()
 {
   // Read the midi data from the serial port
@@ -349,23 +364,25 @@ void processIncomingSerial()
     {
       parseSPacket();
     }
+    else if (command == 'P')
+    {
+      parsePPacket();
+    }
     updatePinVelocity();
   }
 }
 
-// Forces watchdog timeout, resetting the chip
-void rebootArduino()
-{
-  wdt_disable();
-  wdt_enable(WDTO_15MS);
-  while (1)
-  {
-  }
-}
-
-byte numErrorsChecked = 0;
 void checkErrorState()
 {
+
+  // If we are ignoring the error due to Java resetting the 5v power, don't check it this time.
+  if (ignoreErrorChecker)
+  {
+    ignoreErrorChecker = false;
+    sr.checkBitError = false; // reset the physical error bit
+    return;
+  }
+
   // We have an error
   if (sr.checkBitError)
   {
@@ -375,24 +392,10 @@ void checkErrorState()
 
       Serial.println(F("Error bit detected!"));
 
-      if (numErrorsChecked > 4)
-      {
-        Serial.println(F("Rebooting due to numerous errors errors..."));
-        rebootArduino();
-      }
-
-      // Try and fix the error - Step 1:
-      // Turn off the 5v for a sec
-      digitalWrite(RELAY_PIN, HIGH);
-      delay(1000);
-      digitalWrite(RELAY_PIN, LOW);
-
-      numErrorsChecked++;
+      // Turn off and on the relay
+      reset5VPower(1000);
     }
-    else
-    {
-      numErrorsChecked = 0;
-    }
+
     sr.checkBitError = false; // reset the error
   }
 }

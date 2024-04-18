@@ -18,6 +18,7 @@ import plu.capstone.playerpiano.outputs.arduino.packets.PacketNotes;
 import plu.capstone.playerpiano.outputs.arduino.packets.PacketNotes_B;
 import plu.capstone.playerpiano.outputs.arduino.packets.PacketNotes_M;
 import plu.capstone.playerpiano.outputs.arduino.packets.PacketNotes_N;
+import plu.capstone.playerpiano.outputs.arduino.packets.PacketResetPower;
 import plu.capstone.playerpiano.outputs.arduino.packets.PacketSustainPedal;
 import plu.capstone.playerpiano.outputs.arduino.packets.PacketTurnOffAllNotes;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
@@ -48,10 +49,7 @@ public class OutputArduino extends Output {
     private int velocityMappingMin = 106;
     private int velocityMappingMax = 255;
     private boolean ignoreVelocity = false;
-
-    private static final byte[] TURN_OFF_ALL_NOTES = {
-            'O'
-    };
+    private boolean sendPowerResetAfterEverySong = true;
 
     /**
      * Set the default values for the config file before it is loaded.
@@ -88,6 +86,7 @@ public class OutputArduino extends Output {
         logger.setDebugEnabled(true);
 
         final String COM_PORT = getConfig().getString("comPort");
+        sendPowerResetAfterEverySong = getConfig().getBoolean("sendPowerResetAfterEverySong");
 
         arduino = SerialPort.getCommPort(COM_PORT);
         arduino.setComPortParameters(getConfig().getInteger("baudRate"), DATA_BITS, STOP_BITS, PARITY_NONE);
@@ -308,6 +307,7 @@ public class OutputArduino extends Output {
     public void onSongFinished(long timestamp) {
         writePacket(new PacketSustainPedal(false));
         writePacket(new PacketTurnOffAllNotes());
+        writePacket(new PacketResetPower());
     }
 
     private void writePacket(Packet packet) {

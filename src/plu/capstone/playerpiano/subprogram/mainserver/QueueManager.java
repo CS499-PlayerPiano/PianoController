@@ -18,6 +18,9 @@ public class QueueManager {
 
     private final SubProgramMainController controller;
 
+    //TODO: Make this a config option
+    private static final int DELAY_BETWEEN_SONGS = 2000;
+
 
     public QueueManager(SubProgramMainController playerPianoController) {
         controller = playerPianoController;
@@ -32,6 +35,11 @@ public class QueueManager {
                     if(currentSheetMusic == null || currentSheetMusic.getSheetMusic() == null || !currentSheetMusic.getSheetMusic().isSheetMusicStillScrolling()) {
                         if(!songQueue.isEmpty()) {
                             stopOrSkipCurrentSong();
+                            try {
+                                Thread.sleep(DELAY_BETWEEN_SONGS);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
                             currentSheetMusic = songQueue.poll();
                             playSheetMusic();
                             sendCurrentQueueAsWSPacket();

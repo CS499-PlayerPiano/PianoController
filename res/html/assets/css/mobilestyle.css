@@ -125,7 +125,7 @@ body {
 .difficulty-info-text p {
     margin: 0;
     margin-right: 10px;
-    margin-left: calc(100vw - 200px);
+    margin-left: calc(100vw - 220px);
 }
 
 #quicksearch {

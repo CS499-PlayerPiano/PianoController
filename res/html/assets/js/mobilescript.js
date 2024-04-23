@@ -59,6 +59,7 @@ $(document).ready(function () {
         $(this).addClass('selected');
 
         $grid.isotope({ layoutMode: 'vertical' }); //reapply isotope filter
+        $('html, body').animate({scrollTop: 0}, 'slow');
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
@@ -68,6 +69,7 @@ $(document).ready(function () {
         selectedDifficulty = null;
         qsRegex = null; // Reset search regex
         $grid.isotope({ layoutMode: 'vertical' }); // Reapply isotope filter
+        $('html, body').animate({scrollTop: 0}, 'slow');
     });
 });
 
@@ -283,12 +285,9 @@ function hideQueueContainer() {
 }
 
 function showSortContainer() {
-    savedScrollPosition = $(window).scrollTop();
     $('body').css({
         'overflow': 'hidden',
-        'position': 'fixed',
-        'width': '100%',
-        'top': -savedScrollPosition
+        'width': '100%'
     });
     $('.overlay').fadeIn();
     $('.sort-container').addClass('active').slideDown();
@@ -299,11 +298,8 @@ function hideSortContainer() {
     $('.overlay').fadeOut(function () {
         $('body').css({
             'overflow': 'auto',
-            'position': 'static',
-            'width': 'auto',
-            'top': 0
+            'width': 'auto'
         });
-        $(window).scrollTop(savedScrollPosition);
     });
     $('.sort-container').removeClass('active');
 }
@@ -409,8 +405,8 @@ $('#sort-dropdown').on('change', function () {
         ascending = false;
     }
     console.log("Sorting by", value, "ascending", ascending);
-
     $grid.isotope({ sortBy: value, sortAscending: ascending, layoutMode: 'vertical' });
+    $('html, body').animate({scrollTop: 0}, 'slow');
 });
 
 let qsRegex = null; // quick search regex

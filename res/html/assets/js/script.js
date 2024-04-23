@@ -59,6 +59,7 @@ $(document).ready(function () {
         $(this).addClass('selected');
 
         $grid.isotope(); //reapply isotope filter
+        $('html, body').animate({scrollTop: 0}, 'slow');
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
@@ -68,6 +69,7 @@ $(document).ready(function () {
         selectedDifficulty = null;
         qsRegex = null; // Reset search regex
         $grid.isotope(); // Reapply isotope filter
+       $('html, body').animate({scrollTop: 0}, 'slow');
     });
 });
 
@@ -415,6 +417,7 @@ $('#sort-dropdown').on('change', function () {
     console.log("Sorting by", value, "ascending", ascending);
 
     $grid.isotope({ sortBy: value, sortAscending: ascending });
+    $('html, body').animate({scrollTop: 0}, 'slow');
 });
 
 let qsRegex = null; // quick search regex
@@ -479,17 +482,19 @@ function initSearchBarThingy() {
     });
     // use value of search field to filter
     let $quicksearch = $('#quicksearch').keyup(debounce(function () {
-
         let searchValue = $quicksearch.val().trim();
-
         qsRegex = new RegExp(searchValue, 'gi');
-
 
         if (searchValue == '') {
             qsRegex = null;
         }
+
         console.log("Filtering by", qsRegex);
         $grid.isotope();
+
+        // Scroll to the top of the page
+        // find some way to make this happen even if the user doesn't have their cursor in it
+        //$('html, body').animate({scrollTop: 0}, 'slow');
     }));
 }
 

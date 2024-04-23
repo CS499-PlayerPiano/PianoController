@@ -2,6 +2,24 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
+    function displayRandomMessage() {
+
+        var messages = [
+            "Thank you Mario! But our princess is in another castle!",
+            "That's all folks!",
+            "It's quiet in here...",
+            "CAUTION: Side effects may include spontaneous dancing, uncontrollable smiling, bouts of joy, humming melodies in your sleep, and an irresistible urge to learn piano...",
+            "The search continues...",
+            "We've been trying to reach you concerning your vehicle's extended warranty",
+            "Ceci n'est pas un piano",
+            "0% sugar!"
+        ];
+        var randomIndex = Math.floor(Math.random() * messages.length);
+        var endTextElement = document.getElementById("endText");
+        endTextElement.textContent = messages[randomIndex];
+    }
+    displayRandomMessage();
+
 
     function updateMoonState(index, mouseX) {
         let isHalf = mouseX <= $('.moon').eq(index).width() / 2;
@@ -197,15 +215,15 @@ piano.getSongList((songs) => { // Get the list of songs from the API
 
         let songElement = html;
         songElement = songElement.replace('%artwork%', song.artwork);
-        songElement = songElement.replace('%title%', song.name);
-        songElement = songElement.replace('%artist%', arrayToCommaSeparatedString(song.artists));
+        songElement = songElement.replace('%title%', song.favorite ? '<span class="gold-text">' + song.name + '</span>' : song.name);
+        songElement = songElement.replace('%artist%', song.favorite ? '<span class="gold-text">' + arrayToCommaSeparatedString(song.artists) + '</span>' : arrayToCommaSeparatedString(song.artists));
         songElement = songElement.replace('%genres%', arrayToCommaSeparatedString(song.genre));
         songElement = songElement.replace('%tags%', arrayToCommaSeparatedString(song.tags));
         songElement = songElement.replace('%noteDensity%', song.noteDensity);
         songElement = songElement.replace('%difficulty%', song.difficulty);
         songElement = songElement.replace('%emojis%', difficultyToEmojis(song.difficulty));
         songElement = songElement.replace('%song-index%', i);
-        songElement = songElement.replace('%length%', formatMS(song.songLengthMS));
+        songElement = songElement.replace('%length%', song.favorite ? '<span class="gold-text">' + formatMS(song.songLengthMS) + '</span>' : formatMS(song.songLengthMS));
         songElement = songElement.replace('%lengthMS%', song.songLengthMS);
         songElement = songElement.replace('%debugSong%', isDebugSong);
 
@@ -239,10 +257,6 @@ piano.getSongList((songs) => { // Get the list of songs from the API
         hideQueueContainer();
     });
 
-    $('.now-playing-container').on('click', function () {
-        hideQueueContainer();
-    });
-
 });
 
 $('.sticky-container').on('click', '.info-button', function () {
@@ -253,35 +267,63 @@ $('.info-popup').on('click', '.info-close-button', function () {
     hideInfoContainer();
 });
 
+$('.np-overlay').on('click', function () {
+    hideQueueContainer();
+});
+
 //Saveing and loading scroll position seems like a bit of a hack
 //Real fix here is most likely some CSS Magic that I am not aware of.
 let savedScrollPosition = 0;
 function showQueueContainer() {
-    savedScrollPosition = $(window).scrollTop(); // save scroll position
-    $('.now-playing-container').show(); // show queue container
-    console.log("Saving scroll position", savedScrollPosition);
+    savedScrollPosition = $(window).scrollTop();
+    $('body').css({
+        'overflow': 'hidden',
+        'position': 'fixed',
+        'width': '100%',
+        'top': -savedScrollPosition
+    });
+    $('.np-overlay').fadeIn();
+    $('.now-playing-container').addClass('active').slideDown();
 }
 
 function hideQueueContainer() {
-    $('.now-playing-container').hide(); // hide queue container
-    $(window).scrollTop(savedScrollPosition); // restore scroll position
-    console.log("Restoring scroll position", savedScrollPosition);
+    $('.now-playing-container').slideUp();
+    $('.np-overlay').fadeOut(function () {
+        $('body').css({
+            'overflow': 'auto',
+            'position': 'static',
+            'width': 'auto',
+            'top': 0
+        });
+        $(window).scrollTop(savedScrollPosition);
+    });
+    $('.now-playing-container').removeClass('active');
 }
 
 function showInfoContainer() {
-    savedScrollPosition = $(window).scrollTop(); // save scroll position
-    $('.info-popup').show(); // hide header
-    $('.container').hide(); // hide song list
-    $('.sticky-container').hide(); // hide song list
-    console.log("Saving scroll position", savedScrollPosition);
+    savedScrollPosition = $(window).scrollTop();
+    $('body').css({
+        'overflow': 'hidden',
+        'position': 'fixed',
+        'width': '100%',
+        'top': -savedScrollPosition
+    });
+    $('.info-overlay').fadeIn();
+    $('.info-popup').addClass('active').slideDown();
 }
 
 function hideInfoContainer() {
-    $('.sticky-container').show(); // show header
-    $('.container').show(); // show song list
-    $('.info-popup').hide(); // hide queue container
-    $(window).scrollTop(savedScrollPosition); // restore scroll position
-    console.log("Restoring scroll position", savedScrollPosition);
+    $('.info-popup').slideUp();
+    $('.info-overlay').fadeOut(function () {
+        $('body').css({
+            'overflow': 'auto',
+            'position': 'static',
+            'width': 'auto',
+            'top': 0
+        });
+        $(window).scrollTop(savedScrollPosition);
+    });
+    $('.info-popup').removeClass('active');
 }
 
 function queueSongByIndex(index) {

@@ -130,7 +130,7 @@ body {
 
 #quicksearch {
     font-family: 'Courier New', Courier, monospace;
-    width: 85%;
+    width: calc(85% - 30px);
     height: 50px;
     padding-left: 10px;
     border: none;
@@ -144,6 +144,18 @@ body {
     font-family: 'Courier New', Courier, monospace;
     outline: none;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+input#quicksearch {
+    font-size: 14px;
+    background-image: url(https://cdn2.hubspot.net/hubfs/4004166/bioticresearch_website_assets/images/search_icon.png);
+    background-repeat: no-repeat;
+    background-position: left center;
+    padding-left: 40px;
+    background-color: #fff;
+    border: 1px solid #000;
+    box-shadow: none;
+    -webkit-appearance: none;
 }
 
 .sort-dropdown { /* TODO */

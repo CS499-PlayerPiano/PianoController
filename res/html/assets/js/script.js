@@ -269,6 +269,10 @@ $('.info-popup').on('click', '.info-close-button', function () {
     hideInfoContainer();
 });
 
+$('.info-overlay').on('click', function () {
+    hideInfoContainer();
+});
+
 $('.np-overlay').on('click', function () {
     hideQueueContainer();
 });

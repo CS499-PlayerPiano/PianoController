@@ -3,6 +3,7 @@ package plu.capstone.playerpiano.subprogram;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import lombok.Getter;
@@ -13,6 +14,7 @@ import plu.capstone.playerpiano.outputs.Output;
 import plu.capstone.playerpiano.outputs.arduino.OutputArduino;
 import plu.capstone.playerpiano.outputs.logger.OutputLogger;
 import plu.capstone.playerpiano.outputs.pianogui.OutputVirtualPianoGui;
+import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.mainserver.statisticsdb.OutputStatisticsDB;
 import plu.capstone.playerpiano.outputs.synth.OutputSynth;
 import plu.capstone.playerpiano.sheetmusic.events.NoteEvent;
@@ -100,10 +102,16 @@ public abstract class SubProgram implements Callable<Integer> {
 
     }
 
+    public void playNotes(List<NoteEvent> notes) {
+        List<SheetMusicEvent> events = new ArrayList<>(notes); //Weirdly can't cast directly to SheetMusicEvent. Unclear.
+        for(Output output : outputs) {
+            output.onEventsPlayed(events, -1);
+        }
+    }
+
     public void playNote(NoteEvent note) {
         for(Output output : outputs) {
             output.onEventsPlayed(new ArrayList<>(Set.of(note)), -1);
-           // output.onNotePlayed(note, -1);
         }
     }
 

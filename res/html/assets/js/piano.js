@@ -232,7 +232,7 @@ class Piano {
     }
 
     // Send a POST request to the server
-    #sendPostRequest(loc, data = null, responseCallback = null) {
+    sendPostRequest(loc, data = null, responseCallback = null) {
         let xhr = new XMLHttpRequest();
         xhr.open("POST", this.#apiURL + loc, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -258,7 +258,7 @@ class Piano {
 
     // Send a control request to the server
     #sendControlRequest(loc, data = null, responseCallback = null) {
-        this.#sendPostRequest("control/" + loc, data, responseCallback);
+        this.sendPostRequest("control/" + loc, data, responseCallback);
     }
 
     // Get the list of songs from the server

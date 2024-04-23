@@ -1,0 +1,54 @@
+body {
+    background-color: #111;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    /* Full viewport height */
+}
+
+.button {
+    padding: 15px 30px;
+    font-size: 18px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    margin-bottom: 50px;
+    transition: background-color 0.3s;
+}
+
+#singleNote {
+    background-color: #4CAF50;
+}
+
+#mutipleNote {
+    background-color: #008CBA;
+}
+
+#playDemoSong {
+    background-color: #f4e736;
+    color: black;
+}
+
+#stopDemoSong {
+    background-color: #f44336;
+}
+
+@media screen and (max-width: 600px) {
+    .button {
+        padding: 20px 40px;
+        font-size: 20px;
+    }
+}

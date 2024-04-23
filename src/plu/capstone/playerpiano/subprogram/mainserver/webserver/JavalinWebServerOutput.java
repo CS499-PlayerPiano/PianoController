@@ -32,6 +32,7 @@ import plu.capstone.playerpiano.sheetmusic.events.SheetMusicEvent;
 import plu.capstone.playerpiano.subprogram.mainserver.QueueManager;
 import plu.capstone.playerpiano.subprogram.mainserver.SubProgramMainController;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.Endpoint;
+import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointCapstonePresentation;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointControlPiano;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointGetSongData;
 import plu.capstone.playerpiano.subprogram.mainserver.webserver.endpoints.EndpointStaticRedirects;
@@ -56,7 +57,8 @@ public class JavalinWebServerOutput extends Output {
             new EndpointControlPiano(),
             new EndpointsUser(),
             new EndpointStaticRedirects(),
-            new EndpointStatistics()
+            new EndpointStatistics(),
+            new EndpointCapstonePresentation()
     );
 
     private static final String API_DOCS_JSON = "/api/openapi.json";

@@ -178,9 +178,7 @@ public class JavalinWebServerOutput extends Output {
                 data.addProperty("sessionID", ctx.getSessionId());
                 data.add("currentSong", queueManager.getCurrentPlayingSong());
                 data.addProperty("isPaused", queueManager.isPaused());
-                sendWSPacket(PacketIds.CONNECTED, data);
-
-
+                sendWSPacket(ctx, PacketIds.CONNECTED, data);
 
             });
             ws.onMessage(ctx -> {
@@ -225,12 +223,16 @@ public class JavalinWebServerOutput extends Output {
         this.sendWSPacket(packedId, new JsonObject());
     }
     public void sendWSPacket(PacketIds packedId, JsonObject data) {
+        for(WsContext ctx : wsClients) {
+            sendWSPacket(ctx, packedId, data);
+        }
+    }
+
+    public void sendWSPacket(WsContext ctx, PacketIds packedId, JsonObject data) {
         JsonObject packet = new JsonObject();
         packet.addProperty("packetId", packedId.getId());
         packet.add("data", data);
-        for(WsContext ctx : wsClients) {
-            ctx.send(packet.toString());
-        }
+        ctx.send(packet.toString());
     }
 
     long lastTimestamp = 0;

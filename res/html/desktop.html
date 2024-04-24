@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Piano Website</title>
+    <meta name="description" content="Controller for the player piano">
+    <meta name="author" content="Camden Hunt & Eric Golde">
+    <meta name="keywords" content="cs499, player piano, PLU">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="assets/css/iziToast.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div class="sticky-container">
+        <div class="text">
+            <p style="padding-top: 10px;">SEARCH</p>
+            <p class="difficulty-text">DIFFICULTY</p> <!-- this is breaking stuff! -->
+            <div class="emojis-container"> <!-- dont put anything else in here -->
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+                <span class="moon">🌑</span>
+            </div>
+            <div class="dropdown-container">
+                <select id="sort-dropdown" class="sort-dropdown">
+                    <option value="original-order" selected disabled>Sort by...</option>
+                    <option value="original-order">Title (A ⇨ Z)</option>
+                    <option value="original-order" data-ascending="false">Title (Z ⇨ A)</option>
+                    <option value="artist">Artist (A ⇨ Z)</option>
+                    <option value="artist" data-ascending="false">Artist (Z ⇨ A)</option>
+                    <option value="difficulty">Difficulty (Ascending)</option>
+                    <option value="difficulty" data-ascending="false">Difficulty (Descending)</option>
+                    <option value="length">Length (Ascending)</option>
+                    <option value="length" data-ascending="false">Length (Descending)</option>
+                    <option value="random">Random</option>
+                </select>
+                <button class="undo-button">Reset Filters</button>
+            </div>
+        </div>
+        <div class="info-button">ℹ️</div>
+        <p><input type="text" id="quicksearch" placeholder="Search..." /></p>
+    </div>
+
+    <div class="container">
+        <div class="grid">
+            <!-- Song elements will be added here -->
+        </div>
+        <div class="end-text" id="endText">
+            <!-- end message will be added here -->
+        </div>
+    </div>
+    <div class="np-overlay" style="display: none;"></div>
+    <div class="now-playing-container" style="display: none;">
+        <div class="now-playing">
+            <button class="back-to-list">Back to Song List</button>
+            <!-- Content for the Now Playing screen goes here -->
+        </div>
+    </div>
+
+    <div class="info-overlay" style="display: none;"></div>
+    <div class="info-popup" style="display: none;">
+        <h1>Player Piano</h1>
+        <p>Created by Camden Hunt and Eric Golde</p>
+        <p>2024 CS Capstone Project</p>
+        <p>----------------------------------------------------</p>
+
+        <h2>Stats for nerds</h2>
+        <div id="statsForNerds" class="leftAlign">
+            <p>Piano Uptime: <span id="counter-pianoUptime"></span></p>
+            <p>Total Notes Played: <span id="counter-totalNotesPlayed">00000</span></p>
+            <p>Total Songs Played: <span id="counter-totalSongsPlayed">00000</span></p>
+            <p>Total Sustain Pedal Presses: <span id="counter-totalSustainPedalPressed">00000</span></p>
+        </div>
+        <!-- List of top 10 songs -->
+        <h3>Top 10 Songs</h3>
+        <div id="topSongs" class="leftAlign">
+            <p>1. Song Name - 000 Plays</p>
+            <p>1. Song Name longer - 000 Plays</p>
+            <p>1. Song Name - 000 Plays</p>
+            <p>1. Song Name - 000 Plays</p>
+            <!-- <li>1. Song Name - 00000 plays</li> -->
+        </div>
+
+        <button class="info-close-button">Close</button>
+    </div>
+
+    <footer>
+        <img loading="lazy" id="npArtwork" src="https://piano.ericshome.xyz/api/album-art/null">
+        <div>
+            <p id="npTitle">Nothing Playing</p>
+            <p id="npArtist"></p>
+        </div>
+        <div class="music-controls">
+            <div class="progress-container">
+                <div id="progressBar"></div>
+            </div>
+            <div class="music-icons">
+                <i id="npbPlayPause" class="material-symbols-outlined">pause</i>
+                <i id="npbSkipForward" class="material-symbols-outlined">arrow_forward</i>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/isotope.pkgd.min.js"></script>
+    <script src="assets/js/iziToast.min.js"></script>
+    <script src="assets/js/piano.js"></script>
+    <script src="assets/js/script.js"></script>
+</body>
+
+</html>

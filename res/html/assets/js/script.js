@@ -2,6 +2,10 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
+    if($(window).width() <= 950) {
+        window.location = "https://piano.ericshome.xyz/";
+    }
+
     function displayRandomMessage() {
 
         var messages = [

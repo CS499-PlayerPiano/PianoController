@@ -133,6 +133,14 @@ public class QueueManager {
         }
     }
 
+    public void stopAndClearQueue() {
+        stopOrSkipCurrentSong();
+        synchronized (songQueue) {
+            songQueue.clear();
+        }
+        sendCurrentQueueAsWSPacket();
+    }
+
     /**
      * Queues a song to be played.
      * @param song The song to queue.

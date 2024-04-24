@@ -2,8 +2,8 @@ let selectedDifficulty = null;
 
 $(document).ready(function () {
 
-    if($(window).width() <= 950) {
-        window.location = "https://piano.ericshome.xyz/";
+    if ($(window).width() <= 950) {
+        window.location = "/mobileindex.html";
     }
 
     function displayRandomMessage() {
@@ -63,7 +63,7 @@ $(document).ready(function () {
         $(this).addClass('selected');
 
         $grid.isotope(); //reapply isotope filter
-        $('html, body').animate({scrollTop: 0}, 'slow');
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
     });
     $('.dropdown-container').on('click', '.undo-button', function () {
         $('#sort-dropdown').prop('selectedIndex', 0); // Set the dropdown to default option
@@ -73,7 +73,7 @@ $(document).ready(function () {
         selectedDifficulty = null;
         qsRegex = null; // Reset search regex
         $grid.isotope(); // Reapply isotope filter
-       $('html, body').animate({scrollTop: 0}, 'slow');
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
     });
 });
 
@@ -425,7 +425,7 @@ $('#sort-dropdown').on('change', function () {
     console.log("Sorting by", value, "ascending", ascending);
 
     $grid.isotope({ sortBy: value, sortAscending: ascending });
-    $('html, body').animate({scrollTop: 0}, 'slow');
+    $('html, body').animate({ scrollTop: 0 }, 'slow');
 });
 
 let qsRegex = null; // quick search regex

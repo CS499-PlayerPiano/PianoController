@@ -349,21 +349,21 @@ function queueSongByIndex(index) {
 function noteDensityToDifficulty(noteDensity) {
     if (noteDensity < 5) {
         return 1;
-    } else if (noteDensity >= 5 && noteDensity < 6) {
+    } else if (noteDensity >= 5 && noteDensity < 6.5) {
         return 2;
-    } else if (noteDensity >= 6 && noteDensity < 7.5) {
+    } else if (noteDensity >= 6.5 && noteDensity < 8) {
         return 3
-    } else if (noteDensity >= 7.5 && noteDensity < 9) {
+    } else if (noteDensity >= 8 && noteDensity < 9.2) {
         return 4;
-    } else if (noteDensity >= 9 && noteDensity < 10.5) {
+    } else if (noteDensity >= 9.2 && noteDensity < 10.8) {
         return 5;
-    } else if (noteDensity >= 10.5 && noteDensity < 13) {
+    } else if (noteDensity >= 10.8 && noteDensity < 13) {
         return 6;
     } else if (noteDensity >= 13 && noteDensity < 15) {
         return 7;
-    } else if (noteDensity >= 15 && noteDensity < 22.5) {
+    } else if (noteDensity >= 15 && noteDensity < 20) {
         return 8;
-    } else if (noteDensity >= 22.5 && noteDensity < 30) {
+    } else if (noteDensity >= 20 && noteDensity < 30) {
         return 9;
     } else {
         return 10;

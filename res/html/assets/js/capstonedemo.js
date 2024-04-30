@@ -18,8 +18,8 @@ function playMultiNotes() {
     sendDemoRequest("playMultiNotes");
 }
 
-function playDemoSong() {
-    sendDemoRequest("playDemoSong");
+function playDemoSong(id) {
+    sendDemoRequest("playDemoSong/" + id);
 }
 
 function stopDemoSong() {

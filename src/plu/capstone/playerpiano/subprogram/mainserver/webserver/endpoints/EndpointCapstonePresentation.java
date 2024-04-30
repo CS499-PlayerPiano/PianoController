@@ -33,7 +33,7 @@ public class EndpointCapstonePresentation implements Endpoint {
         this.server = server;
         app.post("/api/capstonedemo/playOneNote", this::playOneNote);
         app.post("/api/capstonedemo/playMultiNotes", this::playNoteNotes);
-        app.post("/api/capstonedemo/playDemoSong", this::playDemoSong);
+        app.post("/api/capstonedemo/playDemoSong/{songid}", this::playDemoSong);
         app.post("/api/capstonedemo/stopDemoSong", this::stopDemoSong);
 
         File songDBFile = new File("res" + File.separator + "songs-db" + File.separator + "songs.json");
@@ -76,11 +76,10 @@ public class EndpointCapstonePresentation implements Endpoint {
         }, 1000);
     }
 
-    final String DEMO_MIDI_FILE = "CAPSTONE_DEMO.mid";
-
     private void playDemoSong(Context ctx) {
 
-
+        final String whichDemoSong = ctx.pathParam("songid");
+        String DEMO_MIDI_FILE = "CAPSTONE_DEMO_" + whichDemoSong + ".mid";
 
         String sessionUUID = ctx.sessionAttribute(EndpointsUser.SESSION_UUID);
 

@@ -37,10 +37,16 @@ body {
     background-color: #008CBA;
 }
 
-#playDemoSong {
+#playDemoSong1 {
     background-color: #f4e736;
     color: black;
 }
+
+#playDemoSong2 {
+    background-color: #c836f4;
+    color: black;
+}
+
 
 #stopDemoSong {
     background-color: #f44336;

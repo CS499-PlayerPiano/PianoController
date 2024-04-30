@@ -30,11 +30,11 @@ function sendDemoRequest(loc) {
     piano.sendPostRequest("capstonedemo/" + loc, null, (intResp) => {
         // console.log(intResp);
         if (intResp.status == 200) {
-            iziToast.success({
-                title: 'Success',
-                message: 'Sent ' + loc + ' request!',
-                position: 'topRight'
-            });
+            // iziToast.success({
+            //     title: 'Success',
+            //     message: 'Sent ' + loc + ' request!',
+            //     position: 'topRight'
+            // });
         }
         else {
             iziToast.error({

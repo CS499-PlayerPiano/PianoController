@@ -18,7 +18,7 @@
   },
   "Arduino": {
     "enabled": true,
-    "comPort": "COM9",
+    "comPort": "COM7",
     "baudRate": 115200,
     "printDebugOutputFromArduino": true,
     "sendPowerResetAfterEverySong": true,

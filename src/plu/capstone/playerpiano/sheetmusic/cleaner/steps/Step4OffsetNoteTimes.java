@@ -24,6 +24,7 @@ public class Step4OffsetNoteTimes implements MidiConversionStep {
 
     private static final Map<Integer, Integer> MIDI_ID_TO_HIT_TIME = new HashMap<>();
 
+    //TODO: Make this a config file
     static {
         //NOTE -> HIT TIME
         MIDI_ID_TO_HIT_TIME.put(21, 50);
